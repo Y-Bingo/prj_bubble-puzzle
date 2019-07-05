@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.ProgressStar" xmlns:e="http://ns.egret.com/eui"
+        states="one_0,one_1,two_0,two_1,three_0,three_1" >
+	<e:Image source="star_gray_png"                        y="0" source.one_1="star_light_png" source.two_1="star_light_png" source.three_1="star_light_png"/>
+	<e:Image source="star_gray_png" x="10" y="0" visible.one_0="false" visible.one_1="false" source.two_1="star_light_png" source.three_1="star_light_png"/>
+	<e:Image source="star_gray_png" x="20" y="0" visible.one_0="false" visible.one_1="false" visible.two_0="false" visible.two_1="false" source.three_1="star_light_png"/>
+</e:Skin>

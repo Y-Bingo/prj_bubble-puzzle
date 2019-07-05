@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.MainGameScene" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing"
+        xmlns:bob="bob.*" xmlns:ns1="*" xmlns:ui="ui.*">
+	<e:Image id="bg" height="1137" source="bg_png" />
+
+	<e:Group id="g_bubble" y="120" height="728" touchEnabled="false" touchChildren="false" width="618" x="11"/>
+	<e:Group id="g_guidLine" y="120" height="728" width="618" x="11"/>
+	<e:Image id="border" source="border_png" height="1137"/>
+
+
+
+
+	<e:Image id="dead_line" source="dead_line_png" y="850" horizontalCenter="0"/>
+	<e:Image id="curtain" source="hanging_curtain_png" x="11" scale9Grid="32,10,541,5"  y="98"/>
+
+
+	<ui:Arrow id="icon_arrow" source="arrow_blue_png" anchorOffsetY="85" anchorOffsetX="19" y="985" x="320" rotation="0"  visible="false"/>
+
+
+	<ns1:ScoreBoard id="score_board" skinName="skins.ScoreBoard" left="0" top="0"/>
+	<ns1:TimeBoard id="time_board" x="44" y="878" skinName="skins.Timer" scaleX="1.2" scaleY="1.2"/>
+	<e:Group id="tool_board" x="230" y="1048" touchChildren="false">
+		<e:Component x="0" y="0" skinName="skins.ToolItem" />
+		<e:Component x="10" y="10" skinName="skins.ToolItem" />
+		<e:Component x="20" y="20" skinName="skins.ToolItem" />
+		<e:Component x="30" y="30" skinName="skins.ToolItem" />
+		<e:layout>
+			<e:HorizontalLayout horizontalAlign="center" gap="15" />
+		</e:layout>
+	</e:Group>
+	<e:Group id="g_handle" anchorOffsetY="0" height="730" y="120" width="616" x="11" anchorOffsetX="0"/>
+	<e:Rect id="btn_change" width="56" height="56" ellipseWidth="56" ellipseHeight="56" x="178.33" y="908.3"/>
+
+
+</e:Skin>

@@ -1,0 +1,16 @@
+{
+	"skins": {},
+	"autoGenerateExmlsList": true,
+	"exmls": [
+		"resource/mySkin/component/LevelItem.exml",
+		"resource/mySkin/component/ProgressStar.exml",
+		"resource/mySkin/component/Timer.exml",
+		"resource/mySkin/component/ToolItem.exml",
+		"resource/mySkin/ScoreBoard.exml",
+		"resource/mySkin/GameSkin.exml",
+		"resource/mySkin/LevelSkin.exml",
+		"resource/mySkin/LoadingSkin.exml",
+		"resource/mySkin/MenuSkin.exml"
+	],
+	"path": "resource/default.thm.json"
+}

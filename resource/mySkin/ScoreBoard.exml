@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.ScoreBoard" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:ui="ui.*">
+	<e:Image source="bg_game_top_png" fillMode="clip"  height="135"/>
+
+	<e:Group left="19" top="3">
+		<e:Image source="text_guanqia_png" x="0" y="0"/>
+		<e:BitmapLabel id="bl_lv" text="2" font="fnt_level_fnt" verticalCenter="24" horizontalCenter="0"/>
+	</e:Group>
+
+	<ui:ImageButton id="btn_pause" source="btn_pause_png"  right="0" top="0" anchorOffsetX="92"/>
+	<e:Group horizontalCenter="37.5" y="-5">
+		<e:Image id="pg_trace" source="progress_trace_png" y="50.08" x="0"/>
+		<e:Image id="pg_thumb" source="progress_thumb_png" x="0" y="50"/>
+		<e:Image id="pg_thumb_mask" source="progress_thumb_png" x="0" y="50"/>
+		<e:Component id="pg_star_0" currentState="one_1" y="54" x="71.66" scaleX="1" scaleY="1" skinName="skins.ProgressStar"/>
+		<e:Component id="pg_star_1" x="166.36" currentState="two_1" y="54" scaleX="1" scaleY="1" skinName="skins.ProgressStar"/>
+		<e:Component id="pg_star_2" x="312.35" currentState="three_1" y="54" scaleX="1" scaleY="1" skinName="skins.ProgressStar"/>
+		<e:Group y="10" scaleX="0.7" scaleY="0.7" horizontalCenter="0">
+			<e:BitmapLabel id="bl_user_score" y="0" text="100" font="fnt_scroe2_fnt" x="156" scaleX="1" scaleY="1"/>
+			<e:BitmapLabel y="0" text="/" font="fnt_scroe2_fnt" x="0"/>
+			<e:BitmapLabel id="bl_max_score" y="10" text="100" font="fnt_scroe2_fnt" x="10"/>
+			<e:layout>
+			<e:HorizontalLayout gap="0"/>
+			</e:layout>
+		</e:Group>
+	</e:Group>
+</e:Skin>

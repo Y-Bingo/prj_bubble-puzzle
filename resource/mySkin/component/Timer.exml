@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.Timer" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:BitmapLabel font="fnt_daoji_fnt" text="O" y="0" x="0" scaleX="1.1" scaleY="1.1"/>
+	<e:BitmapLabel id="bl_time" font="fnt_daoji_fnt" text="50" horizontalCenter="0" verticalCenter="0"/>
+</e:Skin>
