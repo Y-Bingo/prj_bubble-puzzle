@@ -1,8 +1,6 @@
-namespace df
-{
+namespace df {
 
-    export class BubbleType extends core.NodeType
-    {
+    export class BubbleType extends core.NodeType {
         // public static NONE = ".";
         // 透明泡泡
         public static ALPHA = 0x10;
@@ -62,8 +60,7 @@ namespace df
     }
 
     // 碰撞结果
-    export enum HIT
-    {
+    export enum HIT {
         BUBBLE = 1,
         TOP_WALL = 2,
         SIDE_WALL = 3,
@@ -72,8 +69,7 @@ namespace df
     }
 
     // 游戏状态
-    export enum EGameStatus
-    {
+    export enum EGameStatus {
         FREE,
         PLAYING,
         END

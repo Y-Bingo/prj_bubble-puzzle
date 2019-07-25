@@ -5,12 +5,11 @@
 		"libs/modules/eui/eui.js",
 		"libs/modules/assetsmanager/assetsmanager.js",
 		"libs/modules/tween/tween.js",
-		"libs/modules/promise/promise.js",
-		"libs/modules/game/game.js"
+		"libs/modules/promise/promise.js"
 	],
 	"game": [
 		"bin-debug/core/Model.js",
-		"bin-debug/component/BubblePool.js",
+		"bin-debug/component/ImageBtn.js",
 		"bin-debug/Director.js",
 		"bin-debug/GuidLine.js",
 		"bin-debug/LoadingUI.js",
@@ -20,8 +19,8 @@
 		"bin-debug/base/Sington.js",
 		"bin-debug/component/Arrow.js",
 		"bin-debug/component/Bubble.js",
+		"bin-debug/component/BubblePool.js",
 		"bin-debug/define.js",
-		"bin-debug/component/ImageBtn.js",
 		"bin-debug/component/MovieClip.js",
 		"bin-debug/core/define.js",
 		"bin-debug/DataMrg.js",
@@ -30,6 +29,7 @@
 		"bin-debug/ui/LevelSkin.js",
 		"bin-debug/ui/MainGameScene.js",
 		"bin-debug/ui/MenuSkin.js",
+		"bin-debug/ui/MovieClip.js",
 		"bin-debug/ui/ScoreBoard.js",
 		"bin-debug/ui/TimeBoard.js"
 	]
