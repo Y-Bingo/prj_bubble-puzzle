@@ -1,5 +1,4 @@
-namespace core
-{
+namespace core {
     /**
      * !!泡泡龙2D物理
      */
@@ -23,8 +22,7 @@ namespace core
     // 重力加速度
     export const G = 1;
 
-    export interface IModel
-    {
+    export interface IModel {
         left?: number;
         right?: number;
         x?: number;
@@ -43,8 +41,7 @@ namespace core
     /**
      * 物理世界
      */
-    class World
-    {
+    class World {
 
         left: number = 0;
         right: number = 0;
@@ -54,14 +51,12 @@ namespace core
         offX: number;
         offY: number;
 
-        constructor ()
-        {
+        constructor () {
 
         }
 
         // 添加舞台
-        addStage ( target: IModel ): void
-        {
+        addStage ( target: IModel ): void {
             // this._left = target.x || 0;
             // this._right = ( target.width || RADIUS * MAX_COL * 2 ) + this._left;
             // this._top = target.y || 0;
@@ -77,8 +72,7 @@ namespace core
         }
 
         // 添加世界物体
-        add ( target: IModel, row: number, col: number ): void
-        {
+        add ( target: IModel, row: number, col: number ): void {
             target.centerX = this.index2wX( row, col );
             target.centerY = this.index2wY( row, col );
 
@@ -87,8 +81,7 @@ namespace core
         }
 
         // 获取物理世界边界
-        getBoundary (): IModel
-        {
+        getBoundary (): IModel {
             return {
                 left: this.left,
                 right: this.right,
@@ -98,20 +91,17 @@ namespace core
         }
 
         // 获取泡泡模型
-        getIndexModel ( row: number, col: number ): IModel
-        {
+        getIndexModel ( row: number, col: number ): IModel {
             let centerX = this.index2wX( row, col );
             let centerY = this.index2wY( row, col );
             return { centerX, centerY, };
         }
         // 获取中心点 X坐标
-        index2wX ( row: number, col: number ): number
-        {
+        index2wX ( row: number, col: number ): number {
             return ( row % 2 !== 0 ? RADIUS : 0 ) + col * RADIUS * 2 + RADIUS;
         }
         // 获取中心点的 Y坐标
-        index2wY ( row: number, col?: number ): number
-        {
+        index2wY ( row: number, col?: number ): number {
             return row * ( RADIUS * 2 - OFF_Y ) + RADIUS;
         }
 
@@ -123,39 +113,33 @@ namespace core
         // x坐标 世界转模型
 
         // 获取泡泡到的行索引
-        getBubbleRow ( y: number ): number
-        {
+        getBubbleRow ( y: number ): number {
             return Math.floor( ( y - this.top - RADIUS ) / ( RADIUS * 2 - OFF_Y ) );
         }
         // 获取泡泡的列索引
-        getBubbleCol ( x: number, row: number ): number
-        {
+        getBubbleCol ( x: number, row: number ): number {
             return Math.floor( ( x - this.left - RADIUS - ( RADIUS * 2 - OFF_Y ) ) / ( RADIUS * 2 ) );
         }
 
         //** ---------------------  -------------------------- */
         // 是否撞边墙
-        isHitSideWall ( x: number ): boolean
-        {
+        isHitSideWall ( x: number ): boolean {
             let wx = this.g2wX( x );
             return this.right - wx <= RADIUS || wx - this.left <= RADIUS;
         }
 
         // 是否撞底墙
-        isHitBottomWall ( y: number ): boolean
-        {
+        isHitBottomWall ( y: number ): boolean {
             return this.g2wY( y ) + RADIUS >= this.bottom;
         }
 
 
-        isHitTopWall (): boolean
-        {
+        isHitTopWall (): boolean {
             return false;
         }
 
         // 获取碰撞到的泡泡索引
-        getHitBubbleIndex ( cur: IModel ): INodeIndex
-        {
+        getHitBubbleIndex ( cur: IModel ): INodeIndex {
             let cols = model.getCols();
             let maxRow = model.getMaxRow();
 
@@ -190,8 +174,7 @@ namespace core
         }
 
         // 获取撞击后定位的泡泡坐标
-        getFixedBubbleIndex ( cur: IModel, hitBubble: INodeIndex ): INodeIndex
-        {
+        getFixedBubbleIndex ( cur: IModel, hitBubble: INodeIndex ): INodeIndex {
             // 获取撞击泡泡周围的泡泡
             let fixedIndex: INodeIndex = null;
             let nearByEmpty = model.getNeighbors( hitBubble.row, hitBubble.col, EFilterType.EMPTY );
@@ -226,8 +209,7 @@ namespace core
         }
 
         // 检查辅助线与世界的碰撞
-        checkGuidLineHit ( point: IModel ): boolean
-        {
+        checkGuidLineHit ( point: IModel ): boolean {
             let maxRow = model.getMaxRow();
 
             if ( point.centerY > this.index2wY( maxRow, 0 ) + RADIUS ) return false

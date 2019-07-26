@@ -69,76 +69,17 @@ class Main extends eui.UILayer {
 	 */
     protected createGameScene (): void {
 
-        let bubble = new ui.Bubble();
-        this.addChild( bubble );
-        bubble.setValue( 0x04 );
-        bubble.x = this.stage.stageWidth / 2;
-        bubble.y = this.stage.stageHeight / 2;
-
-        let mc = new mui.MovieClip( {
-            sourceTemp: "mc_humer_%f_png",
-            startFrame: 0,
-            endFrame: 5,
-            frameRate: 11,
-            // times: 3
-            // isLoop: true
-        } )
-
-        this.addChild( mc );
-
-
-        // let button = new eui.Button();
-        // button.width = 200;
-        // button.height = 200;
-        // button.label = "按钮";
-
-        // this.addChild( button );
-        mc.touchEnabled = true;
-        mc.addEventListener( egret.TouchEvent.TOUCH_TAP, () => {
-            mc.play( () => {
-                bubble.visible = false;
-            } );
-        }, this );
-
-        mc.bindFrameEvent( 4, () => {
-            bubble.visible = false;
-        } );
-        // mc.addEventListener( egret.TouchEvent.COMPLETE, () => {
-        //     bubble.visible = false;
-        // }, this )
-
-        mc.x = bubble.x;
-        mc.y = bubble.y;
-
-        mc.anchorOffsetX = mc.width / 2;
-        mc.anchorOffsetY = mc.height / 2;
-
-        // let bomb = new mui.MovieClip( {
-        //     sourceTemp: "mc_bomb_%f_png",
-        //     startFrame: 0,
-        //     endFrame: 5,
-        //     frameRate: 10,
-        //     // times: 3
-        //     // isLoop: true
-        // } )
-        // this.addChild( bomb );
-        // bomb.touchEnabled = true;
-        // bomb.addEventListener( egret.TouchEvent.TOUCH_TAP, () => {
-        //     bomb.play();
-        // }, this );
-
-
         // let game = new bob.Game();
         // this.addChild( game );
         // new Director( game );
 
-        // let gameScene = new MainGameScene();
+        let gameScene = new MainGameScene();
 
-        // this.addChild( gameScene );
+        this.addChild( gameScene );
 
-        // new Handler( gameScene );
+        new Handler( gameScene );
 
-        // gameScene.setLv( 0 );
+        gameScene.setLv( 0 );
 
     }
 
