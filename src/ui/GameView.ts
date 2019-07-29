@@ -1,14 +1,16 @@
 const SHOOT_START_POSITION = {
     x: 320,
-    y: 985
+    y: 985,
+    rotation: 360
 };
 
 const NEXT_POSITION = {
     x: 205,
-    y: 1010
+    y: 1010,
+    rotation: -360
 };
 
-class MainGameScene extends eui.Component {
+class GameView extends eui.Component {
     // 组件
     // border: eui.Image;       // 边框
     curtain: eui.Image;         // 闸
@@ -18,10 +20,11 @@ class MainGameScene extends eui.Component {
     g_bubble: eui.Group;        // 泡泡的容器
     g_guidLine: eui.Group;      // 弹道容器
     g_handle: eui.Group;        // 控制区域
+    g_tool: eui.Component;      // 道具容器
+    
     btn_change: eui.Group;      // 切换按钮（无显示效果）
     time_board: TimeBoard;      // 计时器面板
     score_board: ScoreBoard;    // 计分板
-    tool_board: eui.Component;  // 道具板
     
     // 游戏属性
     private _lv: number;                    // 关卡等级
@@ -130,36 +133,48 @@ class MainGameScene extends eui.Component {
         }
     }
     
-    // 动画：上弹
-    async loadBubble () {
-        core.model.loadNode();
-        
-        this._createNextBubble();
-        await new Promise( resolve => {
-            egret.Tween.get( this._nextBubble ).to( {
-                x: SHOOT_START_POSITION.x,
-                y: SHOOT_START_POSITION.y
-            }, 250 ).wait( 100 ).call( resolve );
-        } );
-        // 更换位置
-        this._curBubble  = this._nextBubble;
-        this._nextBubble = null;
-        // await this.switchBubble();
-        this._createNextBubble();
-        this.icon_arrow.setValue( core.model.getCurNodeVal() );
-        this.isShooting = false;
-    }
-    
     // 创建一个泡泡放置在next位置
     private _createNextBubble (): void {
-        // 不存在当前的泡泡
         // 创建一个
         if( !this._nextBubble ) {
-            this._nextBubble = ui.BubblePool.getIns().createBubble( core.model.getCurNodeVal() );
+            this._nextBubble = ui.BubblePool.getIns().createBubble( core.model.getNextVal() );
             this.addChild( this._nextBubble );
             this._nextBubble.x = NEXT_POSITION.x;
             this._nextBubble.y = NEXT_POSITION.y;
         }
+    }
+    
+    // 动画: 待射区
+    ballRoll ( isNext2Cur: boolean ) {
+        let self     = this;
+        let position = isNext2Cur ? SHOOT_START_POSITION : NEXT_POSITION;
+        let target   = isNext2Cur ? self._nextBubble : self._curBubble;
+        let zIndex   = isNext2Cur ? 201 : 200;
+        
+        let promise = Promise.resolve();
+        
+        if( target ) {
+            self.setChildIndex( target, zIndex );
+            return new Promise( resolve => {
+                egret.Tween.get( target ).to( { ...position }, 300 ).wait( 100 ).call( () => {
+                    console.log( '上弹动画完成！' );
+                    resolve();
+                } );
+            } );
+        }
+        return Promise.resolve();
+    }
+    
+    // 动画：上弹
+    async loadBubble () {
+        this._createNextBubble();
+        await this.ballRoll( true );
+        console.log( '创建下一个' );
+        this._curBubble  = this._nextBubble;
+        this._nextBubble = null;
+        this._createNextBubble();
+        this.icon_arrow.setValue( this._curBubble.value );
+        this.isShooting = false;
     }
     
     // 动画： 更换泡泡
@@ -168,43 +183,15 @@ class MainGameScene extends eui.Component {
         if( self.isShooting ) return;
         self.isShooting = true;
         
-        core.model.loadNode();
-        
-        // 动画 cur -> next
-        let cur2next = Promise.resolve();
-        if( self._curBubble ) {
-            cur2next.then( () => {
-                new Promise( resolve => {
-                    self.setChildIndex( self._curBubble, 200 );
-                    egret.Tween.get( self._curBubble ).to( {
-                        x: NEXT_POSITION.x,
-                        y: NEXT_POSITION.y
-                    }, 300 ).call( resolve );
-                } );
-            } )
-        }
-        // 动画 next -> cur
-        let next2cur = Promise.resolve();
-        if( self._nextBubble ) {
-            next2cur.then( () => {
-                new Promise( resolve => {
-                    self.setChildIndex( self._nextBubble, 201 );
-                    egret.Tween.get( self._nextBubble ).to( {
-                        x: SHOOT_START_POSITION.x,
-                        y: SHOOT_START_POSITION.y
-                    }, 250 ).call( resolve );
-                } );
-            } )
-        }
         // 执行动画
-        await Promise.all( [ next2cur, cur2next ] );
+        await Promise.all( [ self.ballRoll( true ), self.ballRoll( false ) ] );
         
+        console.log( '交换动画完成！' );
         let temp         = self._curBubble;
         self._curBubble  = self._nextBubble;
         self._nextBubble = temp;
         
-        core.model.changeNext2Cur();
-        self.icon_arrow.setValue( core.model.getCurNodeVal() );
+        self.icon_arrow.setValue( self._curBubble.value );
         self.isShooting = false;
     }
     

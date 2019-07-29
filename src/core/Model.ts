@@ -15,7 +15,7 @@ namespace core {
     export interface INodeIndex {
         row: number;
         col: number;
-    };
+    }
     
     export class NodeType {static NONE = 0x00;}
     
@@ -36,15 +36,16 @@ namespace core {
             return this._instance;
         }
         
-        private _map: any[][]   = [];           // 地图数据
-        private _rows: number   = 0;            // 地图行数
-        private _cols: number   = 0;            // 地图列数
-        private _maxRow: number = 0;            // 存在节点的最大行数
+        private _map: any[][]   = [];          // 地图数据
+        private _rows: number   = 0;           // 地图行数
+        private _cols: number   = 0;           // 地图列数
+        private _maxRow: number = 0;           // 存在节点的最大行数
         // private _visited: number[][] = [];  // 遍历状态
-        private _curNode: NodeType  = NodeType.NONE;   // 当前节点
-        private _nextNode: NodeType = NodeType.NONE;  // 下一个节点
+        private _next: NodeType[]  = [];        // 缓存数据组
+        private _types: NodeType[] = [];        // 缓存节点种类
         
-        private _typeCount: number = 4;         // 节点种类
+        // private _curNode: NodeType  = NodeType.NONE;   // 当前节点
+        // private _nextNode: NodeType = NodeType.NONE;  // 下一个节点
         
         // 更新地图
         updateMap ( map: any[][] ): void {
@@ -55,39 +56,14 @@ namespace core {
                 console.warn( '传入了不合法的地图数据！！！' );
                 // return;
             }
-            this._rows = rows;
-            this._cols = cols;
-            this._map  = map;
-            this._getMaxRow();
+            this._rows   = rows;
+            this._cols   = cols;
+            this._map    = map;
+            this._maxRow = this._countMaxRow();
+            this._alzTypes();
         }
-        
-        /** ------------- ------------------- 数据模型的操作 ------------------------------ */
-        // 获取地图数据
-        getMap (): number[][] { return this._map; }
-        // 是否为空
-        isEmpty (): boolean {
-            let maxRow = this.getMaxRow();
-            let map    = this._map;
-            let cols   = this._cols;
-            if( maxRow > 0 ) return false;
-            for( let col = 0; col < cols - maxRow % 2; col++ ) {
-                if( map[ maxRow ][ col ] !== NodeType.NONE ) return false;
-            }
-            return true;
-        }
-        // 是否溢出
-        isOverflow (): boolean {
-            let maxRow = this.getMaxRow();
-            return maxRow >= MAX_ROW;
-        }
-        // 获取行数
-        getRows () { return this._rows; }
-        // 获取列数
-        getCols () { return this._cols; }
-        // 获取存在节点的最大行
-        getMaxRow (): number { return this._maxRow; }
         // 获取最底层节点的行坐标
-        private _getMaxRow (): number {
+        private _countMaxRow (): number {
             let row  = this._rows - 1;
             let cols = this._cols;
             let map  = this._map;
@@ -101,21 +77,60 @@ namespace core {
                 row--;
             }
         }
+        // 解析地图元素种类
+        private _alzTypes (): void {
+            let map   = this._map;
+            let rows  = this._rows;
+            let cols  = this._cols;
+            let types = this._types;
+            for( let row = 0; row < rows; row++ ) {
+                for( let col = 0; col < cols - row % 2; col++ ) {
+                    if( ( map[ row ][ col ] === NodeType.NONE ) ) continue;
+                    if( map[ row ][ col ] & 0xf0 ) continue;
+                    if( types.indexOf( map[ row ][ col ] ) >= 0 ) continue;
+                    types.push( map[ row ][ col ] );
+                }
+            }
+        }
+        
+        /** ------------- ------------------- 数据模型的操作 ------------------------------ */
+        // // 获取地图数据
+        // getMap (): number[][] { return this._map; }
+        // 是否为空
+        isEmpty (): boolean {
+            let maxRow = this._maxRow;
+            let map    = this._map;
+            let cols   = this._cols;
+            if( maxRow > 0 ) return false;
+            for( let col = 0; col < cols - maxRow % 2; col++ ) {
+                if( map[ maxRow ][ col ] !== NodeType.NONE ) return false;
+            }
+            return true;
+        }
+        // 是否溢出
+        isOverflow (): boolean {
+            let maxRow = this._maxRow;
+            return maxRow >= MAX_ROW;
+        }
+        // 获取行数
+        getRows () { return this._rows; }
+        // 获取列数
+        getCols () { return this._cols; }
+        // 获取存在节点的最大行
+        getMaxRow (): number { return this._maxRow; }
+        
         // 获取节点数据
         getNodeVal ( row: number, col: number ): NodeType { return this._map[ row ][ col ]; }
-        // 获取当前节点的数据
-        getCurNodeVal (): NodeType { return this._curNode; }
-        // 获取下一个准备的发射的节点
-        getNextNodeVal (): NodeType { return this._nextNode; }
-        // 更换节点
-        changeNext2Cur () {
-            let temp       = this._curNode;
-            this._curNode  = this._nextNode;
-            this._nextNode = temp;
+        // 获取下一个节点
+        getNextVal (): NodeType {
+            if( this._next.length <= 0 )
+                return this._createNode();
+            return this._next.pop();
         }
+        
         // 添加节点
-        addNode ( row: number, col: number, value?: NodeType ): void {
-            value = value || this._curNode;
+        addNode ( row: number, col: number, value: NodeType ): void {
+            value = value;
             if( !this._checkArea( row, col ) ) return;
             // 更新最低行
             if( row > this._maxRow )
@@ -136,20 +151,13 @@ namespace core {
                 self._map[ removeNode[ i ].row ][ removeNode[ i ].col ] = NodeType.NONE;
             }
             // 更新最低行
-            this._maxRow = this._getMaxRow();
+            this._maxRow = this._countMaxRow();
         }
-        // 上弹
-         loadNode (): void {
-            if( this._nextNode == NodeType.NONE )
-                this._nextNode = this._createNode();
-            this._curNode  = this._nextNode;
-            this._nextNode = NodeType.NONE;
-            if( this._nextNode == NodeType.NONE )
-                this._nextNode = this._createNode();
-        }
+        
         // todo: 生成一个节点数据  可能根据什么规则来生成，这个后面再设置
         private _createNode ( rule?: any ): any {
-            return Math.floor( Math.random() * this._typeCount ) + 1;
+            let randomIndex = Math.floor( Math.random() * this._types.length )
+            return this._types[ randomIndex ];
         }
         
         /** ------------- ------------------- 核心算法 ------------------------------ */

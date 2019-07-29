@@ -38,6 +38,6 @@
 			</e:Skin>
 		</e:skinName>
 	</e:Button>
-	<e:Component y="816" skinName="Star" currentState="noEmpty_b" scaleX="0.5" scaleY="0.5" right="40"/>
+	<e:Component y="816" currentState="noEmpty_b" scaleX="0.5" scaleY="0.5" right="40"/>
 	<e:BitmapLabel width="20" height="20" x="441" y="842"/>
 </e:Skin>

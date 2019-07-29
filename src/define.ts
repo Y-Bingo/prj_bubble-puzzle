@@ -24,23 +24,23 @@ namespace df {
         
         /** ---------- 特殊作用球 ---------- */
                       // 炸弹
-        public static BOMB   = 0x11;
+        public static BOMB   = 0x09;
         // 云
-        public static CLOUD  = 0x12;
+        public static CLOUD  = 0x08;
         // 闪电
-        public static LIGHT  = 0x13;
+        public static LIGHT  = 0x0A;
         // 疑惑、混沌
-        public static PUZZLE = 0x14;
+        public static PUZZLE = 0x0B;
         
         /** ---------- 道具 ---------- */
                       // 彩球
         public static COLOR  = 0x0f;
         // 炸弹
-        public static BOMB2  = 0x21;
+        public static BOMB2  = 0x11;
         // 锤子
-        public static HUMMER = 0x22;
+        public static HUMMER = 0x12;
         // 金币
-        public static COIN   = 0x23;
+        public static COIN   = 0x13;
     }
     
     export let BubbleResMap = {
@@ -53,10 +53,11 @@ namespace df {
         [ BubbleType.PURPLE ]: 'bubble_purple_png',
         [ BubbleType.PINK ]: 'bubble_pink_png',
         [ BubbleType.BLACK ]: 'bubble_black_png',
-        [ BubbleType.COLOR ]: '',
-        [ BubbleType.LIGHT ]: '',
-        [ BubbleType.PUZZLE ]: '',
-        [ BubbleType.PUZZLE ]: ''
+        [ BubbleType.ALPHA ]: 'bubble_alpha_png',
+        [ BubbleType.COLOR ]: 'prop_colorBall_png',
+        [ BubbleType.BOMB2 ]: 'prop_bomb_png',
+        [ BubbleType.COIN ]: 'icon_coin_png',
+        [ BubbleType.HUMMER ]: 'prop_hammer_png'
     }
     
     // 碰撞结果
@@ -76,29 +77,31 @@ namespace df {
     }
     
     // 每行最大的泡泡数
-    export const MAX_COL          = 11;
+    export const MAX_COL            = 11;
     // 每列最大的泡泡数
-    export const MAX_ROW          = 14;
+    export const MAX_ROW            = 14;
     // 最小角度
-    export const MIN_ANGLE        = -75;
+    export const MIN_ANGLE          = -75;
     // 最大角度
-    export const MAX_ANGLE        = 75;
-    // 泡泡飞行的速度
-    export const BUBBLE_FLY_SPEED = 12;
+    export const MAX_ANGLE          = 75;
+    // 泡泡飞行的速度 Y轴方向
+    export const BUBBLE_FLY_SPEED_Y = 14;
     // 泡泡直径
-    export const RADIUS           = 28;
+    export const RADIUS             = 28;
+    // 自转角度
+    export const ROTATION           = 20;
     // 下一轮
-    export const EVT_NEXT_ROUND   = 'next_round';
+    export const EVT_NEXT_ROUND     = 'next_round';
     // 下落动画x轴方向的最大速度
-    export const SPEED_X          = 5;
+    export const SPEED_X            = 5;
     // 下落动画y轴方向的最速度
-    export const SPEED_Y          = 5;
+    export const SPEED_Y            = 8;
     //碰撞能量损耗系数
-    export const U                = 0.7;
+    export const U                  = 0.65;
     // 重力加速度
-    export const G                = 0.9;
+    export const G                  = 0.85;
     // 负一层
-    export const B1               = [ 21, 21, 21, 21, 21, 21, 21, 21, 21, 21 ];
+    export const B1                 = [ 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10 ];
     
     export const TABLE = [
         [ 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 ],

@@ -9,7 +9,6 @@
 		"resource/mySkin/ScoreBoard.exml",
 		"resource/mySkin/GameSkin.exml",
 		"resource/mySkin/LevelSkin.exml",
-		"resource/mySkin/LoadingSkin.exml",
 		"resource/mySkin/MenuSkin.exml"
 	],
 	"path": "resource/default.thm.json"

@@ -73,11 +73,11 @@ class Main extends eui.UILayer {
         // this.addChild( game );
         // new Director( game );
 
-        let gameScene = new MainGameScene();
+        let gameScene = new GameView();
 
         this.addChild( gameScene );
 
-        new Handler( gameScene );
+        new GameHandler( gameScene );
 
         gameScene.setLv( 0 );
 
