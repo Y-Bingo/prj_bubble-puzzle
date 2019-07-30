@@ -1,4 +1,5 @@
 namespace ui {
+    import NodeType = core.NodeType;
     const MIN = 5;
     const MAX = 170;
     // const MIN = 5;
@@ -22,6 +23,8 @@ namespace ui {
         
         // 创建一个泡泡
         createBubble ( value: df.BubbleType ): Bubble {
+            if( value == NodeType.NONE ) return null;
+            
             let bubble = this._pop();
             let isTool = !!( value as number & 0xf0 );
             

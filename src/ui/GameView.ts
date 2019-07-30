@@ -12,9 +12,6 @@ const NEXT_POSITION = {
 
 class GameView extends eui.Component {
     // 组件
-    // border: eui.Image;       // 边框
-    curtain: eui.Image;         // 闸
-    dead_line: eui.Image;       // 死亡线
     icon_arrow: ui.Arrow;       // 箭头
     // 组件面板
     g_bubble: eui.Group;        // 泡泡的容器
@@ -32,11 +29,14 @@ class GameView extends eui.Component {
     
     private _curBubble: ui.Bubble;          // 当前泡泡
     private _nextBubble: ui.Bubble;         // 下一个泡泡
-    private _hitBubble: core.INodeIndex;    // 击中的泡泡
-    private _fixedBubble: core.INodeIndex;  // 定位的泡泡
+    
+    // private _hitIndex: core.INodeIndex;    // 击中的泡泡
+    // private _fixedIndex: core.INodeIndex;  // 定位的泡泡
+    
     private _bubbleMap: ui.Bubble[][];      // 泡泡缓存
     private _droppingBubbles: ui.Bubble[];  // 正在掉落的泡泡
     
+    // 状态属性
     gameStatus: df.EGameStatus;             // 游戏状态
     isShooting: boolean;                    // 是否正在发射中
     
@@ -53,23 +53,19 @@ class GameView extends eui.Component {
     
     // 初始化游戏属性
     private _initProp (): void {
-        this.isShooting   = false;
-        this.gameStatus   = df.EGameStatus.FREE;
-        this._hitBubble   = null;
-        this._fixedBubble = null;
-        this._lv          = -1;
-        this._lvData      = null;
+        this.isShooting = false;
+        this.gameStatus = df.EGameStatus.FREE;
+        this._lv        = -1;
+        this._lvData    = null;
         
-        core.word.addStage( this.g_bubble );
     }
     
     // 初始化游戏界面组件
     private _initSkinPart (): void {
         this._bubbleMap       = [];
         this._droppingBubbles = [];
-        this.btn_change.addEventListener( egret.TouchEvent.TOUCH_TAP, () => {
-            this.switchBubble();
-        }, this );
+        
+        core.word.addStage( this.g_bubble );
     }
     
     // 设置等级
@@ -93,9 +89,12 @@ class GameView extends eui.Component {
     
     async gameStart () {
         if( this.gameStatus === df.EGameStatus.PLAYING ) return;
-        this.gameStatus = df.EGameStatus.PLAYING;
+        // 创建第一个泡泡
+        this._createNextBubble();
         // 加载泡泡
-        await this.loadBubble();
+        await this.amLoad();
+        // 更新游戏状态
+        this.gameStatus = df.EGameStatus.PLAYING;
         // 开始倒计时
     }
     
@@ -119,16 +118,26 @@ class GameView extends eui.Component {
         let rows = core.model.getRows();
         let cols = core.model.getCols();
         
-        let bubble: ui.Bubble        = null;
-        let bubbleArr: ui.Bubble[][] = [];
+        let bubble: ui.Bubble = null;
         for( let row = 0; row < rows; row++ ) {
-            bubbleArr[ row ] = [];
-            for( let col = 0; col < cols; col++ ) {
+            for( let col = 0; col < cols - row % 2; col++ ) {
                 bubble = ui.BubblePool.getIns().createBubble( core.model.getNodeVal( row, col ) );
+                if( !bubble ) {
+                    console.warn( '添加的跑跑跑不存在！' );
+                    continue;
+                }
+                if( !this._bubbleMap[ row ] ) {
+                    this._bubbleMap[ row ] = [];
+                }
                 
-                bubbleArr[ row ][ col ] = bubble;
+                console.log( `增添泡泡：(${ row },${ col })【${ df.BubbleName[ bubble.value as number ] }】` );
                 
-                this._addBubble( row, col, bubble )
+                this._bubbleMap[ row ][ col ] = bubble;
+                // 添加到容器
+                this.g_bubble.addChild( bubble );
+                // 更新物理模型
+                core.word.add( bubble, row, col );
+                // this._addBubble( row, col, bubble );
             }
         }
     }
@@ -137,73 +146,96 @@ class GameView extends eui.Component {
     private _createNextBubble (): void {
         // 创建一个
         if( !this._nextBubble ) {
-            this._nextBubble = ui.BubblePool.getIns().createBubble( core.model.getNextVal() );
-            this.addChild( this._nextBubble );
+            const val          = core.model.getNextVal();
+            this._nextBubble   = ui.BubblePool.getIns().createBubble( val );
             this._nextBubble.x = NEXT_POSITION.x;
             this._nextBubble.y = NEXT_POSITION.y;
+            this.addChild( this._nextBubble );
+        } else {
+            console.log( 'next bubble没有清空！' );
         }
     }
     
     // 动画: 待射区
-    ballRoll ( isNext2Cur: boolean ) {
+    amBallRoll ( isNext2Cur: boolean ): Promise<any> {
         let self     = this;
         let position = isNext2Cur ? SHOOT_START_POSITION : NEXT_POSITION;
         let target   = isNext2Cur ? self._nextBubble : self._curBubble;
         let zIndex   = isNext2Cur ? 201 : 200;
         
-        let promise = Promise.resolve();
-        
         if( target ) {
             self.setChildIndex( target, zIndex );
             return new Promise( resolve => {
-                egret.Tween.get( target ).to( { ...position }, 300 ).wait( 100 ).call( () => {
-                    console.log( '上弹动画完成！' );
-                    resolve();
-                } );
+                egret.Tween
+                     .get( target )
+                     .to(
+                         {
+                             x: position.x,
+                             y: position.y,
+                             rotation: position.rotation
+                         },
+                         250
+                     )
+                     .wait( 200 )
+                     .call( resolve );
             } );
         }
+        
         return Promise.resolve();
     }
     
     // 动画：上弹
-    async loadBubble () {
-        this._createNextBubble();
-        await this.ballRoll( true );
-        console.log( '创建下一个' );
-        this._curBubble  = this._nextBubble;
-        this._nextBubble = null;
-        this._createNextBubble();
-        this.icon_arrow.setValue( this._curBubble.value );
-        this.isShooting = false;
+    amLoad () {
+        let self = this;
+        
+        if( this._curBubble ) {
+            console.warn( '当前存在泡泡！' );
+            this._curBubble = null;
+        }
+        console.log( `上弹前：cur:【${ this._curBubble }】next:【${ df.BubbleName[ this._nextBubble.value as number ] }】` );
+        
+        self.amBallRoll( true ).then( () => {
+            self._curBubble  = self._nextBubble;
+            self._nextBubble = null;
+            
+            self._createNextBubble();
+            self.icon_arrow.setValue( self._curBubble.value );
+            
+            console.log( `上弹后 cur:【${ df.BubbleName[ this._curBubble.value as number ] }】next:【${ df.BubbleName[ this._nextBubble.value as number ] }】` );
+            
+            self.isShooting = false;
+        } );
     }
     
     // 动画： 更换泡泡
-    async switchBubble () {
+    async amSwitch () {
         let self = this;
         if( self.isShooting ) return;
         self.isShooting = true;
         
         // 执行动画
-        await Promise.all( [ self.ballRoll( true ), self.ballRoll( false ) ] );
+        await Promise.all( [ self.amBallRoll( true ), self.amBallRoll( false ) ] );
         
-        console.log( '交换动画完成！' );
         let temp         = self._curBubble;
         self._curBubble  = self._nextBubble;
         self._nextBubble = temp;
         
         self.icon_arrow.setValue( self._curBubble.value );
         self.isShooting = false;
+        
+        console.log( `【${ df.BubbleName[ this._nextBubble.value as number ] }】 <=> 【${ df.BubbleName[ this._curBubble.value as number ] }】` );
+        
     }
     
     // 开始发射动画
     startShooting ( angle: number ): void {
         this.isShooting = true;
         this._curBubble.setAngle( angle );
-        this.addEventListener( egret.Event.ENTER_FRAME, this._onShooting, this );
+        this.addEventListener( egret.Event.ENTER_FRAME, this._amShooting, this );
     }
     
     // 发射开始过程
-    private _onShooting ( evt: egret.Event ) {
+    private _amShooting () {
         // 速度运动
         this._curBubble.x += this._curBubble.speedX;
         this._curBubble.y += this._curBubble.speedY;
@@ -217,70 +249,68 @@ class GameView extends eui.Component {
         }
         
         // 判断撞击
-        this._hitBubble = core.word.getHitBubbleIndex( this._curBubble );
+        let hitIndex = core.word.getHitBubbleIndex( this._curBubble );
+        if( hitIndex == null ) return;
         
-        if( this._hitBubble == null ) return
-        
-        this.stopShooting();
+        // 停止发射
+        this._curBubble.stop();
+        this.onShootingStop( hitIndex );
     }
     
     // 发射结束
-    private stopShooting () {
-        this.removeEventListener( egret.Event.ENTER_FRAME, this._onShooting, this );
+    private onShootingStop ( hitIndex: core.INodeIndex ) {
+        this.removeEventListener( egret.Event.ENTER_FRAME, this._amShooting, this );
         
-        this._curBubble.stop();
+        // 固定检查
+        const fixedIndex = core.word.getFixedBubbleIndex( this._curBubble, hitIndex );
+        if( fixedIndex ) {
+            this._addBubble( fixedIndex.row, fixedIndex.col, this._curBubble );
+        } else {
+            console.error( '不存在可以定位泡泡的位置！！' );
+            return;
+        }
         
-        this._fixedCheck( this._hitBubble );
+        // 连击检测
+        const combos = core.model.getCombos( fixedIndex.row, fixedIndex.col );
+        if( combos.length >= 3 ) {
+            const noConnectNodes = core.model.getNoConnectNode( combos );
+            const drops          = [ ...combos, ...noConnectNodes ];
+            
+            core.model.removeNode( drops );
+            console.log( `移除泡泡：${ drops.length }` );
+            this._startDrop( drops );
+        }
         
-        if( !this._fixedBubble ) return;
-        // 连击判断
-        this._comboCheck( this._fixedBubble );
-        // 胜利判断
+        // 胜利检测
         if( this.$checkWin() ) {
             this.winResult();
             return;
         }
-        // 失败判断
+        
+        // 失败检测
         if( this.$checkLose() ) {
             this.loseResult();
             return;
         }
         
-        this.loadBubble();
-    }
-    
-    // 固定监测
-    private _fixedCheck ( hitBubble: core.INodeIndex ): void {
-        let fixedBubble = core.word.getFixedBubbleIndex( this._curBubble, hitBubble );
-        if( fixedBubble === null ) {
-            console.error( '不存在可以定位泡泡的位置！！' );
-            return;
-        }
-        this._addBubble( fixedBubble.row, fixedBubble.col, this._curBubble );
-        
-        this._fixedBubble = fixedBubble;
-        this._hitBubble   = null;
-        this._curBubble   = null;
-    }
-    
-    // 连击判断
-    private _comboCheck ( fixedBubble: core.INodeIndex ): void {
-        let combos = core.model.getCombos( fixedBubble.row, fixedBubble.col );
-        if( combos.length < 3 ) return;
-        
-        core.model.removeNode( combos );
-        
-        let noConnectNodes = core.model.getNoConnectNode();
-        
-        core.model.removeNode( noConnectNodes );
-        this._startDrop( [ ...combos, ...noConnectNodes ] );
+        this._curBubble = null;
+        this.amLoad();
     }
     
     // 添加泡泡到容器
-    private _addBubble ( row: number, col: number, bubble?: ui.Bubble ): void {
-        if( !this._bubbleMap[ row ] ) this._bubbleMap[ row ] = [];
+    private _addBubble ( row: number, col: number, bubble: ui.Bubble ): void {
+        if( !bubble ) {
+            console.warn( '添加的跑跑跑不存在！' );
+            return;
+        }
+        
+        if( !this._bubbleMap[ row ] ) {
+            this._bubbleMap[ row ] = [];
+        }
+        
+        console.log( `增添泡泡：(${ row },${ col })【${ df.BubbleName[ bubble.value as number ] }】` );
+        
         this._bubbleMap[ row ][ col ] = bubble;
-        if( !bubble ) return;
         // 添加到容器
         this.g_bubble.addChild( bubble );
         // 更新物理模型
@@ -291,31 +321,62 @@ class GameView extends eui.Component {
     
     // 开始掉落
     private _startDrop ( drops: core.INodeIndex[] ): void {
-        let cur: ui.Bubble = null;
-        let curIndex: core.INodeIndex;
-        while( drops.length ) {
-            curIndex = drops.pop();
-            cur      = this._bubbleMap[ curIndex.row ][ curIndex.col ];
+        let bubble: ui.Bubble         = null;
+        let curIndex: core.INodeIndex = null;
+        
+        let len = drops.length;
+        for( let i = 0; i < len; i++ ) {
+            curIndex = drops[ i ];
+            bubble   = this._bubbleMap[ curIndex.row ][ curIndex.col ];
             
-            cur.speedX = Math.pow( -1, Math.ceil( Math.random() * 4 ) ) * ( df.SPEED_X + Math.random() * df.SPEED_X );
-            cur.speedY = -df.SPEED_Y + Math.random() * df.SPEED_X;
-            cur.g      = df.G + Math.random();
+            bubble.speedX = ( i % 2 ? -1 : 1 ) * ( df.SPEED_X + Math.random() * df.SPEED_X );
+            bubble.speedY = -df.SPEED_Y + Math.random() * df.SPEED_X / 2;
+            bubble.g      = df.G + Math.random();
             
             this._bubbleMap[ curIndex.row ][ curIndex.col ] = null;
-            this._droppingBubbles.push( cur );
-            this.g_bubble.addChild( cur );
+            this._droppingBubbles.push( bubble );
+            this.g_bubble.addChild( bubble );
         }
-        this.addEventListener( egret.Event.ENTER_FRAME, this._onDrop, this );
+        this.addEventListener( egret.Event.ENTER_FRAME, this._amShake, this );
+    }
+    
+    // 掉落前震动
+    private _shakeCount: number = 0;     // 已震动次数
+    private _amShake (): void {
+        let self  = this;
+        let drops = self._droppingBubbles;
+        let bubble: ui.Bubble;
+        
+        // 震动
+        if( self._shakeCount <= df.SHAKE_COUNT ) {
+            self._shakeCount += 1;
+            // 震动动画
+            for( let i = 0; i < drops.length; i++ ) {
+                bubble = drops[ i ];
+                bubble.x += ( Math.random() * df.SHAKE_SPEED - df.SHAKE_SPEED / 2 );
+            }
+            return;
+        } else {
+            // 移除震动动画
+            self.removeEventListener( egret.Event.ENTER_FRAME, self._amShake, self );
+            console.log( '震动动画完毕！' );
+            self._shakeCount = 0;
+        }
+        
+        // 开启掉落动画
+        self.addEventListener( egret.Event.ENTER_FRAME, this._amDrop, this );
     }
     
     // 掉落
-    private _onDrop ( evt: egret.Event ): void {
-        let count           = 0;
-        let self            = this;
-        let droppingBubbles = self._droppingBubbles;
-        let bubble: ui.Bubble;
-        for( let i = 0; i < droppingBubbles.length; i++ ) {
-            bubble   = droppingBubbles[ i ];
+    private _amDrop (): void {
+        let count             = 0;
+        let self              = this;
+        let drops             = self._droppingBubbles;
+        let bubble: ui.Bubble = null;
+        
+        // 掉落
+        for( let i = 0; i < drops.length; i++ ) {
+            bubble   = drops[ i ];
             bubble.x = bubble.x + bubble.speedX;
             bubble.y = bubble.y + bubble.speedY;
             bubble.speedY += bubble.g;
@@ -326,20 +387,21 @@ class GameView extends eui.Component {
                 bubble.speedY = -df.U * bubble.speedY;
             }
             
-            // 移除屏幕就移除
-            if( core.word.left - bubble.x >= df.RADIUS || core.word.right - bubble.x <= -df.RADIUS )
+            // 跳出屏幕就移除
+            if( core.word.left - bubble.x >= df.RADIUS || core.word.right - bubble.x <= -df.RADIUS ) {
                 ui.BubblePool.getIns().recycleBubble( bubble );
-            else
-                droppingBubbles[ count++ ] = droppingBubbles[ i ];
+            } else {
+                drops[ count++ ] = drops[ i ];
+            }
         }
         // 移除多余的泡泡引用
-        for( ; count < droppingBubbles.length; count++ ) {
-            droppingBubbles.pop();
+        for( ; count < drops.length; count++ ) {
+            drops.pop();
         }
         // 全部结束则停止动画
-        if( droppingBubbles.length === 0 ) {
-            self.removeEventListener( egret.Event.ENTER_FRAME, self._onDrop, self );
-            console.log( '动画结束' );
+        if( drops.length === 0 ) {
+            self.removeEventListener( egret.Event.ENTER_FRAME, self._amDrop, self );
+            console.log( '掉落动画完毕！' );
         }
     }
     
@@ -361,9 +423,3 @@ class GameView extends eui.Component {
         console.log( '你输了！' );
     }
 }
-
-
-    
-
-
-

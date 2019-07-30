@@ -95,7 +95,7 @@ namespace core {
         
         /** ------------- ------------------- 数据模型的操作 ------------------------------ */
         // // 获取地图数据
-        // getMap (): number[][] { return this._map; }
+        getMap (): number[][] { return this._map; }
         // 是否为空
         isEmpty (): boolean {
             let maxRow = this._maxRow;
@@ -226,20 +226,20 @@ namespace core {
         }
         
         // 获取悬挂的节点
-        getConnectedNode (): number[][] {
+        getConnectedNode ( ignoreIndex?: INodeIndex[] ): number[][] {
             let self                   = this;
-            let visitedMap: number[][] = self._createMapModel();
+            let visitedMap: number[][] = self._createMapModel( ignoreIndex );
             
             let stack: INodeIndex[]     = [];
-            let curNode: INodeIndex     = null;             // 当前访问的节点
-            let nextNode: INodeIndex    = null;            // 下一个访问的节点
+            let curNode: INodeIndex     = null;         // 当前访问的节点
+            let nextNode: INodeIndex    = null;         // 下一个访问的节点
             let neighbors: INodeIndex[] = null;         // 访问节点的周边节点
             
             let row = 0;
             let col = 0;
             for( ; col < self._cols; col++ ) {
-                if( self._map[ 0 ][ col ] === NodeType.NONE ) continue;
                 if( visitedMap[ 0 ][ col ] ) continue;
+                if( self._map[ 0 ][ col ] === NodeType.NONE ) continue;
                 
                 stack.push( { row, col } );
                 visitedMap[ row ][ col ] = 1;
@@ -261,10 +261,10 @@ namespace core {
         }
         
         // 获取没有悬挂的节点
-        getNoConnectNode (): INodeIndex[] {
+        getNoConnectNode ( ignoreIndex?: INodeIndex[] ): INodeIndex[] {
             let self           = this;
             let noConnectNodes = [];
-            let connectNodes   = this.getConnectedNode();
+            let connectNodes   = this.getConnectedNode( ignoreIndex );
             
             for( let row = 0; row < self._rows; row++ ) {
                 for( let col = 0; col < self._cols - row % 2; col++ ) {
@@ -285,7 +285,7 @@ namespace core {
         }
         
         // 创建一个地图模型
-        private _createMapModel (): number[][] {
+        private _createMapModel ( ignoreIndex?: INodeIndex[] ): number[][] {
             let mapModel = [];
             let rows     = this._rows;
             let cols     = this._cols;
@@ -295,6 +295,13 @@ namespace core {
                     mapModel[ row ][ col ] = 0;
                 }
             }
+            
+            if( ignoreIndex && ignoreIndex.length ) {
+                for( let i = 0; i < ignoreIndex.length; i++ ) {
+                    mapModel[ ignoreIndex[ i ].row ][ ignoreIndex[ i ].col ] = 1;
+                }
+            }
+            
             return mapModel;
         }
     }

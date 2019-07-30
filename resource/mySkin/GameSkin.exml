@@ -23,6 +23,25 @@
 	</e:Group>
 	<ns1:ScoreBoard id="score_board" skinName="skins.ScoreBoard" left="0" top="0"/>
 	<ns1:TimeBoard id="time_board" x="44" y="878" skinName="skins.Timer" scaleX="1.2" scaleY="1.2"/>
+	<e:Group x="19" y="117.4">
+		<ns1:TimeBoard x="0" y="0" skinName="skins.Timer" time="0"/>
+		<ns1:TimeBoard x="0" y="67.2" skinName="skins.Timer" time="1"/>
+		<ns1:TimeBoard x="0" y="151.44" skinName="skins.Timer" time="2"/>
+		<ns1:TimeBoard x="10" y="77.2" skinName="skins.Timer" time="3"/>
+		<ns1:TimeBoard x="20" y="87.2" skinName="skins.Timer" time="4"/>
+		<ns1:TimeBoard x="30" y="97.2" skinName="skins.Timer" time="5"/>
+		<ns1:TimeBoard x="40" y="107.2" skinName="skins.Timer" time="6"/>
+		<ns1:TimeBoard x="50" y="117.2" skinName="skins.Timer" time="7"/>
+		<ns1:TimeBoard x="60" y="127.2" skinName="skins.Timer" time="8"/>
+		<ns1:TimeBoard x="70" y="137.2" skinName="skins.Timer" time="9"/>
+		<ns1:TimeBoard x="50" y="117.2" skinName="skins.Timer" time="10"/>
+		<ns1:TimeBoard x="60" y="127.2" skinName="skins.Timer" time="11"/>
+		<ns1:TimeBoard x="70" y="137.2" skinName="skins.Timer" time="12"/>
+		<ns1:TimeBoard x="80" y="147.2" skinName="skins.Timer" time="13"/>
+		<e:layout>
+			<e:VerticalLayout gap="-4"/>
+		</e:layout>
+	</e:Group>
 	<e:Group id="g_handle" height="740" width="610" anchorOffsetY="0" x="15" y="110" locked="true">
 	</e:Group>
 	<e:Rect id="btn_change" width="56" height="56" ellipseWidth="56" ellipseHeight="56" x="178.33" y="908.3" />

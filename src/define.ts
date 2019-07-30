@@ -43,7 +43,7 @@ namespace df {
         public static COIN   = 0x13;
     }
     
-    export let BubbleResMap = {
+    export const BubbleResMap = {
         [ BubbleType.NONE ]: '',
         [ BubbleType.RED ]: 'bubble_red_png',
         [ BubbleType.YELLOW ]: 'bubble_yellow_png',
@@ -58,7 +58,24 @@ namespace df {
         [ BubbleType.BOMB2 ]: 'prop_bomb_png',
         [ BubbleType.COIN ]: 'icon_coin_png',
         [ BubbleType.HUMMER ]: 'prop_hammer_png'
-    }
+    };
+    
+    export const BubbleName: { [ bubble: number ]: string } = {
+        [ BubbleType.NONE ]: '没',
+        [ BubbleType.RED ]: '红',
+        [ BubbleType.YELLOW ]: '黄',
+        [ BubbleType.BLUE ]: '蓝',
+        [ BubbleType.GREEN ]: '绿',
+        [ BubbleType.ORANGE ]: '橙',
+        [ BubbleType.PURPLE ]: '紫',
+        [ BubbleType.PINK ]: '粉',
+        [ BubbleType.BLACK ]: '黑',
+        [ BubbleType.ALPHA ]: '透明',
+        [ BubbleType.COLOR ]: '彩色',
+        [ BubbleType.BOMB2 ]: '炸弹',
+        [ BubbleType.COIN ]: '金币',
+        [ BubbleType.HUMMER ]: '锤子'
+    };
     
     // 碰撞结果
     export enum HIT {
@@ -97,11 +114,16 @@ namespace df {
     // 下落动画y轴方向的最速度
     export const SPEED_Y            = 8;
     //碰撞能量损耗系数
-    export const U                  = 0.65;
+    export const U                  = 0.6;
     // 重力加速度
-    export const G                  = 0.85;
+    export const G                  = 0.9;
+    // 震动次数
+    export const SHAKE_COUNT        = 8;
+    // 震动速度
+    export const SHAKE_SPEED        = 10;
+    
     // 负一层
-    export const B1                 = [ 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10 ];
+    export const B1 = [ 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10 ];
     
     export const TABLE = [
         [ 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 ],
