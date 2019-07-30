@@ -75,16 +75,16 @@ class GameView extends eui.Component {
         
         this._lvData = DataMrg.getIns().getLvDt( lv );
         
-        if( this._lvData === null ) {
+        if( this._lvData !== null ) {
+            this._lvData.map[ -1 ] = df.B1;
+            core.model.updateMap( this._lvData.map );
+            
+            this._updateTimeBoard();
+            this._updateScoreBoard();
+            this._updateBubbleGroup();
+        } else {
             console.warn( `不能存在关卡【${ lv }】的游戏数据！` );
-            return;
         }
-        
-        core.model.updateMap( this._lvData.map );
-        
-        this._updateTimeBoard();
-        this._updateScoreBoard();
-        this._updateBubbleGroup();
     }
     
     async gameStart () {
@@ -119,9 +119,9 @@ class GameView extends eui.Component {
         let cols = core.model.getCols();
         
         let bubble: ui.Bubble = null;
-        for( let row = 0; row < rows; row++ ) {
+        for( let row = -1; row < rows; row++ ) {
             for( let col = 0; col < cols - row % 2; col++ ) {
-                bubble = ui.BubblePool.getIns().createBubble( core.model.getNodeVal( row, col ) );
+                bubble = ui.bubblePool.createBubble( core.model.getNodeVal( row, col ) );
                 if( !bubble ) {
                     console.warn( '添加的跑跑跑不存在！' );
                     continue;
@@ -147,12 +147,12 @@ class GameView extends eui.Component {
         // 创建一个
         if( !this._nextBubble ) {
             const val          = core.model.getNextVal();
-            this._nextBubble   = ui.BubblePool.getIns().createBubble( val );
+            this._nextBubble   = ui.bubblePool.createBubble( val );
             this._nextBubble.x = NEXT_POSITION.x;
             this._nextBubble.y = NEXT_POSITION.y;
             this.addChild( this._nextBubble );
         } else {
-            console.log( 'next bubble没有清空！' );
+            console.error( 'next bubble没有清空！' );
         }
     }
     
@@ -194,7 +194,7 @@ class GameView extends eui.Component {
         }
         console.log( `上弹前：cur:【${ this._curBubble }】next:【${ df.BubbleName[ this._nextBubble.value as number ] }】` );
         
-        self.amBallRoll( true ).then( () => {
+        return self.amBallRoll( true ).then( () => {
             self._curBubble  = self._nextBubble;
             self._nextBubble = null;
             
@@ -208,23 +208,23 @@ class GameView extends eui.Component {
     }
     
     // 动画： 更换泡泡
-    async amSwitch () {
+    amSwitch () {
         let self = this;
         if( self.isShooting ) return;
         self.isShooting = true;
         
         // 执行动画
-        await Promise.all( [ self.amBallRoll( true ), self.amBallRoll( false ) ] );
-        
-        let temp         = self._curBubble;
-        self._curBubble  = self._nextBubble;
-        self._nextBubble = temp;
-        
-        self.icon_arrow.setValue( self._curBubble.value );
-        self.isShooting = false;
-        
-        console.log( `【${ df.BubbleName[ this._nextBubble.value as number ] }】 <=> 【${ df.BubbleName[ this._curBubble.value as number ] }】` );
-        
+        return Promise.all( [ self.amBallRoll( true ), self.amBallRoll( false ) ] ).then( () => {
+            let temp         = self._curBubble;
+            self._curBubble  = self._nextBubble;
+            self._nextBubble = temp;
+            
+            self.icon_arrow.setValue( self._curBubble.value );
+            self.isShooting = false;
+            
+            console.log( `【${ df.BubbleName[ this._nextBubble.value as number ] }】 <=> 【${ df.BubbleName[ this._curBubble.value as number ] }】` );
+            
+        } );
     }
     
     // 开始发射动画
@@ -240,8 +240,10 @@ class GameView extends eui.Component {
         this._curBubble.x += this._curBubble.speedX;
         this._curBubble.y += this._curBubble.speedY;
         
+        const x = this._curBubble.x;
         if( core.word.isHitSideWall( this._curBubble.x ) ) {
             this._curBubble.speedX = -this._curBubble.speedX;
+            // this._curBubble.x      = Math.max( Math.min( x, this.g_bubble.x + this.g_bubble.width - df.RADIUS ), this.g_bubble.x + df.RADIUS );
             if( this._curBubble.x < this.g_bubble.x + df.RADIUS )
                 this._curBubble.x = this.g_bubble.x + df.RADIUS;
             else if( this._curBubble.x > this.g_bubble.x + this.g_bubble.width - df.RADIUS )
@@ -300,7 +302,7 @@ class GameView extends eui.Component {
     // 添加泡泡到容器
     private _addBubble ( row: number, col: number, bubble: ui.Bubble ): void {
         if( !bubble ) {
-            console.warn( '添加的跑跑跑不存在！' );
+            // console.warn( '添加的跑跑跑不存在！' );
             return;
         }
         
@@ -359,7 +361,6 @@ class GameView extends eui.Component {
         } else {
             // 移除震动动画
             self.removeEventListener( egret.Event.ENTER_FRAME, self._amShake, self );
-            console.log( '震动动画完毕！' );
             self._shakeCount = 0;
         }
         
@@ -368,6 +369,7 @@ class GameView extends eui.Component {
     }
     
     // 掉落
+    // private _dropCount: number = 0;
     private _amDrop (): void {
         let count             = 0;
         let self              = this;
@@ -388,20 +390,18 @@ class GameView extends eui.Component {
             }
             
             // 跳出屏幕就移除
-            if( core.word.left - bubble.x >= df.RADIUS || core.word.right - bubble.x <= -df.RADIUS ) {
-                ui.BubblePool.getIns().recycleBubble( bubble );
-            } else {
-                drops[ count++ ] = drops[ i ];
+            if( self.g_bubble.x - bubble.x > df.RADIUS || bubble.x - ( self.g_bubble.x + self.g_bubble.width ) > df.RADIUS ) {
+                count++;
+                // bubble.stop();
             }
         }
-        // 移除多余的泡泡引用
-        for( ; count < drops.length; count++ ) {
-            drops.pop();
-        }
         // 全部结束则停止动画
-        if( drops.length === 0 ) {
+        if( drops.length === count ) {
             self.removeEventListener( egret.Event.ENTER_FRAME, self._amDrop, self );
-            console.log( '掉落动画完毕！' );
+            for( let i = 0; i < drops.length; i++ ) {
+                ui.bubblePool.recycleBubble( drops[ i ] );
+            }
+            drops.length = 0;
         }
     }
     

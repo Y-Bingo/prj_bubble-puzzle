@@ -37,9 +37,14 @@ namespace ui {
         
         setAngle ( angle: number ) {
             if( angle > df.MAX_ANGLE || angle < df.MIN_ANGLE ) return;
-            this.angle  = angle;
-            this.speedY = -df.BUBBLE_FLY_SPEED_Y;
-            this.speedX = Math.tan( angle * Math.PI / 180 ) * df.BUBBLE_FLY_SPEED_Y;
+            this.angle = angle;
+            if( angle < 35 ) {
+                this.speedY = -df.BUBBLE_FLY_SPEED_Y * 1.4;
+                this.speedX = Math.tan( angle * Math.PI / 180 ) * Math.abs( this.speedY );
+            } else {
+                this.speedY = -df.BUBBLE_FLY_SPEED_Y;
+                this.speedX = Math.tan( angle * Math.PI / 180 ) * Math.abs( this.speedY );
+            }
         }
         
         stop (): void {
@@ -66,8 +71,10 @@ namespace ui {
             self.row       = -1;
             self.col       = -1;
             
-            self.centerX   = 0;
-            self.centerY   = 0;
+            self.centerX = 0;
+            self.centerY = 0;
+            self.x       = 0;
+            self.y       = 0;
             
             this.value = df.BubbleType.NONE;
         }

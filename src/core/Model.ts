@@ -169,7 +169,7 @@ namespace core {
             let D         = centerRow % 2 ? D1 : D0;
             
             // 验证
-            if( !self._checkArea( centerRow, centerCol ) ) return neighbors;
+            // if( !self._checkArea( centerRow, centerCol ) ) return neighbors;
             
             for( let i = 0; i < D.length; i++ ) {
                 row = centerRow + D[ i ][ 0 ];

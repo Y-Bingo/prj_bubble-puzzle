@@ -158,7 +158,7 @@ namespace core {
             let b2 = 0;                                 // 直角边 b
             let c2 = Math.pow( r1 + r2, 2 );            // 斜边 c
             
-            for( let row = maxRow; row >= 0; row-- ) {
+            for( let row = maxRow; row >= -1; row-- ) {
                 y2 = this.index2wY( row, 0 );
                 a2 = Math.pow( y1 - y2, 2 );
                 for( let col = 0; col < cols - row % 2; col++ ) {
