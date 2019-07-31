@@ -108,12 +108,15 @@ namespace core {
             return row * ( RADIUS * 2 - OFF_Y ) + RADIUS;
         }
         
-        // x坐标 世界转模型
+        // x坐标 舞台 => 世界
         g2wX ( x: number ): number { return x - this.offX; }
-        // y坐标 世界转模型
+        // y坐标 舞台 => 世界
         g2wY ( y: number ): number { return y - this.offY; }
         
-        // x坐标 世界转模型
+        // x坐标 世界 => 舞台
+        w2gX ( x: number ): number { return x + this.offX;}
+        // y坐 世界 => 舞台
+        w2gY ( y: number ): number { return y + this.offY; }
         
         // 获取泡泡到的行索引
         getBubbleRow ( y: number ): number {
@@ -204,7 +207,7 @@ namespace core {
         
         // 检查辅助线与世界的碰撞
         checkGuidLineHit ( point: IModel ): boolean {
-            let maxRow   = model.getMaxRow();
+            let maxRow = model.getMaxRow();
             // point.radius = point.radius || RADIUS / 2;
             
             if( point.centerY > this.index2wY( maxRow, 0 ) + RADIUS ) return false;

@@ -1,3 +1,5 @@
+import MovieClip = ui.MovieClip;
+
 const SHOOT_START_POSITION = {
     x: 320,
     y: 985,
@@ -22,6 +24,10 @@ class GameView extends eui.Component {
     btn_change: eui.Group;      // 切换按钮（无显示效果）
     time_board: TimeBoard;      // 计时器面板
     score_board: ScoreBoard;    // 计分板
+    
+    // 动画对象
+    private _mcBomb: MovieClip;  // 爆炸动画
+    private _mcHummer: MovieClip;// 锤子动画
     
     // 游戏属性
     private _lv: number;                    // 关卡等级
@@ -57,13 +63,30 @@ class GameView extends eui.Component {
         this.gameStatus = df.EGameStatus.FREE;
         this._lv        = -1;
         this._lvData    = null;
-        
     }
     
     // 初始化游戏界面组件
     private _initSkinPart (): void {
         this._bubbleMap       = [];
         this._droppingBubbles = [];
+        
+        this._mcBomb               = new MovieClip( {
+            sourceTemp: 'mc_bomb_%f_png',
+            startFrame: 0,
+            endFrame: 6,
+            frameRate: 16
+        } );
+        this._mcBomb.anchorOffsetX = this._mcBomb.width / 2;
+        this._mcBomb.anchorOffsetY = this._mcBomb.height / 2;
+        
+        this._mcHummer               = new MovieClip( {
+            sourceTemp: 'mc_hummer_%f_png',
+            startFrame: 0,
+            endFrame: 5,
+            frameRate: 12
+        } );
+        this._mcHummer.anchorOffsetX = this._mcHummer.width / 2;
+        this._mcHummer.anchorOffsetY = this._mcHummer.height / 2;
         
         core.word.addStage( this.g_bubble );
     }
@@ -77,7 +100,8 @@ class GameView extends eui.Component {
         
         if( this._lvData !== null ) {
             this._lvData.map[ -1 ] = df.B1;
-            core.model.updateMap( this._lvData.map );
+            core.model.setMap( this._lvData.map );
+            core.model.setNext( this._lvData.next );
             
             this._updateTimeBoard();
             this._updateScoreBoard();
@@ -124,7 +148,6 @@ class GameView extends eui.Component {
             for( let col = 0; col < cols; col++ ) {
                 bubble = ui.bubblePool.createBubble( core.model.getNodeVal( row, col ) );
                 if( !bubble ) {
-                    console.warn( '添加的跑跑跑不存在！' );
                     continue;
                 }
                 if( !this._bubbleMap[ row ] ) {
@@ -240,6 +263,7 @@ class GameView extends eui.Component {
         // 速度运动
         this._curBubble.x += this._curBubble.speedX;
         this._curBubble.y += this._curBubble.speedY;
+        this._curBubble.rotation += this._curBubble._rotation;
         
         const x = this._curBubble.x;
         if( core.word.isHitSideWall( this._curBubble.x ) ) {
@@ -251,18 +275,116 @@ class GameView extends eui.Component {
                 this._curBubble.x = this.g_bubble.x + this.g_bubble.width - df.RADIUS;
         }
         
+        this._hitCheck();
+        // if( hitIndex == null ) return;
+        
+        // 开始停止
+    }
+    
+    private _hitCheck (): void {
         // 判断撞击
         let hitIndex = core.word.getHitBubbleIndex( this._curBubble );
-        if( hitIndex == null ) return;
+        if( !hitIndex ) return;
+        // 停止动画
+        this.removeEventListener( egret.Event.ENTER_FRAME, this._amShooting, this );
         
-        // 停止发射
-        this._curBubble.stop();
-        this.onShootingStop( hitIndex );
+        // 判断是否为道具碰撞
+        if( !( this._curBubble.value & df.TOOL_MASK ) ) {
+            this._fixedCheck( hitIndex );
+        } else {
+            // 道具处理
+            switch( this._curBubble.value ) {
+                case df.BubbleType.HUMMER:      // 锤子
+                    this._amHummer( hitIndex );
+                    break;
+                case df.BubbleType.BOMB2:       // 炸弹
+                    this._amBomb( hitIndex );
+                    break;
+                case df.BubbleType.COLOR:       // color
+                    console.log( 'colorBAll' );
+                    break;
+                default:
+                    break;
+            }
+            this._resultCheck();
+        }
+    }
+    // 锤子动画
+    private _amHummer ( hitIndex: core.INodeIndex ): void {
+        const self      = this;
+        const hummer    = self._curBubble;
+        const mcHummer  = self._mcHummer;
+        const bubbleMap = self._bubbleMap;
+        
+        const wx = core.word.w2gX( core.word.index2wX( hitIndex.row, hitIndex.col ) );
+        const wy = core.word.w2gY( core.word.index2wY( hitIndex.row, hitIndex.col ) );
+        
+        // 定位
+        hummer.x   = wx;
+        hummer.y   = wy;
+        mcHummer.x = wx;
+        mcHummer.y = wy;
+        
+        // 更新数据
+        core.model.removeNode( [ hitIndex ] );
+        
+        // 动画
+        self.addChild( mcHummer );
+        mcHummer.bindFrameEvent( 1, () => {
+            ui.bubblePool.recycleBubble( hummer );
+        } );
+        mcHummer.bindFrameEvent( 3, () => {
+            ui.bubblePool.recycleBubble( bubbleMap[ hitIndex.row ][ hitIndex.col ] );
+            bubbleMap[ hitIndex.row ][ hitIndex.col ] = null;
+        } );
+        mcHummer.play( () => {
+            self.removeChild( mcHummer );
+            mcHummer.unbindFrameEvent( 1 );
+            mcHummer.unbindFrameEvent( 3 );
+            console.log( wx, wy, hitIndex );
+        } );
+    }
+    // 炸弹动画
+    private _amBomb ( hitIndex: core.INodeIndex ): void {
+        const self      = this;
+        const bomb      = self._curBubble;
+        const mcBomb    = self._mcBomb;
+        const bubbleMap = self._bubbleMap;
+        
+        const { row, col } = core.word.getFixedBubbleIndex( bomb, hitIndex );
+        const wx           = core.word.w2gX( core.word.index2wX( row, col ) );
+        const wy           = core.word.w2gY( core.word.index2wY( row, col ) );
+        // 定位周围的泡泡
+        const neighbors    = core.model.getNeighbors( row, col, core.EFilterType.FILLED );
+        
+        // 定位
+        bomb.x   = wx;
+        bomb.y   = wy;
+        mcBomb.x = wx;
+        mcBomb.y = wy;
+        
+        // 更新数据
+        core.model.removeNode( neighbors );
+        
+        self.addChild( mcBomb );
+        mcBomb.bindFrameEvent( 2, () => {
+            ui.bubblePool.recycleBubble( bomb );
+        } );
+        mcBomb.bindFrameEvent( 3, () => {
+            neighbors.forEach( ( { row, col } ) => {
+                ui.bubblePool.recycleBubble( bubbleMap[ row ][ col ] );
+                bubbleMap[ row ][ col ] = null;
+            } );
+        } );
+        mcBomb.play( () => {
+            self.removeChild( mcBomb );
+            mcBomb.unbindFrameEvent( 2 );
+            mcBomb.unbindFrameEvent( 5 );
+        } );
     }
     
     // 发射结束
-    private onShootingStop ( hitIndex: core.INodeIndex ) {
-        this.removeEventListener( egret.Event.ENTER_FRAME, this._amShooting, this );
+    private _fixedCheck ( hitIndex: core.INodeIndex ) {
         
         // 固定检查
         const fixedIndex = core.word.getFixedBubbleIndex( this._curBubble, hitIndex );
@@ -284,6 +406,10 @@ class GameView extends eui.Component {
             this._startDrop( drops );
         }
         
+        this._resultCheck();
+    }
+    
+    private _resultCheck (): void {
         // 胜利检测
         if( this.$checkWin() ) {
             this.winResult();
@@ -368,9 +494,7 @@ class GameView extends eui.Component {
         // 开启掉落动画
         self.addEventListener( egret.Event.ENTER_FRAME, this._amDrop, this );
     }
-    
     // 掉落
-    // private _dropCount: number = 0;
     private _amDrop (): void {
         let count             = 0;
         let self              = this;
@@ -393,7 +517,6 @@ class GameView extends eui.Component {
             // 跳出屏幕就移除
             if( self.g_bubble.x - bubble.x > df.RADIUS || bubble.x - ( self.g_bubble.x + self.g_bubble.width ) > df.RADIUS ) {
                 count++;
-                // bubble.stop();
             }
         }
         // 全部结束则停止动画

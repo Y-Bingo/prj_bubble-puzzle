@@ -1,4 +1,6 @@
 namespace df {
+    // 道具掩码
+    export const TOOL_MASK = 0xf0;
     
     export class BubbleType extends core.NodeType {
         // public static NONE = ".";
@@ -34,7 +36,7 @@ namespace df {
         
         /** ---------- 道具 ---------- */
                       // 彩球
-        public static COLOR  = 0x0f;
+        public static COLOR  = 0x1f;
         // 炸弹
         public static BOMB2  = 0x11;
         // 锤子

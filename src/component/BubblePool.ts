@@ -1,5 +1,5 @@
 namespace ui {
-
+    
     const MIN = 5;
     const MAX = 170;
     // const MIN = 5;
@@ -26,14 +26,14 @@ namespace ui {
         }
         
         // 创建一个泡泡
-        createBubble ( value: df.BubbleType ): Bubble {
+        createBubble ( value: number ): Bubble {
             if( value == core.NodeType.NONE ) return null;
             
             let bubble = this._pop();
             bubble.setValue( value );
             
             // 判断是否为工具型泡泡
-            if( !!( value as number & 0xf0 ) ) {
+            if( !!( value & df.TOOL_MASK ) ) {
                 bubble._rotation = df.ROTATION;
             }
             

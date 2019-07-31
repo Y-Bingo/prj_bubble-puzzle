@@ -144,9 +144,9 @@ namespace ui {
             self.addEventListener( egret.Event.ENTER_FRAME, self._play, self );
         }
         
-        private _frameEndTime: number   = 0;          // 上一针的结束时间
-        private _frameStartTime: number = 0;        // 新一帧的开始时间
-        private _deltaTime: number      = 0;             // 帧间隔
+        private _frameEndTime: number   = 0;            // 上一针的结束时间
+        private _frameStartTime: number = 0;            // 新一帧的开始时间
+        private _deltaTime: number      = 0;            // 帧间隔
         private _play (): void {
             let self = this;
             
@@ -183,6 +183,9 @@ namespace ui {
         bindFrameEvent ( frame: number, call: Function ): void {
             this._frameEvent[ frame ] = call;
         }
+        unbindFrameEvent ( frame: number ): void {
+            this._frameEvent[ frame ] = null;
+        }
         
         // 将播放头指定到某一帧停止
         goAndStop ( frame: number ): void {
@@ -217,13 +220,18 @@ namespace ui {
         }
         
         // 停止
+        private _isStop: boolean = false;       // 锁 防止多次调用
         stop (): void {
             let self = this;
-            console.log( '1' );
+            if( self._isStop ) return;
+            self._isStop = true;
+            
             if( self.hasEventListener( egret.Event.ENTER_FRAME ) )
                 self.removeEventListener( egret.Event.ENTER_FRAME, self._play, self );
-            // this._call && this._call();
-            self.dispatchEventWith( egret.Event.COMPLETE );
+            
+            this._call && self._call();
+            self._isStop = false;
+            // self.dispatchEventWith( egret.Event.COMPLETE );
         }
     }
 }

@@ -41,14 +41,14 @@ namespace core {
         private _cols: number   = 0;           // 地图列数
         private _maxRow: number = 0;           // 存在节点的最大行数
         // private _visited: number[][] = [];  // 遍历状态
-        private _next: NodeType[]  = [];        // 缓存数据组
-        private _types: NodeType[] = [];        // 缓存节点种类
+        private _next: number[]  = [];        // 缓存数据组
+        private _types: number[] = [];        // 缓存节点种类
         
         // private _curNode: NodeType  = NodeType.NONE;   // 当前节点
         // private _nextNode: NodeType = NodeType.NONE;  // 下一个节点
         
         // 更新地图
-        updateMap ( map: any[][] ): void {
+        setMap ( map: any[][] ): void {
             // 验证
             let rows = map.length;
             let cols = map[ 0 ] ? map[ 0 ].length : 0;
@@ -93,6 +93,11 @@ namespace core {
             }
         }
         
+        // 设置next
+        setNext ( value: any[] ): void {
+            this._next = JSON.parse( JSON.stringify( value ) );
+        }
+        
         /** ------------- ------------------- 数据模型的操作 ------------------------------ */
         // // 获取地图数据
         getMap (): number[][] { return this._map; }
@@ -120,9 +125,9 @@ namespace core {
         getMaxRow (): number { return this._maxRow; }
         
         // 获取节点数据
-        getNodeVal ( row: number, col: number ): NodeType { return this._map[ row ][ col ]; }
+        getNodeVal ( row: number, col: number ): number { return this._map[ row ][ col ]; }
         // 获取下一个节点
-        getNextVal (): NodeType {
+        getNextVal (): number {
             if( this._next.length <= 0 )
                 return this._createNode();
             return this._next.pop();

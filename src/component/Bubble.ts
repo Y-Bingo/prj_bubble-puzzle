@@ -12,7 +12,7 @@ namespace ui {
         // 游戏属性
         row: number;            // 行坐标
         col: number;            // 纵坐标
-        value: df.BubbleType;   // 泡泡值
+        value: number;   // 泡泡值
         // // 组件
         // border: eui.Image;      // 外部
         // content: eui.Image;     // 内容
@@ -28,7 +28,7 @@ namespace ui {
             this.reset();
         }
         
-        setValue ( val: df.BubbleType ) {
+        setValue ( val: number ) {
             if( this.value == val ) return;
             this.value = val;
             // this.source = null;
@@ -71,10 +71,11 @@ namespace ui {
             self.row       = -1;
             self.col       = -1;
             
-            self.centerX = 0;
-            self.centerY = 0;
-            self.x       = 0;
-            self.y       = 0;
+            self.centerX  = 0;
+            self.centerY  = 0;
+            self.x        = 0;
+            self.y        = 0;
+            self.rotation = 0;
             
             this.value = df.BubbleType.NONE;
         }

@@ -1,10 +1,11 @@
 const LV_MAP_RES = 'lv_map_json';
 
 interface ILVData {
-    map: any[][];
-    typeCount: number;
-    maxScore: number;
-    cellScore: number;
+    map: any[][];           // 地图数据
+    next: any[];            // 待发
+    types: any[];           // 类型种类
+    maxScore: number;       // 最高分
+    cellScore: number;      // 底分
 }
 
 class DataMrg {
