@@ -120,7 +120,8 @@ class GameView extends eui.Component {
         
         let bubble: ui.Bubble = null;
         for( let row = -1; row < rows; row++ ) {
-            for( let col = 0; col < cols - row % 2; col++ ) {
+            cols = core.model.getCols( row );
+            for( let col = 0; col < cols; col++ ) {
                 bubble = ui.bubblePool.createBubble( core.model.getNodeVal( row, col ) );
                 if( !bubble ) {
                     console.warn( '添加的跑跑跑不存在！' );

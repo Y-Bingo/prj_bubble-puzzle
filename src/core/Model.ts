@@ -115,7 +115,7 @@ namespace core {
         // 获取行数
         getRows () { return this._rows; }
         // 获取列数
-        getCols () { return this._cols; }
+        getCols ( row?: number ) { return row ? this._map[ row ].length : this._cols; }
         // 获取存在节点的最大行
         getMaxRow (): number { return this._maxRow; }
         

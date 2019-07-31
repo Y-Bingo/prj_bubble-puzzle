@@ -87,15 +87,15 @@ namespace ui {
         
         // 获取两点之间的图片定位点
         private _getPoints ( count: number = 3 ): { x: number, y: number }[] {
-            let k         = this._k;
-            let b         = this._b;
-            let angle     = this._angle;
+            let k     = this._k;
+            let b     = this._b;
+            let angle = this._angle;
             // 两点之间的偏移
-            let gap       = 0;
-            let gapY      = Math.round( GAP * Math.cos( angle * Math.PI / 180 ) );
+            let gap   = 0;
+            let gapY  = Math.round( GAP * Math.cos( angle * Math.PI / 180 ) );
             // 点坐标
-            let y         = this.bottom;
-            let x         = ( y - b ) / k;
+            let y     = this.bottom;
+            let x     = ( y - b ) / k + 0.1; // 这里 +个0.1 是为了避免跳过墙体的碰撞检查
             // 点数
             let num       = 0;
             let points    = [];
@@ -132,26 +132,21 @@ namespace ui {
                 bottom = this.bottom;
             
             let points = [ { x, y } ];
+            // let points = [];
             
             let nextX = 0,
                 nextY = 0;
             
-            let i     = 0;
-            let isHit = false;
+            let i       = 0;
+            let isHit   = false;
+            let isHitUD = false;
             while( i < count ) {
-                // 左墙撞击
+                
+                // 左墙判断
                 if( !isHit && x != left ) {
                     nextX = left;
                     nextY = k * nextX + b;
                     if( nextY >= top && nextY <= bottom ) {
-                        isHit = true;
-                    }
-                }
-                // 上墙判断
-                if( !isHit && y != top ) {
-                    nextY = top;
-                    nextX = ( nextY - b ) / k;
-                    if( nextX >= left && nextX <= right ) {
                         isHit = true;
                     }
                 }
@@ -163,12 +158,23 @@ namespace ui {
                         isHit = true;
                     }
                 }
+                // 上墙判断
+                if( !isHit && y != top ) {
+                    nextY = top;
+                    nextX = ( nextY - b ) / k;
+                    if( nextX >= left && nextX <= right ) {
+                        isHit   = true;
+                        isHitUD = true;
+                    }
+                }
+                
                 // 下墙判断
                 if( !isHit && y != bottom ) {
                     nextY = bottom;
                     nextX = ( nextY - b ) / k;
                     if( nextX >= left && nextX <= right ) {
-                        isHit = true;
+                        isHit   = true;
+                        isHitUD = true;
                     }
                 }
                 
@@ -177,9 +183,12 @@ namespace ui {
                 
                 x = nextX;
                 y = nextY;
+                
                 points.push( { x, y } );
                 
                 isHit = false;
+                
+                if( isHitUD ) break;
                 i++;
             }
             return points;

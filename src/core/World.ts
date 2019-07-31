@@ -131,15 +131,6 @@ namespace core {
             return this.right - wx <= RADIUS || wx - this.left <= RADIUS;
         }
         
-        // 是否撞底墙
-        isHitBottomWall ( y: number ): boolean {
-            return this.g2wY( y ) + RADIUS >= this.bottom;
-        }
-        
-        isHitTopWall (): boolean {
-            return false;
-        }
-        
         // 获取碰撞到的泡泡索引
         getHitBubbleIndex ( cur: IModel ): INodeIndex {
             let cols   = model.getCols();
@@ -156,12 +147,13 @@ namespace core {
             
             let a2 = 0;                                 // 直角边 a
             let b2 = 0;                                 // 直角边 b
-            let c2 = Math.pow( r1 + r2, 2 );            // 斜边 c
+            let c2 = Math.pow( r1 + r2, 2 );       // 斜边 c
             
             for( let row = maxRow; row >= -1; row-- ) {
-                y2 = this.index2wY( row, 0 );
-                a2 = Math.pow( y1 - y2, 2 );
-                for( let col = 0; col < cols - row % 2; col++ ) {
+                y2   = this.index2wY( row, 0 );
+                a2   = Math.pow( y1 - y2, 2 );
+                cols = core.model.getCols( row );
+                for( let col = 0; col < cols; col++ ) {
                     
                     if( model.getNodeVal( row, col ) === NodeType.NONE ) continue;
                     
@@ -212,7 +204,8 @@ namespace core {
         
         // 检查辅助线与世界的碰撞
         checkGuidLineHit ( point: IModel ): boolean {
-            let maxRow = model.getMaxRow();
+            let maxRow   = model.getMaxRow();
+            // point.radius = point.radius || RADIUS / 2;
             
             if( point.centerY > this.index2wY( maxRow, 0 ) + RADIUS ) return false;
             
