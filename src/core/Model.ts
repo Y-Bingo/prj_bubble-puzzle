@@ -79,12 +79,13 @@ namespace core {
         }
         // 解析地图元素种类
         private _alzTypes (): void {
-            let map   = this._map;
-            let rows  = this._rows;
-            let cols  = this._cols;
-            let types = this._types;
-            for( let row = 0; row < rows; row++ ) {
-                for( let col = 0; col < cols - row % 2; col++ ) {
+            let map   = this._map,
+                rows  = this._maxRow,
+                cols  = this._cols,
+                types = this._types;
+            for( let row = rows; row >= 0; row-- ) {
+                cols = this.getCols( row );
+                for( let col = 0; col < cols; col++ ) {
                     if( ( map[ row ][ col ] === NodeType.NONE ) ) continue;
                     if( map[ row ][ col ] & 0xf0 ) continue;
                     if( types.indexOf( map[ row ][ col ] ) >= 0 ) continue;
@@ -120,7 +121,7 @@ namespace core {
         // 获取行数
         getRows () { return this._rows; }
         // 获取列数
-        getCols ( row?: number ) { return row ? this._map[ row ].length : this._cols; }
+        getCols ( row?: number ) { return ( this._map[ row ] && this._map[ row ].length ) || this._cols; }
         // 获取存在节点的最大行
         getMaxRow (): number { return this._maxRow; }
         
@@ -135,7 +136,6 @@ namespace core {
         
         // 添加节点
         addNode ( row: number, col: number, value: NodeType ): void {
-            value = value;
             if( !this._checkArea( row, col ) ) return;
             // 更新最低行
             if( row > this._maxRow )
@@ -150,13 +150,23 @@ namespace core {
             this._map[ row ][ col ] = value;
         }
         // 移除节点
-        removeNode ( removeNode: INodeIndex[] ): void {
+        removeNodes ( removeNode: INodeIndex[] ): void {
             let self = this;
             for( let i = 0; i < removeNode.length; i++ ) {
                 self._map[ removeNode[ i ].row ][ removeNode[ i ].col ] = NodeType.NONE;
             }
             // 更新最低行
             this._maxRow = this._countMaxRow();
+        }
+        // 获取一组节点类型
+        getTypes ( nodes: INodeIndex[] ): number[] {
+            let types = [];
+            let map   = this._map;
+            for( let i = 0; i < nodes.length; i++ ) {
+                if( types.indexOf( map[ nodes[ i ].row ][ nodes[ i ].col ] ) < 0 )
+                    types.push( map[ nodes[ i ].row ][ nodes[ i ].col ] )
+            }
+            return types;
         }
         
         // todo: 生成一个节点数据  可能根据什么规则来生成，这个后面再设置
@@ -169,9 +179,10 @@ namespace core {
         // 获取一个节点周围的节点
         getNeighbors ( centerRow: number, centerCol: number, filterType: EFilterType = EFilterType.NONE ): INodeIndex[] {
             let self      = this;
-            let neighbors = [];
-            let row       = -1, col = -1;
-            let D         = centerRow % 2 ? D1 : D0;
+            let neighbors = [],
+                row       = -1,
+                col       = -1,
+                D         = centerRow % 2 ? D1 : D0;    // 方向
             
             // 验证
             // if( !self._checkArea( centerRow, centerCol ) ) return neighbors;
@@ -193,58 +204,75 @@ namespace core {
             return neighbors;
         }
         
-        // 获取目标位置连击的节点
-        getCombos ( row: number, col: number, type?: NodeType ): INodeIndex[] {
-            let self   = this;
-            let combos = [];
+        /**
+         * 以row，col为起点 相同类型的节点的连续数
+         * @param {number} row
+         * @param {number} col
+         * @param {core.NodeType[]} types
+         * @returns { [ type: number ]: INodeIndex[] }
+         */
+        getCombos ( row: number, col: number, types?: NodeType[] ): any {
             // 验证
-            if( !self._checkArea( row, col ) ) return combos
-            
-            let visitedMap = self._createMapModel();
-            type           = type || self._map[ row ][ col ];
-            
-            let stack: INodeIndex[]     = [];
-            let curNode: INodeIndex     = null;             // 当前访问的节点
-            let nextNode: INodeIndex    = null;            // 下一个访问的节点
-            let neighbors: INodeIndex[] = null;         // 访问节点的周边节点
-            
-            combos.push( { row, col } );
-            stack.push( { row, col } );
-            visitedMap[ row ][ col ] = 1;
-            while( stack.length ) {
-                curNode   = stack.pop();
-                neighbors = self.getNeighbors( curNode.row, curNode.col, EFilterType.FILLED );
-                for( let i = 0; i < neighbors.length; i++ ) {
-                    nextNode = neighbors[ i ];
-                    if( visitedMap[ nextNode.row ][ nextNode.col ] ) continue;
-                    if( type !== self._map[ nextNode.row ][ nextNode.col ] ) continue;
-                    
-                    stack.push( nextNode );
-                    // 连击标记
-                    combos.push( nextNode );
-                    // 访问标记
-                    visitedMap[ nextNode.row ][ nextNode.col ] = 1;
-                }
+            if( !this._checkArea( row, col ) ) {
+                return {};
+            }
+            if( !types || !types.length ) {
+                types = [ this._map[ row ][ col ] ];
             }
             
-            return combos;
+            let self                                          = this;
+            let map                                           = self._map;
+            let visitedMap                                    = self._createMapModel(), // 访问表
+                combos: INodeIndex[]                          = [],                     // 类型类型节点集合
+                combosMap: { [ type: number ]: INodeIndex[] } = {},                     // 连续类型节点映射
+                stack: INodeIndex[]                           = [];                     // 访问栈
+            
+            let curType: any,
+                curNode: INodeIndex,                // 当前访问的节点
+                nextNode: INodeIndex,               // 下一个访问的节点
+                neighbors: INodeIndex[];            // 访问节点的周边节点
+            
+            while( types.length ) {
+                curType = types.pop();
+                
+                combos = [ { row, col } ];
+                stack.push( { row, col } );
+                visitedMap[ row ][ col ] = 1;
+                while( stack.length ) {
+                    curNode   = stack.pop();
+                    neighbors = self.getNeighbors( curNode.row, curNode.col, EFilterType.FILLED );
+                    for( let i = 0; i < neighbors.length; i++ ) {
+                        nextNode = neighbors[ i ];
+                        if( visitedMap[ nextNode.row ][ nextNode.col ] ) continue;
+                        if( curType !== map[ nextNode.row ][ nextNode.col ] ) continue;
+                        // 进入访问栈
+                        stack.push( nextNode );
+                        // 连击标记
+                        combos.push( nextNode );
+                        // 访问标记
+                        visitedMap[ nextNode.row ][ nextNode.col ] = 1;
+                    }
+                }
+                combosMap[ curType ] = combos;
+            }
+            
+            return combosMap;
         }
         
         // 获取悬挂的节点
         getConnectedNode ( ignoreIndex?: INodeIndex[] ): number[][] {
-            let self                   = this;
-            let visitedMap: number[][] = self._createMapModel( ignoreIndex );
-            
-            let stack: INodeIndex[]     = [];
-            let curNode: INodeIndex     = null;         // 当前访问的节点
-            let nextNode: INodeIndex    = null;         // 下一个访问的节点
-            let neighbors: INodeIndex[] = null;         // 访问节点的周边节点
+            let self                    = this;
+            let visitedMap              = self._createMapModel( ignoreIndex ),
+                stack: INodeIndex[]     = [],
+                curNode: INodeIndex     = null,// 当前访问的节点
+                nextNode: INodeIndex    = null,// 下一个访问的节点
+                neighbors: INodeIndex[] = null;         // 访问节点的周边节点
             
             let row = 0;
             let col = 0;
             for( ; col < self._cols; col++ ) {
                 if( visitedMap[ 0 ][ col ] ) continue;
-                if( self._map[ 0 ][ col ] === NodeType.NONE ) continue;
+                if( !self._map[ 0 ][ col ] || self._map[ 0 ][ col ] === NodeType.NONE ) continue;
                 
                 stack.push( { row, col } );
                 visitedMap[ row ][ col ] = 1;
@@ -267,12 +295,16 @@ namespace core {
         
         // 获取没有悬挂的节点
         getNoConnectNode ( ignoreIndex?: INodeIndex[] ): INodeIndex[] {
-            let self           = this;
+            let self = this,
+                rows = self._maxRow,
+                cols = self._cols;
+            
             let noConnectNodes = [];
             let connectNodes   = this.getConnectedNode( ignoreIndex );
             
-            for( let row = 0; row < self._rows; row++ ) {
-                for( let col = 0; col < self._cols - row % 2; col++ ) {
+            for( let row = rows; row >= 0; row-- ) {
+                cols = self.getCols( row );
+                for( let col = 0; col < cols; col++ ) {
                     if( connectNodes[ row ][ col ] || self._map[ row ][ col ] === NodeType.NONE ) continue;
                     
                     noConnectNodes.push( { row, col } );
@@ -291,12 +323,14 @@ namespace core {
         
         // 创建一个地图模型
         private _createMapModel ( ignoreIndex?: INodeIndex[] ): number[][] {
-            let mapModel = [];
-            let rows     = this._rows;
-            let cols     = this._cols;
-            for( let row = 0; row < rows; row++ ) {
+            let mapModel = [],
+                rows     = this._maxRow,
+                cols     = this._cols;
+            
+            for( let row = rows; row >= 0; row-- ) {
                 mapModel[ row ] = [];
-                for( let col = 0; col < cols - row % 2; col++ ) {
+                cols            = this.getCols( row );
+                for( let col = 0; col < cols; col++ ) {
                     mapModel[ row ][ col ] = 0;
                 }
             }

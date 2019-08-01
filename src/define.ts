@@ -146,4 +146,28 @@ namespace df {
         // [ 2, 4, 4, 4, 2, 4, 0, 4, 4, 4, 1 ],
         // [ 1, 0, 4, 0, 2, 4, 0, 0, 2, 1, ],
     ];
+    
+    /* -------------------- 游戏其他定义 --------------------*/
+    // 默认玩家名
+    export const NAME       = '游客';
+    // 默认玩家ID
+    export const ID         = 9527;
+    // 默认金币数量
+    export const COIN       = 10;
+    // 默认道具数量
+    export const TOOL_COUNT = 1;
+    // 默认自由模式最高分数
+    export const MAX_SCORE  = 0;
+    
+    // 默认：连击分数奖励
+    export const COMBO_SCORE  = [];
+    // 默认：游戏通关奖励
+    export const BONUS        = [];
+    // 默认：游戏分数奖励
+    export const COMBOS_BONUS = [];
+    // 默认：关卡时间
+    export const GMAE_TIME    = 30;
+    
+    // 道具价格
+    export const TOOL_PRICE = {}
 }

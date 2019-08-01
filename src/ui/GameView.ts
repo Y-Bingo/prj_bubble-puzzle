@@ -31,13 +31,10 @@ class GameView extends eui.Component {
     
     // 游戏属性
     private _lv: number;                    // 关卡等级
-    private _lvData: ILVData;               // 关卡数据
+    private _lvData: dt.ILVData;               // 关卡数据
     
     private _curBubble: ui.Bubble;          // 当前泡泡
     private _nextBubble: ui.Bubble;         // 下一个泡泡
-    
-    // private _hitIndex: core.INodeIndex;    // 击中的泡泡
-    // private _fixedIndex: core.INodeIndex;  // 定位的泡泡
     
     private _bubbleMap: ui.Bubble[][];      // 泡泡缓存
     private _droppingBubbles: ui.Bubble[];  // 正在掉落的泡泡
@@ -67,9 +64,9 @@ class GameView extends eui.Component {
     
     // 初始化游戏界面组件
     private _initSkinPart (): void {
-        this._bubbleMap       = [];
-        this._droppingBubbles = [];
-        
+        this._bubbleMap            = [];
+        this._droppingBubbles      = [];
+        // 动画组件
         this._mcBomb               = new MovieClip( {
             sourceTemp: 'mc_bomb_%f_png',
             startFrame: 0,
@@ -96,7 +93,7 @@ class GameView extends eui.Component {
         if( this._lv == lv ) return;
         this._lv = lv;
         
-        this._lvData = DataMrg.getIns().getLvDt( lv );
+        this._lvData = dt.dataMrg.getLvDt( lv );
         
         if( this._lvData !== null ) {
             this._lvData.map[ -1 ] = df.B1;
@@ -281,6 +278,7 @@ class GameView extends eui.Component {
         // 开始停止
     }
     
+    // 碰撞检测
     private _hitCheck (): void {
         // 判断撞击
         let hitIndex = core.word.getHitBubbleIndex( this._curBubble );
@@ -290,18 +288,18 @@ class GameView extends eui.Component {
         
         // 判断是否为道具碰撞
         if( !( this._curBubble.value & df.TOOL_MASK ) ) {
-            this._fixedCheck( hitIndex );
+            this._bubbleHit( hitIndex );
         } else {
-            // 道具处理
+            // 道具碰撞
             switch( this._curBubble.value ) {
                 case df.BubbleType.HUMMER:      // 锤子
-                    this._amHummer( hitIndex );
+                    this._hummerHit( hitIndex );
                     break;
                 case df.BubbleType.BOMB2:       // 炸弹
-                    this._amBomb( hitIndex );
+                    this._bombHit( hitIndex );
                     break;
                 case df.BubbleType.COLOR:       // color
-                    console.log( 'colorBAll' );
+                    this._colorHit( hitIndex );
                     break;
                 default:
                     break;
@@ -309,8 +307,8 @@ class GameView extends eui.Component {
             this._resultCheck();
         }
     }
-    // 锤子动画
-    private _amHummer ( hitIndex: core.INodeIndex ): void {
+    // 动画： 锤子碰撞
+    private _hummerHit ( hitIndex: core.INodeIndex ): void {
         const self      = this;
         const hummer    = self._curBubble;
         const mcHummer  = self._mcHummer;
@@ -326,7 +324,7 @@ class GameView extends eui.Component {
         mcHummer.y = wy;
         
         // 更新数据
-        core.model.removeNode( [ hitIndex ] );
+        core.model.removeNodes( [ hitIndex ] );
         
         // 动画
         self.addChild( mcHummer );
@@ -344,27 +342,26 @@ class GameView extends eui.Component {
             console.log( wx, wy, hitIndex );
         } );
     }
-    // 炸弹动画
-    private _amBomb ( hitIndex: core.INodeIndex ): void {
-        const self      = this;
-        const bomb      = self._curBubble;
-        const mcBomb    = self._mcBomb;
-        const bubbleMap = self._bubbleMap;
-        
+    // 动画：炸弹碰撞
+    private _bombHit ( hitIndex: core.INodeIndex ): void {
+        const self         = this;
+        const bomb         = self._curBubble;
+        const mcBomb       = self._mcBomb;
+        const bubbleMap    = self._bubbleMap;
+        // 定位
         const { row, col } = core.word.getFixedBubbleIndex( bomb, hitIndex );
         const wx           = core.word.w2gX( core.word.index2wX( row, col ) );
         const wy           = core.word.w2gY( core.word.index2wY( row, col ) );
         // 定位周围的泡泡
         const neighbors    = core.model.getNeighbors( row, col, core.EFilterType.FILLED );
         
-        // 定位
         bomb.x   = wx;
         bomb.y   = wy;
         mcBomb.x = wx;
         mcBomb.y = wy;
         
         // 更新数据
-        core.model.removeNode( neighbors );
+        core.model.removeNodes( neighbors );
         
         self.addChild( mcBomb );
         mcBomb.bindFrameEvent( 2, () => {
@@ -382,33 +379,66 @@ class GameView extends eui.Component {
             mcBomb.unbindFrameEvent( 5 );
         } );
     }
-    
-    // 发射结束
-    private _fixedCheck ( hitIndex: core.INodeIndex ) {
+    // 动画： 彩球碰撞
+    private _colorHit ( hitIndex: core.INodeIndex ): void {
+        const self  = this;
+        const color = self._curBubble;
         
-        // 固定检查
-        const fixedIndex = core.word.getFixedBubbleIndex( this._curBubble, hitIndex );
-        if( fixedIndex ) {
-            this._addBubble( fixedIndex.row, fixedIndex.col, this._curBubble );
-        } else {
-            console.error( '不存在可以定位泡泡的位置！！' );
-            return;
+        // 定位
+        const { row, col } = core.word.getFixedBubbleIndex( color, hitIndex );
+        this._addBubble( row, col, this._curBubble );
+        
+        // 周边连击检测
+        const neighbors = core.model.getNeighbors( row, col, core.EFilterType.FILLED );
+        const types     = core.model.getTypes( neighbors );
+        const combos    = [ { row, col } ];
+        const combosMap = core.model.getCombos( row, col, types );
+        // 过滤不符合条件的连击
+        for( let type in combosMap ) {
+            if( combosMap.hasOwnProperty( type ) && combosMap[ type ].length >= 3 ) {
+                combosMap[ type ].shift();
+                Array.prototype.push.apply( combos, combosMap[ type ] );
+            }
         }
         
+        if( combos.length >= 3 ) {
+            // 满足掉落条件
+            const noConnectNodes = core.model.getNoConnectNode( combos );
+            const drops          = [ ...combos, ...noConnectNodes ];
+            
+            core.model.removeNodes( drops );
+            this._startDrop( drops );
+        } else {
+            // 不满足掉落条件 ：变成撞击的泡泡颜色
+            let hitValue = core.model.getNodeVal( hitIndex.row, hitIndex.col );
+            color.setValue( hitValue );
+            core.model.addNode( row, col, hitValue );
+        }
+    }
+    
+    // 普通泡泡碰撞
+    private _bubbleHit ( hitIndex: core.INodeIndex ) {
+        const self         = this;
+        const bubble       = self._curBubble;
+        // 定位
+        const { row, col } = core.word.getFixedBubbleIndex( bubble, hitIndex );
+        
+        this._addBubble( row, col, this._curBubble );
+        
         // 连击检测
-        const combos = core.model.getCombos( fixedIndex.row, fixedIndex.col );
+        const combos = core.model.getCombos( row, col )[ this._curBubble.value ];
         if( combos.length >= 3 ) {
             const noConnectNodes = core.model.getNoConnectNode( combos );
             const drops          = [ ...combos, ...noConnectNodes ];
             
-            core.model.removeNode( drops );
-            console.log( `移除泡泡：${ drops.length }` );
+            core.model.removeNodes( drops );
             this._startDrop( drops );
         }
         
         this._resultCheck();
     }
     
+    // 结果检查
     private _resultCheck (): void {
         // 胜利检测
         if( this.$checkWin() ) {
@@ -469,7 +499,7 @@ class GameView extends eui.Component {
         this.addEventListener( egret.Event.ENTER_FRAME, this._amShake, this );
     }
     
-    // 掉落前震动
+    // 动画: 震动
     private _shakeCount: number = 0;     // 已震动次数
     private _amShake (): void {
         let self  = this;
@@ -494,7 +524,7 @@ class GameView extends eui.Component {
         // 开启掉落动画
         self.addEventListener( egret.Event.ENTER_FRAME, this._amDrop, this );
     }
-    // 掉落
+    // 动画： 掉落
     private _amDrop (): void {
         let count             = 0;
         let self              = this;
