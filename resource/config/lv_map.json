@@ -11,7 +11,8 @@
         "next": [31 , 31, 31,31,31 ],
         "typeCount": 3,
         "maxScore":1000,
-        "cellScore": 10
+        "cellScore": 10,
+        "time": 30
     },
     {
         "map": [
@@ -25,6 +26,7 @@
         "typeCount": 3,
         "maxScore": 1000,
         "cellScore": 10,
-        "baseScore": 11
+        "baseScore": 11,
+        "time": 50
     }
 ]

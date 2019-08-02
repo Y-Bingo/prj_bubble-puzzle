@@ -76,4 +76,23 @@ namespace utils {
     export function isObject ( val: any ): val is Object {
         return val != null && typeof val === 'object';
     }
+    
+    const colorMatrixGray =
+              [
+                  0.3086, 0.6094, 0.0820, 0,
+                  0, 0.3086, 0.6094, 0.0820,
+                  0, 0, 0.3086, 0.6094,
+                  0.0820, 0, 0, 0,
+                  0, 0, 1, 0
+              ];
+    
+    // 灰度
+    export function SetImageGray ( target: egret.DisplayObject, isGray: boolean = false ) {
+        if( isGray ) {
+            let cmf_grayFilter = new egret.ColorMatrixFilter( colorMatrixGray );
+            target.filters     = [ cmf_grayFilter ];
+        } else {
+            target.filters = null;
+        }
+    }
 }

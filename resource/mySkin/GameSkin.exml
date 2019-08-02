@@ -1,48 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="skins.MainGameScene" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing"
-        xmlns:bob="bob.*" xmlns:ns1="*" xmlns:ui="ui.*">
-	<e:Image id="bg" height="1137" source="bg_png"  locked="true"/>
-	<e:Group id="g_bubble" y="117" height="735" touchEnabled="false" touchChildren="false" width="618" x="11"  locked="true"/>
-	<e:Group id="g_guidLine" y="117" height="735" width="618"  x="11" locked="true"/>
-	<e:Image id="curtain" source="hanging_curtain_png" scale9Grid="32,10,541,5" top="95" horizontalCenter="0"/>
+<e:Skin class="skins.MainGameScene" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:ui="ui.*"
+        xmlns:game="game.*">
+	<e:Image id="bg" height="1137" source="bg_png" locked="true" />
+	<e:Group id="g_bubble" y="117" height="735" touchEnabled="false" touchChildren="false" width="618" x="11" locked="true" />
+	<e:Group id="g_guidLine" y="117" height="735" width="618" x="11" locked="true" />
+	<e:Image id="curtain" source="hanging_curtain_png" scale9Grid="32,10,541,5" top="95" horizontalCenter="0" />
 	<e:Image id="border" source="border_png" height="1137" />
-	<e:Image id="dead_line" source="dead_line_png" y="856.08"  x="19"/>
-
+	<e:Image id="dead_line" source="dead_line_png" y="856.08" x="19" />
 	<ui:Arrow id="icon_arrow" source="arrow_blue_png" anchorOffsetY="85" anchorOffsetX="19" y="985" x="320" rotation="0"
-	           visible="false"/>
-
-
+	          visible="false" />
 	<e:Group id="g_tool" x="230" y="1048" touchChildren="true" touchEnabled="true" touchThrough="true">
-		<e:Component x="0" y="0" skinName="skins.ToolItem"  currentState="hummer" name="hummer" touchEnabled="true" touchChildren="false"/>
-		<e:Component x="10" y="10" skinName="skins.ToolItem"  currentState="bomb" name="bomb" touchChildren="false" touchEnabled="true"/>
-		<e:Component x="20" y="20" skinName="skins.ToolItem"  currentState="color" name="color" touchChildren="false" touchEnabled="true"/>
-		<e:Component x="30" y="30" skinName="skins.ToolItem"  currentState="guid" name="guid" touchChildren="false" touchEnabled="true"/>
+		<e:Component id="tool_hummer" x="0" y="0" skinName="skins.ToolItem" currentState="hummer" name="hummer"
+		             touchEnabled="true" touchChildren="false" />
+		<e:Component id="tool_bomb" x="10" y="10" skinName="skins.ToolItem" currentState="bomb" name="bomb"
+		             touchChildren="false" touchEnabled="true" />
+		<e:Component id="tool_color" x="20" y="20" skinName="skins.ToolItem" currentState="color" name="color"
+		             touchChildren="false" touchEnabled="true" />
+		<e:Component id="tool_guid" x="30" y="30" skinName="skins.ToolItem" currentState="guid" name="guid"
+		             touchChildren="false" touchEnabled="true" />
 		<e:layout>
 			<e:HorizontalLayout horizontalAlign="center" gap="15" />
 		</e:layout>
 	</e:Group>
-	<ns1:ScoreBoard id="score_board" skinName="skins.ScoreBoard" left="0" top="0"/>
-	<ns1:TimeBoard id="time_board" x="44" y="878" skinName="skins.Timer" scaleX="1.2" scaleY="1.2"/>
-	<e:Group x="19" y="117.4">
-		<ns1:TimeBoard x="0" y="0" skinName="skins.Timer" time="0"/>
-		<ns1:TimeBoard x="0" y="67.2" skinName="skins.Timer" time="1"/>
-		<ns1:TimeBoard x="0" y="151.44" skinName="skins.Timer" time="2"/>
-		<ns1:TimeBoard x="10" y="77.2" skinName="skins.Timer" time="3"/>
-		<ns1:TimeBoard x="20" y="87.2" skinName="skins.Timer" time="4"/>
-		<ns1:TimeBoard x="30" y="97.2" skinName="skins.Timer" time="5"/>
-		<ns1:TimeBoard x="40" y="107.2" skinName="skins.Timer" time="6"/>
-		<ns1:TimeBoard x="50" y="117.2" skinName="skins.Timer" time="7"/>
-		<ns1:TimeBoard x="60" y="127.2" skinName="skins.Timer" time="8"/>
-		<ns1:TimeBoard x="70" y="137.2" skinName="skins.Timer" time="9"/>
-		<ns1:TimeBoard x="50" y="117.2" skinName="skins.Timer" time="10"/>
-		<ns1:TimeBoard x="60" y="127.2" skinName="skins.Timer" time="11"/>
-		<ns1:TimeBoard x="70" y="137.2" skinName="skins.Timer" time="12"/>
-		<ns1:TimeBoard x="80" y="147.2" skinName="skins.Timer" time="13"/>
-		<e:layout>
-			<e:VerticalLayout gap="-4"/>
-		</e:layout>
-	</e:Group>
-	<e:Group id="g_handle" height="740" width="610" anchorOffsetY="0" x="15" y="110" locked="true">
-	</e:Group>
-	<e:Rect id="btn_change" width="56" height="56" ellipseWidth="56" ellipseHeight="56" x="178.33" y="908.3" />
+	<game:ScoreBoard id="score_board" skinName="skins.ScoreBoard" x="0" y="0" />
+	<e:Component id="time_board" x="44" y="878" skinName="skins.Timer" scaleX="1.2" scaleY="1.2" />
+	<e:Group id="g_handle" height="740" width="610" anchorOffsetY="0" x="15" y="110" locked="true"></e:Group>
+	<e:Rect id="btn_change" width="60" height="60" ellipseWidth="60" ellipseHeight="60" x="177" y="982"
+	        fillColor="0xffffff" fillAlpha="0" strokeAlpha="0"  touchEnabled="true"/>
 </e:Skin>

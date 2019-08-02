@@ -1,3 +1,5 @@
+import dataMrg = dt.dataMrg;
+
 class Main extends eui.UILayer {
     
     protected createChildren (): void {
@@ -66,18 +68,13 @@ class Main extends eui.UILayer {
      */
     protected createGameScene (): void {
         
-        // let game = new bob.Game();
-        // this.addChild( game );
-        // new Director( game );
-        
-        let gameScene = new GameView();
+        let gameScene = new game.GameView();
         
         this.addChild( gameScene );
         
-        new GameHandler( gameScene );
+        new game.GameHandler( gameScene );
         
         gameScene.setLv( 0 );
-        
     }
     
 }

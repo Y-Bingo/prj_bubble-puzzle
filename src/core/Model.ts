@@ -130,7 +130,7 @@ namespace core {
         // 获取下一个节点
         getNextVal (): number {
             if( this._next.length <= 0 )
-                return this._createNode();
+                return this.createNode();
             return this._next.pop();
         }
         
@@ -170,7 +170,7 @@ namespace core {
         }
         
         // todo: 生成一个节点数据  可能根据什么规则来生成，这个后面再设置
-        private _createNode ( rule?: any ): any {
+        createNode ( rule?: any ): any {
             let randomIndex = Math.floor( Math.random() * this._types.length )
             return this._types[ randomIndex ];
         }

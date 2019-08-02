@@ -13,7 +13,7 @@
 		<e:Image id="pg_thumb" source="progress_thumb_png" x="0" y="50"/>
 		<e:Image id="pg_thumb_mask" source="progress_thumb_png" x="0" y="50"/>
 		<e:Component id="pg_star_0" currentState="one_1" y="54" x="71.66" scaleX="1" scaleY="1" skinName="skins.ProgressStar"/>
-		<e:Component id="pg_star_1" x="186.36" currentState="two_1" y="54" scaleX="1" scaleY="1" skinName="skins.ProgressStar"/>
+		<e:Component id="pg_star_1" x="185.36" currentState="two_1" y="54" scaleX="1" scaleY="1" skinName="skins.ProgressStar"/>
 		<e:Component id="pg_star_2" x="312.35" currentState="three_1" y="54" scaleX="1" scaleY="1" skinName="skins.ProgressStar"/>
 		<e:Group y="10" scaleX="0.7" scaleY="0.7" horizontalCenter="0">
 			<e:BitmapLabel id="bl_user_score" y="0" text="100" font="fnt_scroe2_fnt" x="156" scaleX="1" scaleY="1"/>
