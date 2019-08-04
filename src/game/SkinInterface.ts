@@ -8,7 +8,7 @@ namespace game {
     // 道具item
     export interface IToolItem extends eui.Component {
         icon_tool: eui.Image;           // 道具icon
-        bl_num: eui.BitmapLabel;   // 道具数量
+        bl_num: eui.BitmapLabel;        // 道具数量
     }
     
     // 道具面板

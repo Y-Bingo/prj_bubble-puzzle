@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="skins.ToolItem" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" width="90"
-        height="80" states="bomb,color,guid,hummer">
+<e:Skin class="skins.ToolItem" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:ui="ui.*"
+        width="90" height="80" states="bomb,color,guid,hummer">
 	<e:Image id="icon_tool" source="prop_bomb_png" source.color="prop_colorBall_png" source.guid="prop_guidLine_png"
-	         source.hummer="prop_hammer_png" x="0" y="0"  anchorOffsetX.bomb="34" anchorOffsetY.bomb="35" x.bomb="34" y.bomb="35" anchorOffsetX.color="35" anchorOffsetY.color="35" x.color="35" y.color="35" anchorOffsetX.guid="26" anchorOffsetY.guid="37" x.guid="26" y.guid="37" x.hummer="35" y.hummer="35" width.hummer="70" anchorOffsetX.hummer="35" anchorOffsetY.hummer="35"/>
+	                source.hummer="prop_hammer_png" x="35" y="35"  anchorOffsetX="35" anchorOffsetY="35" anchorOffsetX.guid="27" anchorOffsetY.guid="37" x.guid="27" y.guid="37"/>
 	<e:Group bottom="0" right="0">
 		<e:Image source="num_bg_png" scale9Grid="13,7,18,15" />
 		<e:BitmapLabel id="bl_num" font="fnt_nums_fnt" text="20" scaleX="0.55" scaleY="0.55" horizontalCenter="0"

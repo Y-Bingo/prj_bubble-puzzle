@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin class="skins.MainGameScene" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:ui="ui.*"
-        xmlns:game="game.*">
+        xmlns:game="game.*" width="640" height="1137">
 	<e:Image id="bg" height="1137" source="bg_png" locked="true" />
 	<e:Group id="g_bubble" y="117" height="735" touchEnabled="false" touchChildren="false" width="618" x="11" locked="true" />
 	<e:Group id="g_guidLine" y="117" height="735" width="618" x="11" locked="true" />
@@ -9,7 +9,7 @@
 	<e:Image id="dead_line" source="dead_line_png" y="856.08" x="19" />
 	<ui:Arrow id="icon_arrow" source="arrow_blue_png" anchorOffsetY="85" anchorOffsetX="19" y="985" x="320" rotation="0"
 	          visible="false" />
-	<e:Group id="g_tool" x="230" y="1048" touchChildren="true" touchEnabled="true" touchThrough="true">
+	<e:Group id="g_tool" x="230" y="1048" touchChildren="true" touchEnabled="false" touchThrough="true">
 		<e:Component id="tool_hummer" x="0" y="0" skinName="skins.ToolItem" currentState="hummer" name="hummer"
 		             touchEnabled="true" touchChildren="false" />
 		<e:Component id="tool_bomb" x="10" y="10" skinName="skins.ToolItem" currentState="bomb" name="bomb"
@@ -27,4 +27,5 @@
 	<e:Group id="g_handle" height="740" width="610" anchorOffsetY="0" x="15" y="110" locked="true"></e:Group>
 	<e:Rect id="btn_change" width="60" height="60" ellipseWidth="60" ellipseHeight="60" x="177" y="982"
 	        fillColor="0xffffff" fillAlpha="0" strokeAlpha="0"  touchEnabled="true"/>
+			<ui:ImageButton id="btn_pause" source="btn_pause_png"  right="0" top="0" anchorOffsetX="92"/>
 </e:Skin>

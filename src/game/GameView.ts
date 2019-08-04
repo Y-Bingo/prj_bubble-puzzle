@@ -1,5 +1,8 @@
 namespace game {
     
+    import Bubble = ui.Bubble;
+    import BubbleType = df.BubbleType;
+    import bubblePool = ui.bubblePool;
     export const SHOOT_START_POSITION = {
         x: 320,
         y: 985,
@@ -20,15 +23,15 @@ namespace game {
         g_guidLine: eui.Group;      // 弹道容器
         g_handle: eui.Group;        // 控制区域
         g_tool: eui.Component;      // 道具容器
-        
+        // 道具
         tool_hummer: IToolItem;
         tool_color: IToolItem;
         tool_bomb: IToolItem;
         tool_guid: IToolItem;
         
         btn_change: eui.Rect;       // 切换按钮（无显示效果）
-        time_board: ITimer;         // 计时器面板
         
+        time_board: ITimer;         // 计时器面板
         score_board: ScoreBoard;    // 计分板
         
         // 动画对象
@@ -66,20 +69,8 @@ namespace game {
             this.$initSkinPart();
         }
         
-        // 初始化游戏属性
-        private _initProp (): void {
-            this.isShooting = false;
-            this.gameStatus = df.EGameStatus.FREE;
-            this._lv        = -1;
-            this._lvData    = null;
-            this._toolDt    = {};
-        }
-        
         // 初始化游戏界面组件
         private $initSkinPart (): void {
-            // this._bubbleMap       = [];
-            // this._droppingBubbles = [];
-            
             this._initMc();
             this._initTool();
             
@@ -125,24 +116,33 @@ namespace game {
             tool.bl_num.text          = `${ value }`;
             tool.touchEnabled         = value > 0;
             utils.SetImageGray( tool.icon_tool, value <= 0 );
-            
         }
         
+        // 使用道具
         useTool ( tool: IToolItem ): boolean {
-            if( !this._toolDt[ tool.name ] || this._toolDt[ tool.name ] <= 0 )
-                return false;
-            
-            this._toolDt[ tool.name ] -= 1;
-            this._setToolValue( tool, this._toolDt[ tool.name ] );
+            const self = this;
+            if( !self._curBubble ) return false;
             switch( tool ) {
-                case this.tool_hummer:
-                case this.tool_color:
-                case this.tool_bomb:
-                case this.tool_guid:
+                case self.tool_hummer:
+                    self._curBubble.setValue( BubbleType.HUMMER );
+                    break;
+                case self.tool_color:
+                    self._curBubble.setValue( BubbleType.COLOR );
+                    break;
+                case self.tool_bomb:
+                    self._curBubble.setValue( BubbleType.BOMB2 );
+                    break;
+                case self.tool_guid:
                 default:
                     break;
             }
             
+            self._toolDt[ tool.name ] -= 1;
+            
+            self._setToolValue( tool, self._toolDt[ tool.name ] );
+            self.icon_arrow.setValue( self._curBubble.value );
+            // 更新道具使用情况
+            dt.dataMrg.updateToolCount( tool.name, -1 );
             return true;
         }
         
@@ -231,6 +231,27 @@ namespace game {
             }
             console.log( this.getChildIndex( this._nextBubble ), this.getChildIndex( this.btn_change ) );
         }
+        // 添加泡泡到容器
+        private _addBubble ( row: number, col: number, bubble: ui.Bubble ): void {
+            if( !bubble ) {
+                // console.warn( '添加的跑跑跑不存在！' );
+                return;
+            }
+            
+            if( !this._bubbleMap[ row ] ) {
+                this._bubbleMap[ row ] = [];
+            }
+            
+            // console.log( `增添泡泡：(${ row },${ col })【${ df.BubbleName[ bubble.value as number ] }】` );
+            
+            this._bubbleMap[ row ][ col ] = bubble;
+            // 添加到容器
+            this.g_bubble.addChild( bubble );
+            // 更新物理模型
+            core.word.add( bubble, row, col );
+            // 更新数据模型
+            core.model.addNode( row, col, bubble.value );
+        }
         
         // 动画: 待射区
         amBallRoll ( isNext2Cur: boolean ): Promise<any> {
@@ -259,7 +280,6 @@ namespace game {
             
             return Promise.resolve();
         }
-        
         // 动画：上弹
         amLoad () {
             let self = this;
@@ -282,7 +302,6 @@ namespace game {
                 self.isShooting = false;
             } );
         }
-        
         // 动画： 更换泡泡
         amSwitch () {
             let self = this;
@@ -313,25 +332,34 @@ namespace game {
         
         // 发射开始过程
         private _amShooting () {
+            const self = this;
             // 速度运动
-            this._curBubble.x += this._curBubble.speedX;
-            this._curBubble.y += this._curBubble.speedY;
-            this._curBubble.rotation += this._curBubble._rotation;
+            self._curBubble.x += self._curBubble.speedX;
+            self._curBubble.y += self._curBubble.speedY;
+            self._curBubble.rotation += self._curBubble._rotation;
             
-            const x = this._curBubble.x;
-            if( core.word.isHitSideWall( this._curBubble.x ) ) {
-                this._curBubble.speedX = -this._curBubble.speedX;
+            const x = self._curBubble.x;
+            if( core.word.isHitSideWall( self._curBubble.x ) ) {
+                self._curBubble.speedX = -self._curBubble.speedX;
                 // this._curBubble.x      = Math.max( Math.min( x, this.g_bubble.x + this.g_bubble.width - df.RADIUS ), this.g_bubble.x + df.RADIUS );
-                if( this._curBubble.x < this.g_bubble.x + df.RADIUS )
-                    this._curBubble.x = this.g_bubble.x + df.RADIUS;
-                else if( this._curBubble.x > this.g_bubble.x + this.g_bubble.width - df.RADIUS )
-                    this._curBubble.x = this.g_bubble.x + this.g_bubble.width - df.RADIUS;
+                if( self._curBubble.x < self.g_bubble.x + df.RADIUS )
+                    self._curBubble.x = self.g_bubble.x + df.RADIUS;
+                else if( this._curBubble.x > this.g_bubble.x + self.g_bubble.width - df.RADIUS )
+                    self._curBubble.x = self.g_bubble.x + self.g_bubble.width - df.RADIUS;
             }
-            
             this._hitCheck();
-            // if( hitIndex == null ) return;
             
-            // 开始停止
+            // // 移除屏幕就停止
+            // if( self.g_bubble.y - self._curBubble.x > df.RADIUS || self._curBubble.x - ( self.g_bubble.x + self.g_bubble.width ) > df.RADIUS ) {
+            //     // 停止动画
+            //     this.removeEventListener( egret.Event.ENTER_FRAME, this._amShooting, this );
+            //
+            //     bubblePool.recycleBubble( self._curBubble );
+            //     this._curBubble = null;
+            //     this.amLoad();
+            //     // console.log();
+            // } else {
+            // }
         }
         
         // 碰撞检测
@@ -370,8 +398,20 @@ namespace game {
             const mcHummer  = self._mcHummer;
             const bubbleMap = self._bubbleMap;
             
+            // 溢出屏幕处理
+            if( hitIndex.row < 0 ) {
+                core.word.add( hummer, hitIndex.row, hitIndex.col );
+                hummer.visible = false;
+                this._startDrop( [ hitIndex ], false );
+                return;
+            }
+            
             const wx = core.word.w2gX( core.word.index2wX( hitIndex.row, hitIndex.col ) );
             const wy = core.word.w2gY( core.word.index2wY( hitIndex.row, hitIndex.col ) );
+            
+            // 计算将要掉落的球
+            const noConnectNodes = core.model.getNoConnectNode( [ hitIndex ] );
+            const drops          = [ hitIndex, ...noConnectNodes ];
             
             // 定位
             hummer.x   = wx;
@@ -380,60 +420,72 @@ namespace game {
             mcHummer.y = wy;
             
             // 更新数据
-            core.model.removeNodes( [ hitIndex ] );
+            core.model.removeNodes( drops );
             
-            // 动画
-            self.addChild( mcHummer );
-            mcHummer.bindFrameEvent( 1, () => {
+            // 动画回调
+            const rmCall   = () => {
                 ui.bubblePool.recycleBubble( hummer );
-            } );
-            mcHummer.bindFrameEvent( 3, () => {
-                ui.bubblePool.recycleBubble( bubbleMap[ hitIndex.row ][ hitIndex.col ] );
-                bubbleMap[ hitIndex.row ][ hitIndex.col ] = null;
-            } );
-            mcHummer.play( () => {
+            };
+            const amCall   = () => {
+                if( hitIndex.row < 0 ) return;
+                bubbleMap[ hitIndex.row ][ hitIndex.col ].visible = false;
+                this._startDrop( drops, false );
+            };
+            const playCall = () => {
                 self.removeChild( mcHummer );
                 mcHummer.unbindFrameEvent( 1 );
                 mcHummer.unbindFrameEvent( 3 );
                 console.log( wx, wy, hitIndex );
-            } );
+            };
+            
+            // 动画
+            self.addChild( mcHummer );
+            mcHummer.bindFrameEvent( 1, rmCall );
+            mcHummer.bindFrameEvent( 3, amCall );
+            mcHummer.play( playCall );
         }
         // 动画：炸弹碰撞
         private _bombHit ( hitIndex: core.INodeIndex ): void {
-            const self         = this;
-            const bomb         = self._curBubble;
-            const mcBomb       = self._mcBomb;
-            const bubbleMap    = self._bubbleMap;
+            const self           = this;
+            const bomb           = self._curBubble;
+            const mcBomb         = self._mcBomb;
+            const bubbleMap      = self._bubbleMap;
             // 定位
-            const { row, col } = core.word.getFixedBubbleIndex( bomb, hitIndex );
-            const wx           = core.word.w2gX( core.word.index2wX( row, col ) );
-            const wy           = core.word.w2gY( core.word.index2wY( row, col ) );
-            // 定位周围的泡泡
-            const neighbors    = core.model.getNeighbors( row, col, core.EFilterType.FILLED );
+            const { row, col }   = core.word.getFixedBubbleIndex( bomb, hitIndex );
+            const wx             = core.word.w2gX( core.word.index2wX( row, col ) );
+            const wy             = core.word.w2gY( core.word.index2wY( row, col ) );
+            // 被破坏的泡泡
+            const rmBubble       = core.model.getNeighbors( row, col, core.EFilterType.FILLED );
+            const noConnectNodes = core.model.getNoConnectNode( rmBubble );
+            const drops          = [ ...rmBubble, ...noConnectNodes ];
+            core.model.removeNodes( drops );
             
             bomb.x   = wx;
             bomb.y   = wy;
             mcBomb.x = wx;
             mcBomb.y = wy;
             
-            // 更新数据
-            core.model.removeNodes( neighbors );
-            
-            self.addChild( mcBomb );
-            mcBomb.bindFrameEvent( 2, () => {
+            // 动画回调
+            const rmCall   = () => {
                 ui.bubblePool.recycleBubble( bomb );
-            } );
-            mcBomb.bindFrameEvent( 3, () => {
-                neighbors.forEach( ( { row, col } ) => {
-                    ui.bubblePool.recycleBubble( bubbleMap[ row ][ col ] );
-                    bubbleMap[ row ][ col ] = null;
-                } );
-            } );
-            mcBomb.play( () => {
+            };
+            const amCall   = () => {
+                for( let i = 0; i < rmBubble.length; i++ ) {
+                    let { row, col }                = rmBubble[ i ];
+                    bubbleMap[ row ][ col ].visible = false;
+                }
+                this._startDrop( drops, false );
+            };
+            const playCall = () => {
                 self.removeChild( mcBomb );
                 mcBomb.unbindFrameEvent( 2 );
                 mcBomb.unbindFrameEvent( 5 );
-            } );
+            };
+            
+            self.addChild( mcBomb );
+            mcBomb.bindFrameEvent( 2, rmCall );
+            mcBomb.bindFrameEvent( 3, amCall );
+            mcBomb.play( playCall );
         }
         // 动画： 彩球碰撞
         private _colorHit ( hitIndex: core.INodeIndex ): void {
@@ -473,7 +525,6 @@ namespace game {
                 core.model.addNode( row, col, hitValue );
             }
         }
-        
         // 普通泡泡碰撞
         private _bubbleHit ( hitIndex: core.INodeIndex ) {
             const self         = this;
@@ -514,30 +565,8 @@ namespace game {
             this.amLoad();
         }
         
-        // 添加泡泡到容器
-        private _addBubble ( row: number, col: number, bubble: ui.Bubble ): void {
-            if( !bubble ) {
-                // console.warn( '添加的跑跑跑不存在！' );
-                return;
-            }
-            
-            if( !this._bubbleMap[ row ] ) {
-                this._bubbleMap[ row ] = [];
-            }
-            
-            // console.log( `增添泡泡：(${ row },${ col })【${ df.BubbleName[ bubble.value as number ] }】` );
-            
-            this._bubbleMap[ row ][ col ] = bubble;
-            // 添加到容器
-            this.g_bubble.addChild( bubble );
-            // 更新物理模型
-            core.word.add( bubble, row, col );
-            // 更新数据模型
-            core.model.addNode( row, col, bubble.value );
-        }
-        
         // 开始掉落
-        private _startDrop ( drops: core.INodeIndex[] ): void {
+        private _startDrop ( drops: core.INodeIndex[], isShake: boolean = true ): void {
             let bubble: ui.Bubble         = null;
             let curIndex: core.INodeIndex = null;
             
@@ -547,16 +576,22 @@ namespace game {
                 bubble   = this._bubbleMap[ curIndex.row ][ curIndex.col ];
                 
                 bubble.speedX = ( i % 2 ? -1 : 1 ) * ( df.SPEED_X + Math.random() * df.SPEED_X );
-                bubble.speedY = -df.SPEED_Y + Math.random() * df.SPEED_X / 2;
+                bubble.speedY = isShake ? -df.SPEED_Y + Math.random() * df.SPEED_X / 2 : 0;
                 bubble.g      = df.G + Math.random();
                 
                 this._bubbleMap[ curIndex.row ][ curIndex.col ] = null;
                 this._droppingBubbles.push( bubble );
                 this.g_bubble.addChild( bubble );
             }
-            this.addEventListener( egret.Event.ENTER_FRAME, this._amShake, this );
+            
+            // 开启动画
+            if( !isShake ) {
+                // 开启掉落动画
+                this.addEventListener( egret.Event.ENTER_FRAME, this._amDrop, this );
+            } else {
+                this.addEventListener( egret.Event.ENTER_FRAME, this._amShake, this );
+            }
         }
-        
         // 动画: 震动
         private _shakeCount: number = 0;     // 已震动次数
         private _amShake (): void {
@@ -617,6 +652,7 @@ namespace game {
             }
         }
         
+        /******************** 胜负检查  ********************/
         // 胜利检测
         protected $checkWin (): boolean {
             return core.model.isEmpty();

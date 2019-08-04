@@ -7,7 +7,6 @@
 		<e:BitmapLabel id="bl_lv" text="2" font="fnt_level_fnt" verticalCenter="24" horizontalCenter="0"/>
 	</e:Group>
 
-	<ui:ImageButton id="btn_pause" source="btn_pause_png"  right="0" top="0" anchorOffsetX="92"/>
 	<e:Group horizontalCenter="37.5" y="-5">
 		<e:Image id="pg_trace" source="progress_trace_png" y="50.08" x="0"/>
 		<e:Image id="pg_thumb" source="progress_thumb_png" x="0" y="50"/>

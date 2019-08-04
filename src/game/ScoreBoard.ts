@@ -5,7 +5,7 @@ namespace game {
     export class ScoreBoard extends eui.Component {
         // 组件
         bl_lv: eui.BitmapLabel;         // 等级
-        btn_pause: eui.Image;           // 暂停
+        // btn_pause: eui.Image;           // 暂停
         
         pg_trace: eui.Image;            // 进度条 轨迹
         pg_thumb: eui.Image;            // 进度条 高亮
@@ -33,7 +33,7 @@ namespace game {
             
             this.reset();
             
-            this.btn_pause.addEventListener( egret.TouchEvent.TOUCH_TAP, this._onTouchTap, this );
+            // this.btn_pause.addEventListener( egret.TouchEvent.TOUCH_TAP, this._onTouchTap, this );
         }
         
         private _onTouchTap (): void {

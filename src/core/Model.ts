@@ -153,6 +153,7 @@ namespace core {
         removeNodes ( removeNode: INodeIndex[] ): void {
             let self = this;
             for( let i = 0; i < removeNode.length; i++ ) {
+                if( removeNode[ i ].row < 0 ) continue;
                 self._map[ removeNode[ i ].row ][ removeNode[ i ].col ] = NodeType.NONE;
             }
             // 更新最低行
@@ -337,6 +338,7 @@ namespace core {
             
             if( ignoreIndex && ignoreIndex.length ) {
                 for( let i = 0; i < ignoreIndex.length; i++ ) {
+                    if( ignoreIndex[ i ].row < 0 ) continue;
                     mapModel[ ignoreIndex[ i ].row ][ ignoreIndex[ i ].col ] = 1;
                 }
             }

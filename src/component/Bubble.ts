@@ -31,6 +31,11 @@ namespace ui {
         setValue ( val: number ) {
             if( this.value == val ) return;
             this.value = val;
+            
+            // 判断是否为工具型泡泡
+            if( !!( val & df.TOOL_MASK ) ) {
+                this._rotation = df.ROTATION;
+            }
             // this.source = null;
             this._updateRes();
         }
@@ -38,7 +43,7 @@ namespace ui {
         setAngle ( angle: number ) {
             if( angle > df.MAX_ANGLE || angle < df.MIN_ANGLE ) return;
             this.angle = angle;
-            if( angle < 35 ) {
+            if( Math.abs( angle ) < 35 ) {
                 this.speedY = -df.BUBBLE_FLY_SPEED_Y * 1.4;
                 this.speedX = Math.tan( angle * Math.PI / 180 ) * Math.abs( this.speedY );
             } else {
@@ -76,6 +81,8 @@ namespace ui {
             self.x        = 0;
             self.y        = 0;
             self.rotation = 0;
+            
+            self.visible = true;
             
             this.value = df.BubbleType.NONE;
         }

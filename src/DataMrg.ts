@@ -1,5 +1,6 @@
 namespace dt {
     const LV_MAP_RES = 'lv_map_json';
+    const USER_KEY   = 'user';
     
     // 关卡数据
     export interface ILVData {
@@ -47,9 +48,9 @@ namespace dt {
         }
         // 获取用户数据并初始化
         private _initUserData (): void {
-            let data = egret.localStorage.getItem( 'user' );
-            let user;
-            if( data == 'undefined' ) {
+            let data = egret.localStorage.getItem( USER_KEY );
+            let user = JSON.parse( data );
+            if( !user ) {
                 user = {};
             } else {
                 user = JSON.parse( data ) as IUserData;
@@ -61,17 +62,17 @@ namespace dt {
             user.maxScore  = user.maxScore || df.MAX_SCORE;
             user.lvScore   = user.lvScore || [];
             user.toolCount = user.toolCount || {
-                hummer: 0,
-                color: 0,
-                bomb: 0,
-                guid: 0
+                hummer: 1,
+                color: 1,
+                bomb: 1,
+                guid: 1
             };
             this._user     = user;
             this._saveDataToStorage();
         }
         // 保存数据
         private _saveDataToStorage (): void {
-            egret.localStorage.setItem( 'user', JSON.stringify( this._user ) );
+            egret.localStorage.setItem( USER_KEY, JSON.stringify( this._user ) );
         }
         
         // 获取关卡数据
@@ -123,13 +124,16 @@ namespace dt {
             return toolCount;
         }
         // 更新道具存量 值为增量
-        updateToolCount ( h: number, c: number, b: number, g: number ): void {
-            let { hummer, color, bomb, guid } = this._user.toolCount;
+        updateToolCount ( toolName: string, delta: number ): void {
+            // let { hummer, color, bomb, guid } = this._user.toolCount;
+            // this._user.toolCount.hummer = Math.max( hummer + h, 0 );
+            // this._user.toolCount.color  = Math.max( color + c, 0 );
+            // this._user.toolCount.bomb   = Math.max( bomb + b, 0 );
+            // this._user.toolCount.guid   = Math.max( guid + g, 0 );
+            let value = this._user.toolCount[ toolName ];
+            if( value == null ) return;
+            this._user.toolCount[ toolName ] = Math.max( value + delta, 0 );
             
-            this._user.toolCount.hummer = Math.max( hummer + h, 0 );
-            this._user.toolCount.color  = Math.max( color + c, 0 );
-            this._user.toolCount.bomb   = Math.max( bomb + b, 0 );
-            this._user.toolCount.guid   = Math.max( guid + g, 0 );
             this._saveDataToStorage();
         }
         

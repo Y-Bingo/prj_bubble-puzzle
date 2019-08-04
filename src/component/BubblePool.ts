@@ -32,11 +32,6 @@ namespace ui {
             let bubble = this._pop();
             bubble.setValue( value );
             
-            // 判断是否为工具型泡泡
-            if( !!( value & df.TOOL_MASK ) ) {
-                bubble._rotation = df.ROTATION;
-            }
-            
             return bubble;
         }
         // 弹出一个泡泡

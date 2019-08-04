@@ -43,7 +43,7 @@ namespace game {
             
             tool.icon_tool.scaleX = 1.1;
             tool.icon_tool.scaleY = 1.1;
-            
+    
             this._gameView.g_tool.addEventListener( egret.TouchEvent.TOUCH_END, this._onTouchToolEnd, this );
             this._gameView.g_tool.addEventListener( egret.TouchEvent.TOUCH_CANCEL, this._onTouchCancel, this );
             this._gameView.g_tool.addEventListener( egret.TouchEvent.TOUCH_RELEASE_OUTSIDE, this._onTouchCancel, this );
