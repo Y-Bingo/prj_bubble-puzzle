@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.ResultPanel" currentState="lv" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:ui="ui.*" states="free,lv" >
+	<e:Image source="btn_panel_libao_png" y="58.34" horizontalCenter="0"/>
+	<e:Image id="icon_pass" y="260.34" anchorOffsetX="153" anchorOffsetY="164" x="250" includeIn="lv" source="guoguanXzTX0_png"/>
+	<e:Image source="icon_red_silk_png" x="116" y="3.34"/>
+	<e:Image id="icon_result" x="163" y="16.84" source="result_wenzigongxiguoguan_png"/>
+	<e:Group x="109.5" y="172.34" y.free="199">
+		<e:Image source="result_defen_png" x="0" y="0"/>
+		<e:Image id="icon_completion" source="result_wanchengdu_png" x="1" y="115" includeIn="lv"/>
+	</e:Group>
+	<e:Group id="g_completion" x="252" y="278.34" width="162" height="50" includeIn="lv">
+		<e:Image source="smallStar_png" x="0" y="0"/>
+		<e:Image x="69" y="0" source="smallStar_png"/>
+		<e:Image x="79" y="10" source="smallStar_png"/>
+		<e:layout>
+			<e:HorizontalLayout/>
+		</e:layout>
+	</e:Group>
+	<e:BitmapLabel id="bl_score" x="263" y="169.34" font="fnt_nums_fnt" text="232" y.free="196"/>
+	<e:BitmapLabel id="bl_maxScore" x="263.5" y="232.84" font="fnt_nums_fnt" text="111" y.free="259.5"/>
+	<ui:ImageButton id="btn_last" source="btn_last_png" x="125" y="396.34" anchorOffsetX="31" anchorOffsetY="32" includeIn="lv"/>
+	<ui:ImageButton id="btn_restart" source="btn_restart_png" x="296.1666666666667" y="394.34" anchorOffsetX="34" anchorOffsetY="33"/>
+	<ui:ImageButton id="btn_next" source="btn_next_png" x="470" y="396.34" anchorOffsetX="33" anchorOffsetY="28" includeIn="lv"/>
+</e:Skin>

@@ -27,15 +27,16 @@ namespace game {
             this._arrow           = this._gameView.icon_arrow;
             this._guidLineHandler = new ui.GuidLineHandler( this._gameView.g_guidLine );
             
-            this._gameView.btn_change.addEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnSwitch, this );
+            this._gameView.btn_begin.addEventListener( egret.TouchEvent.TOUCH_TAP, this._gameView.gameStart, this._gameView );
+            this._gameView.btn_change.addEventListener( egret.TouchEvent.TOUCH_TAP, this._gameView.amSwitch, this._gameView );
             this._gameView.g_tool.addEventListener( egret.TouchEvent.TOUCH_BEGIN, this._onTouchToolBegin, this );
             this._gameView.g_handle.addEventListener( egret.TouchEvent.TOUCH_BEGIN, this._onUserTouchBegin, this );
         }
         
-        // 交换事件
-        private _onBtnSwitch (): void {
-            this._gameView.amSwitch();
-        }
+        // // 交换事件
+        // private _onBtnSwitch (): void {
+        //     this._gameView.amSwitch();
+        // }
         
         // 道具触碰开启
         private _onTouchToolBegin ( evt: egret.Event ): void {
@@ -43,7 +44,7 @@ namespace game {
             
             tool.icon_tool.scaleX = 1.1;
             tool.icon_tool.scaleY = 1.1;
-    
+            
             this._gameView.g_tool.addEventListener( egret.TouchEvent.TOUCH_END, this._onTouchToolEnd, this );
             this._gameView.g_tool.addEventListener( egret.TouchEvent.TOUCH_CANCEL, this._onTouchCancel, this );
             this._gameView.g_tool.addEventListener( egret.TouchEvent.TOUCH_RELEASE_OUTSIDE, this._onTouchCancel, this );
@@ -130,8 +131,9 @@ namespace game {
         }
         
         clear (): void {
-            this._gameView.btn_change.removeEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnSwitch, this );
-            this._gameView.g_tool.removeEventListener( egret.TouchEvent.TOUCH_TAP, this._onTouchToolBegin, this );
+            this._gameView.btn_begin.removeEventListener( egret.TouchEvent.TOUCH_TAP, this._gameView.gameStart, this._gameView );
+            this._gameView.btn_change.removeEventListener( egret.TouchEvent.TOUCH_TAP, this._gameView.amSwitch, this._gameView );
+            this._gameView.g_tool.removeEventListener( egret.TouchEvent.TOUCH_BEGIN, this._onTouchToolBegin, this );
             this._gameView.g_handle.removeEventListener( egret.TouchEvent.TOUCH_BEGIN, this._onUserTouchBegin, this );
         }
     }

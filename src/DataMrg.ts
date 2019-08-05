@@ -1,6 +1,7 @@
 namespace dt {
-    const LV_MAP_RES = 'lv_map_json';
-    const USER_KEY   = 'user';
+    const LV_MAP_RES       = 'lv_map_json';
+    const USER_KEY         = 'user';
+    const USER_SETTING_KEY = 'setting';
     
     // 关卡数据
     export interface ILVData {
@@ -10,6 +11,7 @@ namespace dt {
         maxScore?: number;       // 最高分
         cellScore?: number;      // 底分
         time?: number;           // 游戏通关时间
+        scoreLv: number[];       // 游戏分数等级
     }
     
     // 用户数据
@@ -125,11 +127,6 @@ namespace dt {
         }
         // 更新道具存量 值为增量
         updateToolCount ( toolName: string, delta: number ): void {
-            // let { hummer, color, bomb, guid } = this._user.toolCount;
-            // this._user.toolCount.hummer = Math.max( hummer + h, 0 );
-            // this._user.toolCount.color  = Math.max( color + c, 0 );
-            // this._user.toolCount.bomb   = Math.max( bomb + b, 0 );
-            // this._user.toolCount.guid   = Math.max( guid + g, 0 );
             let value = this._user.toolCount[ toolName ];
             if( value == null ) return;
             this._user.toolCount[ toolName ] = Math.max( value + delta, 0 );

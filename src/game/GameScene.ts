@@ -143,7 +143,7 @@
 //
 //         // 更新时间面板
 //         private _updateTimeBoard (): void {
-//             this.time_board.bl_time.text = `${ this._lvData.time || df.GMAE_TIME }`;
+//             this.time_board.bl_time.text = `${ this._lvData.time || df.GAME_TIME }`;
 //             this.time_board.touchEnabled = true;
 //             this.time_board.addEventListener( egret.TouchEvent.TOUCH_TAP, () => {
 //                 this.gameStart();

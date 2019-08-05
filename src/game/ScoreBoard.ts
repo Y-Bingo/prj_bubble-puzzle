@@ -5,7 +5,6 @@ namespace game {
     export class ScoreBoard extends eui.Component {
         // 组件
         bl_lv: eui.BitmapLabel;         // 等级
-        // btn_pause: eui.Image;           // 暂停
         
         pg_trace: eui.Image;            // 进度条 轨迹
         pg_thumb: eui.Image;            // 进度条 高亮
@@ -21,6 +20,7 @@ namespace game {
         private _lv: number;            // 关卡等级
         private _maxScore: number;      // 关卡积分
         private _userScore: number;     // 玩家积分
+        private _scoreLv: number[];       // 游戏积分等级
         
         private _progress: number;      // 进度
         
@@ -32,12 +32,6 @@ namespace game {
             this.pg_thumb.mask = this.pg_thumb_mask;
             
             this.reset();
-            
-            // this.btn_pause.addEventListener( egret.TouchEvent.TOUCH_TAP, this._onTouchTap, this );
-        }
-        
-        private _onTouchTap (): void {
-            console.log( '暂停' );
         }
         
         // 游戏开始设置数据
@@ -46,45 +40,67 @@ namespace game {
             this._maxScore  = data.maxScore;
             this._userScore = 0;
             
+            this.setScoreLv( data.scoreLv );
             this._progress = Math.floor( ( this._userScore / this._maxScore ) * 100 ) / 100;
+            this._updateRes();
+        }
+        
+        setScoreLv ( value: number[] ): void {
+            this._scoreLv = value || df.SCORE_LV;
             
-            this._update();
+            let maxWidth     = this.pg_thumb.width;
+            // 设置星星的位置
+            this.pg_star_0.x = this._scoreLv [ 0 ] / 100 * maxWidth;
+            this.pg_star_1.x = this._scoreLv [ 1 ] / 100 * maxWidth;
+            this.pg_star_2.x = this._scoreLv [ 2 ] / 100 * maxWidth;
+            
+            console.log( this.pg_star_0.x, this.pg_star_1.x, this.pg_star_2.x );
         }
         
         // 游戏进度
-        onProgress ( userScore: number ): void {
-            this._userScore += userScore;
+        onProgress ( value: number ): void {
+            let userScore = this._userScore;
             
-            this._update();
+            this._userScore = Math.min( value + userScore, this._maxScore );
+            this._progress  = this._userScore / this._maxScore;
+            console.log( `获取积分：【${ value }】,积分更新：【${ this._userScore }】` );
+            
+            this._updateRes();
+            
+            let x = ( this._progress - 1 ) * this.pg_thumb_mask.width;
+            egret.Tween.get( this.pg_thumb_mask ).to( { x: x }, 600 );
         }
         
         // 重置
         reset (): void {
-            this._lv        = 0;
-            this._maxScore  = 0;
-            this._userScore = 0;
-            this._progress  = 0;
+            const self = this;
             
-            this._update();
+            self._lv                    = 0;
+            self._maxScore              = 0;
+            self._userScore             = 0;
+            self._progress              = 0;
+            self.pg_star_0.currentState = 'one_0';
+            self.pg_star_1.currentState = 'two_0';
+            self.pg_star_2.currentState = 'three_0';
+            
+            self.bl_lv.text         = `${ self._lv }`;
+            self.bl_max_score.text  = `${ self._maxScore }`;
+            self.bl_user_score.text = `${ self._userScore }`;
+            self.pg_thumb_mask.x    = ( self._progress - 1 ) * self.pg_thumb_mask.width;
         }
         
-        private _update (): void {
-            this.bl_lv.text         = `${ this._lv }`;
-            this.bl_max_score.text  = `${ this._maxScore }`;
-            this.bl_user_score.text = `${ this._userScore }`;
+        private _updateRes (): void {
+            const self              = this;
+            self.bl_lv.text         = `${ self._lv }`;
+            self.bl_max_score.text  = `${ self._maxScore }`;
+            self.bl_user_score.text = `${ self._userScore }`;
             
-            this.pg_thumb_mask.x = ( this._progress - 1 ) * this.pg_thumb_mask.width;
-            
-            this.pg_star_0.currentState = 'one_0';
-            this.pg_star_1.currentState = 'two_0';
-            this.pg_star_2.currentState = 'three_0';
-            
-            if( this._progress > 0.33 )
-                this.pg_star_0.currentState = 'one_1';
-            if( this._progress > 0.55 )
-                this.pg_star_1.currentState = 'two_1';
-            if( this._progress >= 1 )
-                this.pg_star_2.currentState = 'three_1';
+            if( self._progress * 100 > self._scoreLv[ 0 ] )
+                self.pg_star_0.currentState = 'one_1';
+            if( self._progress * 100 > self._scoreLv[ 1 ] )
+                self.pg_star_1.currentState = 'two_1';
+            if( self._progress * 100 >= self._scoreLv[ 2 ] )
+                self.pg_star_2.currentState = 'three_1';
         }
     }
 }

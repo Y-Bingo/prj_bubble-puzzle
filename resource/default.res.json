@@ -9,7 +9,7 @@
 			"name": "game"
 		},
 		{
-			"keys": "coin1_png,coin2_png,coin3_png,coin4_png,coin5_png,coin6_png,explain_bingdu_png,explain_bingkuai_png,explain_bingkuaipp_png,explain_caiqiu_png,explain_charge_png,explain_fuzhuxian_png,explain_heidong_png,explain_jinbipaopao_PNG,explain_kongqipp_png,explain_muban_png,explain_rule_png,explain_xiaolongpaopao_png,explain_xiaomuchui_png,text_caiqiu_png,text_miaozhunxian_png,text_xiaomuchui_png,text_zhadan_png,bg_panel_blue_png,bg_panel_purple_png,btn_panel_libao_png,icon_gift_png,icon_red_silk_png,icon_shop_png,item_level_lock_png,item_levle_unlock_png,star_empty_b_png,star_empty_s_png,star_gray_png,star_noEmpty_b_png,star_noEmpty_s_png,text_bangzhu_png,text_goumai_png,text_guanqia_png,text_shangcheng_png,text_zanting_png,star_light_png,mc_bomb_0_png,mc_bomb_1_png,mc_bomb_2_png,mc_bomb_3_png,mc_bomb_4_png,mc_bomb_5_png,mc_bomb_6_png,mc_hummer_0_png,mc_hummer_1_png,mc_hummer_2_png,mc_hummer_3_png,mc_hummer_4_png,mc_hummer_5_png",
+			"keys": "coin1_png,coin2_png,coin3_png,coin4_png,coin5_png,coin6_png,explain_bingdu_png,explain_bingkuai_png,explain_bingkuaipp_png,explain_caiqiu_png,explain_charge_png,explain_fuzhuxian_png,explain_heidong_png,explain_jinbipaopao_PNG,explain_kongqipp_png,explain_muban_png,explain_rule_png,explain_xiaolongpaopao_png,explain_xiaomuchui_png,text_caiqiu_png,text_miaozhunxian_png,text_xiaomuchui_png,text_zhadan_png,bg_panel_blue_png,bg_panel_purple_png,btn_panel_libao_png,icon_gift_png,icon_red_silk_png,icon_shop_png,item_level_lock_png,item_levle_unlock_png,star_empty_b_png,star_empty_s_png,star_gray_png,star_noEmpty_b_png,star_noEmpty_s_png,text_bangzhu_png,text_goumai_png,text_guanqia_png,text_shangcheng_png,text_zanting_png,star_light_png,mc_bomb_0_png,mc_bomb_1_png,mc_bomb_2_png,mc_bomb_3_png,mc_bomb_4_png,mc_bomb_5_png,mc_bomb_6_png,mc_hummer_0_png,mc_hummer_1_png,mc_hummer_2_png,mc_hummer_3_png,mc_hummer_4_png,mc_hummer_5_png,fanyean_png,fanyeliang_png,guoguanXzTX0_png,smallStar_png",
 			"name": "common"
 		}
 	],
@@ -770,34 +770,14 @@
 			"name": "dijinbi_png"
 		},
 		{
-			"url": "assets/未知ui/fanyean.png",
-			"type": "image",
-			"name": "fanyean_png"
-		},
-		{
-			"url": "assets/未知ui/fanyeliang.png",
-			"type": "image",
-			"name": "fanyeliang_png"
-		},
-		{
 			"url": "assets/未知ui/follow.png",
 			"type": "image",
 			"name": "follow_png"
 		},
 		{
-			"url": "assets/未知ui/guoguanXzTX0.png",
-			"type": "image",
-			"name": "guoguanXzTX0_png"
-		},
-		{
 			"url": "assets/未知ui/kuang.PNG",
 			"type": "bin",
 			"name": "kuang_PNG"
-		},
-		{
-			"url": "assets/未知ui/smallStar.png",
-			"type": "image",
-			"name": "smallStar_png"
 		},
 		{
 			"url": "assets/未知ui/suoda.png",
@@ -1003,6 +983,26 @@
 			"url": "assets/ani/mc_hummer_5.png",
 			"type": "image",
 			"name": "mc_hummer_5_png"
+		},
+		{
+			"url": "assets/other/fanyean.png",
+			"type": "image",
+			"name": "fanyean_png"
+		},
+		{
+			"url": "assets/other/fanyeliang.png",
+			"type": "image",
+			"name": "fanyeliang_png"
+		},
+		{
+			"url": "assets/other/guoguanXzTX0.png",
+			"type": "image",
+			"name": "guoguanXzTX0_png"
+		},
+		{
+			"url": "assets/other/smallStar.png",
+			"type": "image",
+			"name": "smallStar_png"
 		}
 	]
 }

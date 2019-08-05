@@ -1,8 +1,5 @@
 namespace game {
     
-    import Bubble = ui.Bubble;
-    import BubbleType = df.BubbleType;
-    import bubblePool = ui.bubblePool;
     export const SHOOT_START_POSITION = {
         x: 320,
         y: 985,
@@ -29,10 +26,15 @@ namespace game {
         tool_bomb: IToolItem;
         tool_guid: IToolItem;
         
+        gray_mask: eui.Rect;        // 灰色遮罩
+        
+        btn_begin: ui.ImageButton;  // 开始按钮
         btn_change: eui.Rect;       // 切换按钮（无显示效果）
         
         time_board: ITimer;         // 计时器面板
         score_board: ScoreBoard;    // 计分板
+        
+        l_coin: eui.Label;          // 金币
         
         // 动画对象
         private _mcBomb: ui.MovieClip;      // 爆炸动画
@@ -77,7 +79,6 @@ namespace game {
             core.word.addStage( this.g_bubble );
             this.setChildIndex( this.btn_change, 200 );
         }
-        
         // 初始化mc组件
         private _initMc (): void {
             // 动画组件
@@ -101,7 +102,6 @@ namespace game {
         }
         
         // ///////////////////////////  道具
-        
         // 初始化道具面板
         private _initTool (): void {
             let { hummer, guid, bomb, color } = dt.dataMrg.getToolCount();
@@ -110,27 +110,26 @@ namespace game {
             this._setToolValue( this.tool_bomb, bomb );
             this._setToolValue( this.tool_guid, guid );
         }
-        
+        // 设置工具数量
         private _setToolValue ( tool: IToolItem, value: number ): void {
             this._toolDt[ tool.name ] = value;
             tool.bl_num.text          = `${ value }`;
             tool.touchEnabled         = value > 0;
             utils.SetImageGray( tool.icon_tool, value <= 0 );
         }
-        
         // 使用道具
         useTool ( tool: IToolItem ): boolean {
             const self = this;
             if( !self._curBubble ) return false;
             switch( tool ) {
                 case self.tool_hummer:
-                    self._curBubble.setValue( BubbleType.HUMMER );
+                    self._curBubble.setValue( df.BubbleType.HUMMER );
                     break;
                 case self.tool_color:
-                    self._curBubble.setValue( BubbleType.COLOR );
+                    self._curBubble.setValue( df.BubbleType.COLOR );
                     break;
                 case self.tool_bomb:
-                    self._curBubble.setValue( BubbleType.BOMB2 );
+                    self._curBubble.setValue( df.BubbleType.BOMB2 );
                     break;
                 case self.tool_guid:
                 default:
@@ -166,8 +165,25 @@ namespace game {
             }
         }
         
+        // 显示
+        show (): void {
+        
+        }
+        
+        // 关闭
+        close (): void {
+        
+        }
+        
+        // 游戏开始
         async gameStart () {
             if( this.gameStatus === df.EGameStatus.PLAYING ) return;
+            // 移除灰色遮罩
+            if( this.gray_mask.parent )
+                this.gray_mask.parent.removeChild( this.gray_mask );
+            if( this.btn_begin.parent )
+                this.btn_begin.parent.removeChild( this.btn_begin );
+            
             // 创建第一个泡泡
             this._createNextBubble();
             // 加载泡泡
@@ -184,11 +200,8 @@ namespace game {
         
         // 更新时间面板
         private _updateTimeBoard (): void {
-            this.time_board.bl_time.text = `${ this._lvData.time || df.GMAE_TIME }`;
+            this.time_board.bl_time.text = `${ this._lvData.time || df.GAME_TIME }`;
             this.time_board.touchEnabled = true;
-            this.time_board.addEventListener( egret.TouchEvent.TOUCH_TAP, () => {
-                this.gameStart();
-            }, this );
         }
         
         // 更新泡泡容器内的泡泡
@@ -229,7 +242,7 @@ namespace game {
             } else {
                 console.error( 'next bubble没有清空！' );
             }
-            console.log( this.getChildIndex( this._nextBubble ), this.getChildIndex( this.btn_change ) );
+            // console.log( this.getChildIndex( this._nextBubble ), this.getChildIndex( this.btn_change ) );
         }
         // 添加泡泡到容器
         private _addBubble ( row: number, col: number, bubble: ui.Bubble ): void {
@@ -288,7 +301,7 @@ namespace game {
                 console.warn( '当前存在泡泡！' );
                 this._curBubble = null;
             }
-            console.log( `上弹前：cur:【${ this._curBubble }】next:【${ df.BubbleName[ this._nextBubble.value as number ] }】` );
+            // console.log( `上弹前：cur:【${ this._curBubble }】next:【${ df.BubbleName[ this._nextBubble.value as number ] }】` );
             
             return self.amBallRoll( true ).then( () => {
                 self._curBubble  = self._nextBubble;
@@ -297,7 +310,7 @@ namespace game {
                 self._createNextBubble();
                 self.icon_arrow.setValue( self._curBubble.value );
                 
-                console.log( `上弹后 cur:【${ df.BubbleName[ this._curBubble.value as number ] }】next:【${ df.BubbleName[ this._nextBubble.value as number ] }】` );
+                // console.log( `上弹后 cur:【${ df.BubbleName[ this._curBubble.value as number ] }】next:【${ df.BubbleName[ this._nextBubble.value as number ] }】` );
                 
                 self.isShooting = false;
             } );
@@ -348,18 +361,6 @@ namespace game {
                     self._curBubble.x = self.g_bubble.x + self.g_bubble.width - df.RADIUS;
             }
             this._hitCheck();
-            
-            // // 移除屏幕就停止
-            // if( self.g_bubble.y - self._curBubble.x > df.RADIUS || self._curBubble.x - ( self.g_bubble.x + self.g_bubble.width ) > df.RADIUS ) {
-            //     // 停止动画
-            //     this.removeEventListener( egret.Event.ENTER_FRAME, this._amShooting, this );
-            //
-            //     bubblePool.recycleBubble( self._curBubble );
-            //     this._curBubble = null;
-            //     this.amLoad();
-            //     // console.log();
-            // } else {
-            // }
         }
         
         // 碰撞检测
@@ -388,8 +389,9 @@ namespace game {
                     default:
                         break;
                 }
-                this._resultCheck();
             }
+            this._resultCheck();
+            
         }
         // 动画： 锤子碰撞
         private _hummerHit ( hitIndex: core.INodeIndex ): void {
@@ -435,7 +437,7 @@ namespace game {
                 self.removeChild( mcHummer );
                 mcHummer.unbindFrameEvent( 1 );
                 mcHummer.unbindFrameEvent( 3 );
-                console.log( wx, wy, hitIndex );
+                // console.log( wx, wy, hitIndex );
             };
             
             // 动画
@@ -515,6 +517,9 @@ namespace game {
                 const drops          = [ ...combos, ...noConnectNodes ];
                 
                 core.model.removeNodes( drops );
+                // 更新积分
+                self.score_board.onProgress( self.countCombos( combos.length, drops.length ) );
+                
                 this._startDrop( drops );
             } else {
                 // 不满足掉落条件 ：变成撞击的泡泡颜色
@@ -536,15 +541,19 @@ namespace game {
             
             // 连击检测
             const combos = core.model.getCombos( row, col )[ this._curBubble.value ];
-            if( combos.length >= 3 ) {
-                const noConnectNodes = core.model.getNoConnectNode( combos );
-                const drops          = [ ...combos, ...noConnectNodes ];
-                
-                core.model.removeNodes( drops );
-                this._startDrop( drops );
-            }
+            if( combos.length < 3 ) return;
             
-            this._resultCheck();
+            const noConnectNodes = core.model.getNoConnectNode( combos );
+            const drops          = [ ...combos, ...noConnectNodes ];
+            core.model.removeNodes( drops );
+            
+            // 更新积分
+            self.score_board.onProgress( self.countCombos( combos.length, drops.length ) );
+            
+            // 开始掉落动画
+            this._startDrop( drops );
+            
+            // this._resultCheck();
         }
         
         // 结果检查
@@ -659,7 +668,7 @@ namespace game {
         }
         
         protected winResult (): void {
-            console.log( '你赢了！' )
+            console.log( '你赢了！' );
         }
         
         // 失败检测
@@ -670,6 +679,28 @@ namespace game {
         protected loseResult (): void {
             console.log( '你输了！' );
         }
+        
+        /******************** 算分规则  ********************/
+        // 计算连击得分
+        protected countCombos ( combosCount: number, dropsCount: number ): number {
+            let baseScore = df.COMBOS_BONUS[ 0 ];
+            for( let i = 0; i < df.COMBO_LV.length; i++ ) {
+                if( combosCount < df.COMBO_LV[ i ] ) break;
+                baseScore = df.COMBOS_BONUS[ i ];
+            }
+            return combosCount * baseScore + ( dropsCount - combosCount ) * baseScore / 2;
+        }
+        
+        // 计算奖励 星星奖励
+        protected countBonus ( scoreLv: number ): void {
+        
+        }
+        
+        // 计算金币得分
+        protected countCoin ( score: number ): number {
+            return Math.floor( score / df.SCORE_CHANGE_COIN );
+        }
+        
     }
     
 }

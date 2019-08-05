@@ -1,5 +1,3 @@
-import dataMrg = dt.dataMrg;
-
 class Main extends eui.UILayer {
     
     protected createChildren (): void {
@@ -69,12 +67,16 @@ class Main extends eui.UILayer {
     protected createGameScene (): void {
         
         let gameScene = new game.GameView();
-        
+
         this.addChild( gameScene );
-        
+
         new game.GameHandler( gameScene );
+
+        gameScene.setLv( 1 );
         
-        gameScene.setLv( 0 );
+        // let resultPanel = new game.ResultPanel();
+        // this.addChild( resultPanel );
+        // resultPanel.show( df.EGameModel.FREE );
     }
     
 }

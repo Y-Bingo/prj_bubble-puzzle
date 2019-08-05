@@ -96,6 +96,12 @@ namespace df {
         END
     }
     
+    // 游戏模式
+    export enum EGameModel {
+        LV,     // 闯关模式
+        FREE    // 自由模式
+    }
+    
     // 每行最大的泡泡数
     export const MAX_COL            = 11;
     // 每列最大的泡泡数
@@ -128,26 +134,8 @@ namespace df {
     // 负一层
     export const B1 = [ 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10 ];
     
-    export const TABLE = [
-        [ 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 ],
-        [ 0, 0, 0, 4, 4, 4, 4, 4, 4, 0 ],
-        [ 1, 2, 3, 4, 4, 2, 4, 1, 3, 4, 2 ],
-        [ 2, 3, 4, 0, 2, 4, 1, 2, 4, 2 ],
-        [ 1, 2, 0, 0, 0, 2, 4, 1, 4, 1, 4 ],
-        [ 1, 0, 4, 0, 2, 0, 0, 0, 2, 1 ],
-        [ 2, 4, 4, 4, 2, 4, 0, 4, 4, 4, 1 ],
-        [ 1, 0, 4, 0, 2, 4, 0, 0, 2, 1 ],
-        [ 2, 4, 4, 4, 2, 4, 0, 4, 4, 4, 1 ]
-        // [ 1, 0, 4, 0, 2, 4, 0, 0, 2, 1, ],
-        // [ 2, 4, 4, 4, 2, 4, 0, 4, 4, 4, 1 ],
-        // [ 1, 0, 4, 0, 2, 4, 0, 0, 2, 1, ],
-        // [ 2, 4, 4, 4, 2, 4, 0, 4, 4, 4, 1 ],
-        // [ 1, 0, 4, 0, 2, 4, 0, 0, 2, 1, ],
-        // [ 2, 4, 4, 4, 2, 4, 0, 4, 4, 4, 1 ],
-        // [ 1, 0, 4, 0, 2, 4, 0, 0, 2, 1, ],
-    ];
-    
     /* -------------------- 游戏其他定义 --------------------*/
+    
     // 默认玩家名
     export const NAME       = '游客';
     // 默认玩家ID
@@ -160,14 +148,23 @@ namespace df {
     export const MAX_SCORE  = 0;
     
     // 默认：连击分数奖励
-    export const COMBO_SCORE  = [];
-    // 默认：游戏通关奖励
-    export const BONUS        = [];
+    export const COMBO_LV          = [ 8, 16, 24 ];
     // 默认：游戏分数奖励
-    export const COMBOS_BONUS = [];
+    export const COMBOS_BONUS      = [ 8, 16, 24 ];
     // 默认：关卡时间
-    export const GMAE_TIME    = 30;
+    export const GAME_TIME         = 30;
+    // 默认：游戏通关奖励
+    export const BONUS             = [ 5, 10, 30 ];
+    // 默认：游戏积分转金币
+    export const SCORE_CHANGE_COIN = 10;
+    // 默认： 游戏积分进度等级
+    export const SCORE_LV          = [ 30, 60, 100 ];
     
     // 道具价格
-    export const TOOL_PRICE = {}
+    export const TOOL_PRICE = {
+        hummer: 80,
+        bomb: 180,
+        color: 240,
+        guid: 100
+    }
 }
