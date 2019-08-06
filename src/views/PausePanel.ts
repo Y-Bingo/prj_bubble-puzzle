@@ -1,4 +1,4 @@
-namespace game {
+namespace view {
     
     export class PausePanel extends eui.Component {
         

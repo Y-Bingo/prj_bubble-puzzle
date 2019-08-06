@@ -34,13 +34,13 @@ class Main extends eui.UILayer {
     
     private async loadResource () {
         try {
+            await RES.loadConfig( 'resource/default.res.json', 'resource/' );
+            await RES.loadGroup( 'preload', 0 );
             const loadingView = new LoadingUI();
             this.stage.addChild( loadingView );
-            await RES.loadConfig( 'resource/default.res.json', 'resource/' );
             await this.loadTheme();
-            await RES.loadGroup( 'preload', 0 );
-            await RES.loadGroup( 'game', 1 );
-            await RES.loadGroup( 'common', 1 );
+            await RES.loadGroup( 'game', 1, loadingView );
+            await RES.loadGroup( 'common', 1, loadingView );
             await dt.dataMrg.init();
             this.stage.removeChild( loadingView );
         } catch( e ) {
@@ -53,10 +53,7 @@ class Main extends eui.UILayer {
             // load skin theme configuration file, you can manually modify the file. And replace the default skin.
             //加载皮肤主题配置文件,可以手动修改这个文件。替换默认皮肤。
             let theme = new eui.Theme( 'resource/default.thm.json', this.stage );
-            theme.addEventListener( eui.UIEvent.COMPLETE, () => {
-                resolve();
-            }, this );
-            
+            theme.once( eui.UIEvent.COMPLETE, resolve, this );
         } );
     }
     
@@ -65,14 +62,22 @@ class Main extends eui.UILayer {
      * Create scene interface
      */
     protected createGameScene (): void {
+        view.viewMrg.init( this );
         
-        let gameScene = new game.GameView();
-
-        this.addChild( gameScene );
-
-        new game.GameHandler( gameScene );
-
-        gameScene.setLv( 1 );
+        let menuPage = new view.MenuPage();
+        view.viewMrg.register( menuPage, menuPage.viewName, menuPage.viewType );
+        let levelPage = new view.LevelPage();
+        view.viewMrg.register( levelPage, levelPage.viewName, levelPage.viewType );
+        
+        view.viewMrg.showPage( menuPage.viewName );
+        
+        // let gameScene = new game.GameView();
+        //
+        // this.addChild( gameScene );
+        //
+        // new game.GameHandler( gameScene );
+        //
+        // gameScene.setLv( 1 );
         
         // let resultPanel = new game.ResultPanel();
         // this.addChild( resultPanel );

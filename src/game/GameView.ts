@@ -62,7 +62,7 @@ namespace game {
         
         constructor () {
             super();
-            this.skinName = skins.MainGameScene;
+            this.skinName = skins.GamePage;
         }
         
         protected childrenCreated () {

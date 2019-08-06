@@ -7,10 +7,10 @@
 		"resource/mySkin/component/Timer.exml",
 		"resource/mySkin/component/ToolItem.exml",
 		"resource/mySkin/ScoreBoard.exml",
+		"resource/mySkin/GamePage.exml",
+		"resource/mySkin/LevelPage.exml",
+		"resource/mySkin/MenuPage.exml",
 		"resource/mySkin/PausePanel.exml",
-		"resource/mySkin/GameSkin.exml",
-		"resource/mySkin/LevelSkin.exml",
-		"resource/mySkin/MenuSkin.exml",
 		"resource/mySkin/ResultPanel.exml"
 	],
 	"path": "resource/default.thm.json"

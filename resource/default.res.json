@@ -5,11 +5,11 @@
 			"name": "preload"
 		},
 		{
-			"keys": "arrow_blue_png,arrow_green_png,arrow_orange_png,arrow_pink_png,arrow_purple_png,arrow_red_png,arrow_white_png,arrow_yellow_png,bg_game_top_png,border_png,btn_add_png,btn_begin_png,btn_bgm_down_png,btn_bgm_up_png,btn_buy_down_png,btn_buy_up_png,btn_close_png,btn_contuine_png,btn_help_PNG,btn_last_png,btn_min_png,btn_model_infinite_png,btn_model_level_png,btn_music_effect_down_png,btn_music_effect_up_png,btn_next_png,btn_pause_png,btn_question_png,btn_restart_png,btn_return_png,btn_unlock_png,bubble_add_png,bubble_alpha_png,bubble_black_png,bubble_blue_png,bubble_bomb_png,bubble_cloud_png,bubble_green_png,bubble_hexagon_PNG,bubble_light_png,bubble_orange_png,bubble_pink_png,bubble_purple_png,bubble_puzzple_png,bubble_red_png,bubble_shadow_png,bubble_triangle_PNG,bubble_yellow_png,bubble_png,dead_line_png,hanging_curtain_png,icon_coin_png,mc_bomb_png,mc_humer_png,point_png,pointer_png,prop_bomb_png,prop_colorBall_png,prop_guidLine_png,prop_hammer_png,num_bg_png",
+			"keys": "arrow_blue_png,arrow_green_png,arrow_orange_png,arrow_pink_png,arrow_purple_png,arrow_red_png,arrow_white_png,arrow_yellow_png,bg_game_top_png,border_png,bubble_add_png,bubble_alpha_png,bubble_black_png,bubble_blue_png,bubble_bomb_png,bubble_cloud_png,bubble_green_png,bubble_hexagon_PNG,bubble_light_png,bubble_orange_png,bubble_pink_png,bubble_purple_png,bubble_puzzple_png,bubble_red_png,bubble_shadow_png,bubble_triangle_PNG,bubble_yellow_png,bubble_png,dead_line_png,hanging_curtain_png,icon_coin_png,mc_bomb_png,mc_humer_png,point_png,pointer_png,prop_bomb_png,prop_colorBall_png,prop_guidLine_png,prop_hammer_png,num_bg_png",
 			"name": "game"
 		},
 		{
-			"keys": "coin1_png,coin2_png,coin3_png,coin4_png,coin5_png,coin6_png,explain_bingdu_png,explain_bingkuai_png,explain_bingkuaipp_png,explain_caiqiu_png,explain_charge_png,explain_fuzhuxian_png,explain_heidong_png,explain_jinbipaopao_PNG,explain_kongqipp_png,explain_muban_png,explain_rule_png,explain_xiaolongpaopao_png,explain_xiaomuchui_png,text_caiqiu_png,text_miaozhunxian_png,text_xiaomuchui_png,text_zhadan_png,bg_panel_blue_png,bg_panel_purple_png,btn_panel_libao_png,icon_gift_png,icon_red_silk_png,icon_shop_png,item_level_lock_png,item_levle_unlock_png,star_empty_b_png,star_empty_s_png,star_gray_png,star_noEmpty_b_png,star_noEmpty_s_png,text_bangzhu_png,text_goumai_png,text_guanqia_png,text_shangcheng_png,text_zanting_png,star_light_png,mc_bomb_0_png,mc_bomb_1_png,mc_bomb_2_png,mc_bomb_3_png,mc_bomb_4_png,mc_bomb_5_png,mc_bomb_6_png,mc_hummer_0_png,mc_hummer_1_png,mc_hummer_2_png,mc_hummer_3_png,mc_hummer_4_png,mc_hummer_5_png,fanyean_png,fanyeliang_png,guoguanXzTX0_png,smallStar_png",
+			"keys": "coin1_png,coin2_png,coin3_png,coin4_png,coin5_png,coin6_png,explain_bingdu_png,explain_bingkuai_png,explain_bingkuaipp_png,explain_caiqiu_png,explain_charge_png,explain_fuzhuxian_png,explain_heidong_png,explain_jinbipaopao_PNG,explain_kongqipp_png,explain_muban_png,explain_rule_png,explain_xiaolongpaopao_png,explain_xiaomuchui_png,text_caiqiu_png,text_miaozhunxian_png,text_xiaomuchui_png,text_zhadan_png,bg_panel_blue_png,bg_panel_purple_png,btn_panel_libao_png,icon_gift_png,icon_red_silk_png,icon_shop_png,item_level_lock_png,item_levle_unlock_png,star_empty_b_png,star_empty_s_png,star_gray_png,star_noEmpty_b_png,star_noEmpty_s_png,text_bangzhu_png,text_goumai_png,text_guanqia_png,text_shangcheng_png,text_zanting_png,star_light_png,mc_bomb_0_png,mc_bomb_1_png,mc_bomb_2_png,mc_bomb_3_png,mc_bomb_4_png,mc_bomb_5_png,mc_bomb_6_png,mc_hummer_0_png,mc_hummer_1_png,mc_hummer_2_png,mc_hummer_3_png,mc_hummer_4_png,mc_hummer_5_png,fanyean_png,fanyeliang_png,guoguanXzTX0_png,smallStar_png,btn_add_png,btn_begin_png,btn_bgm_down_png,btn_bgm_up_png,btn_buy_down_png,btn_buy_up_png,btn_close_png,btn_contuine_png,btn_help_png,btn_last_png,btn_min_png,btn_model_infinite_png,btn_model_level_png,btn_music_effect_down_png,btn_music_effect_up_png,btn_next_png,btn_pause_png,btn_question_png,btn_restart_png,btn_return_png,btn_start_png,btn_unlock_png",
 			"name": "common"
 		}
 	],
@@ -800,111 +800,6 @@
 			"name": "xingzing001_png"
 		},
 		{
-			"url": "assets/game/btns/btn_add.png",
-			"type": "image",
-			"name": "btn_add_png"
-		},
-		{
-			"url": "assets/game/btns/btn_begin.png",
-			"type": "image",
-			"name": "btn_begin_png"
-		},
-		{
-			"url": "assets/game/btns/btn_bgm_down.png",
-			"type": "image",
-			"name": "btn_bgm_down_png"
-		},
-		{
-			"url": "assets/game/btns/btn_bgm_up.png",
-			"type": "image",
-			"name": "btn_bgm_up_png"
-		},
-		{
-			"url": "assets/game/btns/btn_buy_down.png",
-			"type": "image",
-			"name": "btn_buy_down_png"
-		},
-		{
-			"url": "assets/game/btns/btn_buy_up.png",
-			"type": "image",
-			"name": "btn_buy_up_png"
-		},
-		{
-			"url": "assets/game/btns/btn_close.png",
-			"type": "image",
-			"name": "btn_close_png"
-		},
-		{
-			"url": "assets/game/btns/btn_contuine.png",
-			"type": "image",
-			"name": "btn_contuine_png"
-		},
-		{
-			"url": "assets/game/btns/btn_help.PNG",
-			"type": "bin",
-			"name": "btn_help_PNG"
-		},
-		{
-			"url": "assets/game/btns/btn_last.png",
-			"type": "image",
-			"name": "btn_last_png"
-		},
-		{
-			"url": "assets/game/btns/btn_min.png",
-			"type": "image",
-			"name": "btn_min_png"
-		},
-		{
-			"url": "assets/game/btns/btn_model_infinite.png",
-			"type": "image",
-			"name": "btn_model_infinite_png"
-		},
-		{
-			"url": "assets/game/btns/btn_model_level.png",
-			"type": "image",
-			"name": "btn_model_level_png"
-		},
-		{
-			"url": "assets/game/btns/btn_music_effect_down.png",
-			"type": "image",
-			"name": "btn_music_effect_down_png"
-		},
-		{
-			"url": "assets/game/btns/btn_music_effect_up.png",
-			"type": "image",
-			"name": "btn_music_effect_up_png"
-		},
-		{
-			"url": "assets/game/btns/btn_next.png",
-			"type": "image",
-			"name": "btn_next_png"
-		},
-		{
-			"url": "assets/game/btns/btn_pause.png",
-			"type": "image",
-			"name": "btn_pause_png"
-		},
-		{
-			"url": "assets/game/btns/btn_question.png",
-			"type": "image",
-			"name": "btn_question_png"
-		},
-		{
-			"url": "assets/game/btns/btn_restart.png",
-			"type": "image",
-			"name": "btn_restart_png"
-		},
-		{
-			"url": "assets/game/btns/btn_return.png",
-			"type": "image",
-			"name": "btn_return_png"
-		},
-		{
-			"url": "assets/game/btns/btn_unlock.png",
-			"type": "image",
-			"name": "btn_unlock_png"
-		},
-		{
 			"url": "assets/game/num_bg.png",
 			"type": "image",
 			"name": "num_bg_png"
@@ -1003,6 +898,116 @@
 			"url": "assets/other/smallStar.png",
 			"type": "image",
 			"name": "smallStar_png"
+		},
+		{
+			"url": "assets/btns/btn_add.png",
+			"type": "image",
+			"name": "btn_add_png"
+		},
+		{
+			"url": "assets/btns/btn_begin.png",
+			"type": "image",
+			"name": "btn_begin_png"
+		},
+		{
+			"url": "assets/btns/btn_bgm_down.png",
+			"type": "image",
+			"name": "btn_bgm_down_png"
+		},
+		{
+			"url": "assets/btns/btn_bgm_up.png",
+			"type": "image",
+			"name": "btn_bgm_up_png"
+		},
+		{
+			"url": "assets/btns/btn_buy_down.png",
+			"type": "image",
+			"name": "btn_buy_down_png"
+		},
+		{
+			"url": "assets/btns/btn_buy_up.png",
+			"type": "image",
+			"name": "btn_buy_up_png"
+		},
+		{
+			"url": "assets/btns/btn_close.png",
+			"type": "image",
+			"name": "btn_close_png"
+		},
+		{
+			"url": "assets/btns/btn_contuine.png",
+			"type": "image",
+			"name": "btn_contuine_png"
+		},
+		{
+			"url": "assets/btns/btn_help.png",
+			"type": "image",
+			"name": "btn_help_png"
+		},
+		{
+			"url": "assets/btns/btn_last.png",
+			"type": "image",
+			"name": "btn_last_png"
+		},
+		{
+			"url": "assets/btns/btn_min.png",
+			"type": "image",
+			"name": "btn_min_png"
+		},
+		{
+			"url": "assets/btns/btn_model_infinite.png",
+			"type": "image",
+			"name": "btn_model_infinite_png"
+		},
+		{
+			"url": "assets/btns/btn_model_level.png",
+			"type": "image",
+			"name": "btn_model_level_png"
+		},
+		{
+			"url": "assets/btns/btn_music_effect_down.png",
+			"type": "image",
+			"name": "btn_music_effect_down_png"
+		},
+		{
+			"url": "assets/btns/btn_music_effect_up.png",
+			"type": "image",
+			"name": "btn_music_effect_up_png"
+		},
+		{
+			"url": "assets/btns/btn_next.png",
+			"type": "image",
+			"name": "btn_next_png"
+		},
+		{
+			"url": "assets/btns/btn_pause.png",
+			"type": "image",
+			"name": "btn_pause_png"
+		},
+		{
+			"url": "assets/btns/btn_question.png",
+			"type": "image",
+			"name": "btn_question_png"
+		},
+		{
+			"url": "assets/btns/btn_restart.png",
+			"type": "image",
+			"name": "btn_restart_png"
+		},
+		{
+			"url": "assets/btns/btn_return.png",
+			"type": "image",
+			"name": "btn_return_png"
+		},
+		{
+			"url": "assets/btns/btn_start.png",
+			"type": "image",
+			"name": "btn_start_png"
+		},
+		{
+			"url": "assets/btns/btn_unlock.png",
+			"type": "image",
+			"name": "btn_unlock_png"
 		}
 	]
 }
