@@ -32,17 +32,17 @@ class Main extends eui.UILayer {
         this.createGameScene();
     }
     
+    private _loadingView;
     private async loadResource () {
         try {
             await RES.loadConfig( 'resource/default.res.json', 'resource/' );
             await RES.loadGroup( 'preload', 0 );
-            const loadingView = new LoadingUI();
-            this.stage.addChild( loadingView );
+            this._loadingView = new LoadingUI();
+            this.addChild( this._loadingView );
             await this.loadTheme();
-            await RES.loadGroup( 'game', 1, loadingView );
-            await RES.loadGroup( 'common', 1, loadingView );
+            await RES.loadGroup( 'game', 1, this._loadingView );
+            await RES.loadGroup( 'common', 1, this._loadingView );
             await dt.dataMrg.init();
-            this.stage.removeChild( loadingView );
         } catch( e ) {
             console.error( e );
         }
@@ -65,12 +65,11 @@ class Main extends eui.UILayer {
         view.viewMrg.init( this );
         
         let menuPage = new view.MenuPage();
-        view.viewMrg.register( menuPage, menuPage.viewName, menuPage.viewType );
-        let levelPage = new view.LevelPage();
-        view.viewMrg.register( levelPage, levelPage.viewName, levelPage.viewType );
+        view.viewMrg.register( menuPage );
+        view.viewMrg.register( new view.LevelPage() );
+        view.viewMrg.register( new view.PausePanel() );
         
         view.viewMrg.showPage( menuPage.viewName );
-        
         // let gameScene = new game.GameView();
         //
         // this.addChild( gameScene );
@@ -82,6 +81,7 @@ class Main extends eui.UILayer {
         // let resultPanel = new game.ResultPanel();
         // this.addChild( resultPanel );
         // resultPanel.show( df.EGameModel.FREE );
+        this.removeChild( this._loadingView );
     }
     
 }

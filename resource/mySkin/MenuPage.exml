@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin class="skins.MenuPage" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing"
-        xmlns:tween="egret.tween.*" width="640" height="1200">
+        xmlns:tween="egret.tween.*" width="640" height="1136">
 	<w:Declarations>
 		<tween:TweenGroup id="tgShow">
 			<tween:TweenItem target="{logo}">
@@ -61,7 +61,7 @@
 			</tween:TweenItem>
 		</tween:TweenGroup>
 	</w:Declarations>
-	<e:Image source="bg_png" />
+	<e:Image source="bg_png"  height="1136"/>
 	<e:Image id="logo" source="logo_png" scaleX="0.5" scaleY="0.5" anchorOffsetX="252" anchorOffsetY="146" y="450"
 	          x="320"/>
 	<e:Button id="btn_infinite" label="" anchorOffsetX="157" anchorOffsetY="68" horizontalCenter="0.5"

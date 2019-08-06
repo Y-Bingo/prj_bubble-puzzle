@@ -34,12 +34,6 @@ namespace view {
      * 页面管理器
      */
     class ViewMrg extends eui.UILayer {
-        // private static _instance: ViewMrg = null;
-        // public static getIns (): ViewMrg {
-        //     if( !this._instance )
-        //         this._instance = new ViewMrg();
-        //     return this._instance;
-        // }
         
         private _stageWidth: number;
         private _stageHeight: number;
@@ -102,137 +96,111 @@ namespace view {
         
         /*************** 页面显示 与 关闭 ***************/
         // 显示page
-        async showPage ( page: string | IView, amOption?: ui.IAmShowOptions ): Promise<any> {
-            const self    = this;
-            const curPage = typeof page == 'string' ? self._pageMap[ page as string ] : page;
-            
-            if( !curPage ) return Promise.reject( `！page 打开失败` );
-            
-            const am       = [];
-            const lastPage = self._curPage;
-            am.push( self._showPage( curPage, amOption ) );
-            am.push( self._closePage( lastPage, { ...amOption, isReverse: true } as ui.IAmCloseOptions ) )
+        async showPage ( page: string, amOption?: ui.IAmShowOptions ): Promise<any> {
+            const self = this;
+            const am   = [];
+            am.push( self._showPage( page, amOption ) );
+            if( self._curPage )
+                am.push( self._closePage( self._curPage.viewName, { ...amOption, isReverse: true } as ui.IAmCloseOptions ) )
             
             // 执行动画
-            await Promise.all( am );
+            const [ curPage, lastPage ] = await Promise.all( am );
             
             // 更新
             self._curPage = curPage;
         }
-        private _showPage ( page: string | IView, amOption?: ui.IAmShowOptions, showArgs?: any ) {
+        private _showPage ( page: string, amOption?: ui.IAmShowOptions, showArgs?: any ) {
             const self    = this;
-            const curPage = typeof page == 'string' ? self._pageMap[ page as string ] : page;
+            const curPage = self._pageMap[ page ];
             if( !curPage ) {
-                console.warn( `打开的page 不存在！` );
-                return Promise.resolve();
+                console.warn( `page【${ page }】没有注册` );
+                return Promise.resolve( null );
             }
             // 执行生命周期
             curPage.onPreShow && curPage.onPreShow();
             return ui.Am.show( self._pageLayer, curPage, amOption ).then( () => {
                 curPage.onPostShow && curPage.onPostShow();
+                return Promise.resolve( curPage );
             } );
         }
         
         // 关闭page
-        async closePage ( page?: string | IView, amOption?: ui.IAmCloseOptions ): Promise<any> {
+        async closePage ( page?: string, amOption?: ui.IAmCloseOptions ): Promise<any> {
+            page = page || this._curPage.viewName;
             await this._closePage( page, amOption );
         }
-        private _closePage ( page?: string | IView, amOption?: ui.IAmCloseOptions ) {
+        private _closePage ( page?: string, amOption?: ui.IAmCloseOptions ) {
             const self    = this;
-            const curPage = typeof page == 'string' ? self._pageMap[ page as string ] : page;
+            const curPage = self._pageMap[ page ];
             if( !curPage ) {
-                console.warn( `关闭的page 不存在！` );
-                return Promise.resolve();
+                console.warn( `page【${ page }】没有注册` );
+                return Promise.resolve( null );
             }
             
             // 执行生命周期
             curPage.onPreClose && curPage.onPreClose();
             return ui.Am.close( self._pageLayer, curPage, amOption ).then( () => {
-                curPage.onPostShow && curPage.onPostShow();
+                curPage.onPostClose && curPage.onPostClose();
+                return Promise.resolve( curPage );
             } );
         }
         
         /*************** 弹窗显示 与 关闭 ***************/
-        private _panelMask: eui.Rect;
         // 显示 panel
-        showPanel ( name: string ): Promise<any> {
-            let self = this;
-            
-            let curPanel = self._panelMap[ name ];
-            // 注册验证
-            if( !curPanel ) {
-                if( DEBUG )
-                    egret.warn( `弹窗【${ name }】还没注册!` );
-                return Promise.reject( '' );
-            }
-            // 验证是否没有关闭之前的弹窗
-            if( self._curPanel && self._curPanel.parent ) {
-                if( DEBUG )
-                    egret.warn( `当前弹窗【${ self._curPanel.name }】还没关闭` );
-                self._curPanel.onPreClose && self._curPanel.onPreClose();
-                self._curPanel.parent.removeChild( self._curPanel );
-                self._curPanel.onPostClose && self._curPanel.onPostClose();
-            }
-            
-            // 添加灰色背景
-            !self._panelMask.parent && self._panelLayer.addChild( self._panelMask );
-            // 添加弹窗
-            curPanel.onPreShow && curPanel.onPreShow();
-            // todo 动画
-            self._panelLayer.addChild( curPanel );
-            curPanel.x = ( self._stageWidth - curPanel.width ) / 2;
-            curPanel.y = ( self._stageHeight - curPanel.height ) / 2;
-            
-            curPanel.onPostShow && curPanel.onPostShow();
-            
-            // 更新
-            self._curPanel = curPanel;
-            
-            return Promise.resolve();
+        async showPanel ( panel: string, amOption?: ui.IAmShowOptions, showArgs?: any ) {
+            const self = this;
+            if( self._curPanel )
+                await self._closePanel( self._curPanel.viewName, amOption );
+            self._curPanel = await self._showPanel( panel, amOption );
         }
-        // 关闭 panel
-        closePanel ( name?: string ): Promise<any> {
-            let self = this;
-            
-            let curPanel = name ? self._panelMap[ name ] : self._curPanel;
-            
-            if( !curPanel || !curPanel.parent ) {
-                self._curPanel = null;
-                return Promise.resolve();
+        private _showPanel ( panel: string, amOption?: ui.IAmShowOptions, showArgs?: any ) {
+            const self     = this;
+            const curPanel = self._panelMap[ panel ];
+            if( !curPanel ) {
+                console.warn( `panel【${ panel }】没有注册` );
+                return Promise.resolve( curPanel );
             }
-            
-            // 移除弹窗
-            curPanel.onPreClose && curPanel.onPreClose();
-            // todo: 动画
-            self._panelLayer.removeChild( curPanel );
-            // 移除灰色背景
-            self._panelMask.parent && self._panelLayer.removeChild( self._panelMask );
-            
-            curPanel.onPostClose && curPanel.onPostClose();
-            
-            // 更新
-            self._curPanel = null;
-            return Promise.resolve();
+            // 执行生命周期
+            curPanel.onPreShow && curPanel.onPreShow();
+            return ui.Am.show( self._panelLayer, curPanel, { ...amOption, dark: true } ).then( () => {
+                curPanel.onPostShow && curPanel.onPostShow();
+                return Promise.resolve( curPanel );
+            } );
         }
         
-        /********** 游戏界面显示 与 关闭 **********/
-        // // 显示page
-        // showGame (): Promise<any>
-        // {
-        //     return Promise.resolve();
-        // }
-        // // 关闭page
-        // closeGame (): Promise<any>
-        // {
-        //     return Promise.resolve();
-        // }
+        // 关闭 panel
+        async closePanel ( page?: string, amOption?: ui.IAmCloseOptions ) {
+            let panel;
+            if( !page ) {
+                if( this._curPanel )
+                    panel = await this._closePanel( this._curPanel.viewName, amOption );
+            } else {
+                panel = await this._closePanel( page, amOption );
+            }
+            if( panel == this._curPanel )
+                this._curPanel = null;
+        }
+        private _closePanel ( panel?: string, amOption?: ui.IAmCloseOptions ) {
+            const self     = this;
+            const curPanel = self._panelMap[ panel ];
+            if( !curPanel ) {
+                console.warn( `panel【${ panel }】没有注册` );
+                return Promise.resolve( curPanel );
+            }
+            
+            // 执行生命周期
+            curPanel.onPreClose && curPanel.onPreClose();
+            return ui.Am.close( self._panelLayer, curPanel, { ...amOption } ).then( () => {
+                curPanel.onPostClose && curPanel.onPostClose();
+                return Promise.resolve( curPanel );
+            } );
+        }
         
         // 注册页面
-        register ( view: IView, viewName: string, viewType?: EViewType ): boolean {
-            let self = this;
+        register ( view: IView ): boolean {
+            const self = this;
             
-            viewName = viewName;
-            viewType = viewType || view.viewType;
+            const { viewName, viewType } = view;
             
             let viewMap;
             switch( viewType ) {

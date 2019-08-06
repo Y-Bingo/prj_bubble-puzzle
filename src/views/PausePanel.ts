@@ -1,7 +1,8 @@
 namespace view {
     
-    export class PausePanel extends eui.Component {
-        
+    export class PausePanel extends eui.Component implements IView {
+        viewName: string    = 'PausePanel';
+        viewType: EViewType = EViewType.PANEL;
         // 组件
         btn_last: ui.ImageButton;
         btn_continue: ui.ImageButton;
@@ -21,6 +22,7 @@ namespace view {
             const self = this;
             switch( evt.target ) {
                 case self.btn_close:
+                    view.viewMrg.closePanel( this.viewName, { effectType: ui.BOUNCE_EN.IN, isReverse: true } );
                     break;
                 case self.btn_last:
                     break;

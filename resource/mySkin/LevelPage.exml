@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="skins.LevelPage" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" height="1200">
-	<e:Image source="bg_png"/>
+<e:Skin class="skins.LevelPage" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" height="1136">
+	<e:Image source="bg_png" height="1137"/>
 	<e:List itemRendererSkinName="LevelItem" anchorOffsetX="0" anchorOffsetY="0" y="60" left="0" right="0">
 		<e:ArrayCollection>
 			<e:Array>
@@ -30,7 +30,7 @@
 			<e:TileLayout  orientation="rows" horizontalGap="15" paddingRight="45" paddingLeft="50" verticalGap="10" requestedColumnCount="4"/>
 		</e:layout>
 	</e:List>
-	<e:Button id="btn_return" label="" x="46" y="1012">
+	<e:Button id="btn_return" label="" x="44.48" y="960.48">
 		<e:skinName>
 			<e:Skin states="up,down,disabled">
 			<e:Image width="100%" height="100%" source="btn_return_png" source.down="btn_return_png"/>

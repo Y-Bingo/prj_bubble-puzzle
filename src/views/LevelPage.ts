@@ -26,20 +26,20 @@ namespace view {
         }
         
         onPreShow (): void {
-            console.log( `【${ this.name }】:preShow` );
+            console.log( `【${ this.viewName }】:preShow` );
         }
         
         onPostShow (): void {
-            console.log( `【${ this.name }】:postShow` );
+            console.log( `【${ this.viewName }】:postShow` );
             
         }
         
         onPreClose (): void {
-            console.log( `【${ this.name }】: preClose` );
+            console.log( `【${ this.viewName }】: preClose` );
         }
         
         onPostClose (): void {
-            console.log( `【${ this.name }】:postClose` );
+            console.log( `【${ this.viewName }】:postClose` );
         }
     }
 }

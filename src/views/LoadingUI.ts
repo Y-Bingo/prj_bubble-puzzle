@@ -1,10 +1,11 @@
-class LoadingUI extends egret.DisplayObjectContainer {
+class LoadingUI extends eui.UILayer {
     
     thumb: egret.Bitmap;
     thumb_mask: egret.Bitmap;
     
     constructor () {
         super();
+        
         this._initPart();
     }
     
@@ -20,6 +21,8 @@ class LoadingUI extends egret.DisplayObjectContainer {
         this.addChild( trace );
         this.addChild( thumb );
         this.addChild( mask );
+        
+        bg.height = 1136;
         
         logo.anchorOffsetY = 146;
         logo.anchorOffsetX = 252;

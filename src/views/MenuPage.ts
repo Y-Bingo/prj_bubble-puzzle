@@ -39,27 +39,27 @@ namespace view {
         }
         
         private _onBtnHelp (): void {
-            // viewMrg.showPanel( 'Panel', { effectType: ui.BOUNCE_EN.IN, dark: true } );
+            viewMrg.showPanel( 'PausePanel', { effectType: ui.BOUNCE_EN.IN, dark: true } );
             console.log( '帮助' );
         }
         
         onPreShow (): void {
-            console.log( `【${ this.name }】:preShow` );
+            console.log( `【${ this.viewName }】:preShow` );
             this.tgShow.play( 0 );
             // this.tgPreShow.play(1);
         }
         
         onPostShow (): void {
-            console.log( `【${ this.name }】:postShow` );
+            console.log( `【${ this.viewName }】:postShow` );
             
         }
         
         onPreClose (): void {
-            console.log( `【${ this.name }】: preClose` );
+            console.log( `【${ this.viewName }】: preClose` );
         }
         
         onPostClose (): void {
-            console.log( `【${ this.name }】:postClose` );
+            console.log( `【${ this.viewName }】:postClose` );
         }
     }
 }
