@@ -68,6 +68,8 @@ class Main extends eui.UILayer {
         view.viewMrg.register( menuPage );
         view.viewMrg.register( new view.LevelPage() );
         view.viewMrg.register( new view.PausePanel() );
+        view.viewMrg.register( new game.GameView() );
+        view.viewMrg.register( new view.ResultPanel() );
         
         view.viewMrg.showPage( menuPage.viewName );
         // let gameScene = new game.GameView();

@@ -1,6 +1,8 @@
 namespace view {
     
-    export class ResultPanel extends eui.Component {
+    export class ResultPanel extends eui.Component implements IView {
+        viewName: string    = 'ResultPanel';
+        viewType: EViewType = EViewType.PANEL;
         
         // 组件
         icon_pass: eui.Image;
@@ -42,14 +44,18 @@ namespace view {
             }
         }
         
-        show ( gameModel: df.EGameModel = df.EGameModel.LV ): void {
+        applyArgs (): void {
+        
+        }
+        
+        onPreShow ( gameModel: df.EGameModel, maxScore: number ): void {
             const self        = this;
             self.currentState = gameModel === df.EGameModel.FREE ? 'free' : 'lv';
             if( this.icon_pass )
                 egret.Tween.get( this.icon_pass, { loop: true } ).to( { rotation: 360 }, 2000 );
         }
         
-        close (): void {
+        onPostClose (): void {
             
             egret.Tween.removeTweens( this.icon_pass );
         }

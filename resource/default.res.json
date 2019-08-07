@@ -9,7 +9,7 @@
 			"name": "game"
 		},
 		{
-			"keys": "coin1_png,coin2_png,coin3_png,coin4_png,coin5_png,coin6_png,bg_panel_blue_png,bg_panel_purple_png,btn_panel_libao_png,icon_gift_png,icon_red_silk_png,icon_shop_png,item_level_lock_png,star_empty_b_png,star_empty_s_png,star_gray_png,star_noEmpty_b_png,star_noEmpty_s_png,text_bangzhu_png,text_goumai_png,text_guanqia_png,text_shangcheng_png,text_zanting_png,star_light_png,mc_bomb_0_png,mc_bomb_1_png,mc_bomb_2_png,mc_bomb_3_png,mc_bomb_4_png,mc_bomb_5_png,mc_bomb_6_png,mc_hummer_0_png,mc_hummer_1_png,mc_hummer_2_png,mc_hummer_3_png,mc_hummer_4_png,mc_hummer_5_png,fanyean_png,fanyeliang_png,guoguanXzTX0_png,smallStar_png,btn_add_png,btn_begin_png,btn_bgm_down_png,btn_bgm_up_png,btn_buy_down_png,btn_buy_up_png,btn_close_png,btn_contuine_png,btn_help_png,btn_last_png,btn_min_png,btn_model_infinite_png,btn_model_level_png,btn_music_effect_down_png,btn_music_effect_up_png,btn_next_png,btn_pause_png,btn_question_png,btn_restart_png,btn_return_png,btn_start_png,btn_unlock_png,result_defen_png,result_wanchengdu_png,result_wenzibucuoo_png,result_wenzichuangguanshibai_png,result_wenzigongxiguoguan_png,result_wenzikubile_png,result_wenzilianji_png,result_wenzishuaidaile_png,result_wenzizhenbang_png,result_wenzizhenlihai_png,item_level_unlock_png",
+			"keys": "coin1_png,coin2_png,coin3_png,coin4_png,coin5_png,coin6_png,bg_panel_blue_png,bg_panel_purple_png,btn_panel_libao_png,icon_gift_png,icon_red_silk_png,icon_shop_png,item_level_lock_png,star_empty_b_png,star_empty_s_png,star_gray_png,star_noEmpty_b_png,star_noEmpty_s_png,text_bangzhu_png,text_goumai_png,text_guanqia_png,text_shangcheng_png,text_zanting_png,star_light_png,mc_bomb_0_png,mc_bomb_1_png,mc_bomb_2_png,mc_bomb_3_png,mc_bomb_4_png,mc_bomb_5_png,mc_bomb_6_png,mc_hummer_0_png,mc_hummer_1_png,mc_hummer_2_png,mc_hummer_3_png,mc_hummer_4_png,mc_hummer_5_png,fanyean_png,fanyeliang_png,guoguanXzTX0_png,smallStar_png,btn_add_png,btn_begin_png,btn_bgm_down_png,btn_bgm_up_png,btn_buy_down_png,btn_buy_up_png,btn_close_png,btn_contuine_png,btn_help_png,btn_last_png,btn_min_png,btn_model_infinite_png,btn_model_level_png,btn_music_effect_down_png,btn_music_effect_up_png,btn_next_png,btn_pause_png,btn_question_png,btn_restart_png,btn_return_png,btn_start_png,btn_unlock_png,result_defen_png,result_wanchengdu_png,result_wenzibucuoo_png,result_wenzichuangguanshibai_png,result_wenzigongxiguoguan_png,result_wenzikubile_png,result_wenzilianji_png,result_wenzishuaidaile_png,result_wenzizhenbang_png,result_wenzizhenlihai_png,item_level_unlock_png,explain_bingdu_png,explain_bingkuai_png,explain_bingkuaipp_png,explain_caiqiu_png,explain_charge_png,explain_fuzhuxian_png,explain_heidong_png,explain_jinbipaopao_PNG,explain_kongqipp_png,explain_muban_png,explain_rule_png,explain_xiaolongpaopao_png,explain_xiaomuchui_png,text_caiqiu_png,text_miaozhunxian_png,text_xiaomuchui_png,text_zhadan_png",
 			"name": "common"
 		}
 	],
@@ -923,6 +923,91 @@
 			"url": "assets/other/item_level_unlock.png",
 			"type": "image",
 			"name": "item_level_unlock_png"
+		},
+		{
+			"url": "assets/explain/explain_bingdu.png",
+			"type": "image",
+			"name": "explain_bingdu_png"
+		},
+		{
+			"url": "assets/explain/explain_bingkuai.png",
+			"type": "image",
+			"name": "explain_bingkuai_png"
+		},
+		{
+			"url": "assets/explain/explain_bingkuaipp.png",
+			"type": "image",
+			"name": "explain_bingkuaipp_png"
+		},
+		{
+			"url": "assets/explain/explain_caiqiu.png",
+			"type": "image",
+			"name": "explain_caiqiu_png"
+		},
+		{
+			"url": "assets/explain/explain_charge.png",
+			"type": "image",
+			"name": "explain_charge_png"
+		},
+		{
+			"url": "assets/explain/explain_fuzhuxian.png",
+			"type": "image",
+			"name": "explain_fuzhuxian_png"
+		},
+		{
+			"url": "assets/explain/explain_heidong.png",
+			"type": "image",
+			"name": "explain_heidong_png"
+		},
+		{
+			"url": "assets/explain/explain_jinbipaopao.PNG",
+			"type": "bin",
+			"name": "explain_jinbipaopao_PNG"
+		},
+		{
+			"url": "assets/explain/explain_kongqipp.png",
+			"type": "image",
+			"name": "explain_kongqipp_png"
+		},
+		{
+			"url": "assets/explain/explain_muban.png",
+			"type": "image",
+			"name": "explain_muban_png"
+		},
+		{
+			"url": "assets/explain/explain_rule.png",
+			"type": "image",
+			"name": "explain_rule_png"
+		},
+		{
+			"url": "assets/explain/explain_xiaolongpaopao.png",
+			"type": "image",
+			"name": "explain_xiaolongpaopao_png"
+		},
+		{
+			"url": "assets/explain/explain_xiaomuchui.png",
+			"type": "image",
+			"name": "explain_xiaomuchui_png"
+		},
+		{
+			"url": "assets/explain/text_caiqiu.png",
+			"type": "image",
+			"name": "text_caiqiu_png"
+		},
+		{
+			"url": "assets/explain/text_miaozhunxian.png",
+			"type": "image",
+			"name": "text_miaozhunxian_png"
+		},
+		{
+			"url": "assets/explain/text_xiaomuchui.png",
+			"type": "image",
+			"name": "text_xiaomuchui_png"
+		},
+		{
+			"url": "assets/explain/text_zhadan.png",
+			"type": "image",
+			"name": "text_zhadan_png"
 		}
 	]
 }

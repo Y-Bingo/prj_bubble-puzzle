@@ -1,5 +1,5 @@
 namespace game {
-    
+    import EGameModel = df.EGameModel;
     export const SHOOT_START_POSITION = {
         x: 320,
         y: 985,
@@ -12,7 +12,10 @@ namespace game {
         rotation: -360
     };
     
-    export class GameView extends eui.Component {
+    export class GameView extends eui.Component implements view.IView {
+        viewName: string         = 'GameView';
+        viewType: view.EViewType = view.EViewType.PAGE;
+        
         // 组件
         icon_arrow: ui.Arrow;       // 箭头
         // 组件面板
@@ -27,7 +30,7 @@ namespace game {
         tool_guid: IToolItem;
         
         gray_mask: eui.Rect;        // 灰色遮罩
-        
+        btn_pause: ui.ImageButton;  // 暂停按钮
         btn_begin: ui.ImageButton;  // 开始按钮
         btn_change: eui.Rect;       // 切换按钮（无显示效果）
         
@@ -57,8 +60,9 @@ namespace game {
         private _droppingBubbles: ui.Bubble[] = [];     // 正在掉落的泡泡
         
         // 状态属性
-        gameStatus: df.EGameStatus = df.EGameStatus.FREE;// 游戏状态
-        isShooting: boolean        = false;             // 是否正在发射中
+        isShooting: boolean = false;              // 是否正在发射中
+        
+        private _gameHandler: GameHandler;           // 游戏控制器
         
         constructor () {
             super();
@@ -68,6 +72,8 @@ namespace game {
         protected childrenCreated () {
             super.childrenCreated();
             console.log( 'childrenCreated' );
+            
+            this._gameHandler = new game.GameHandler( this );
             this.$initSkinPart();
         }
         
@@ -147,37 +153,58 @@ namespace game {
         
         // 设置等级
         setLv ( lv: number ): void {
-            if( this._lv == lv ) return;
-            this._lv = lv;
-            
-            this._lvData = dt.dataMrg.getLvDt( lv );
+            this._lv     = lv;
+            this._lvData = dt.dataMrg.getLvMap( lv );
             
             if( this._lvData !== null ) {
                 this._lvData.map[ -1 ] = df.B1;
                 core.model.setMap( this._lvData.map );
                 core.model.setNext( this._lvData.next );
                 
-                this._updateTimeBoard();
-                this._updateScoreBoard();
-                this._updateBubbleGroup();
+                this._gameSceneInit();
             } else {
                 console.warn( `不能存在关卡【${ lv }】的游戏数据！` );
             }
         }
         
+        private _gameSceneInit (): void {
+            this._updateTimeBoard();
+            this._updateScoreBoard();
+            this._updateBubbleGroup();
+        }
+        
         // 显示
-        show (): void {
+        onPreShow ( gameModel: df.EGameModel, lv?: number ): void {
+            if( gameModel == df.EGameModel.LV ) {
+                this.setLv( lv );
+            }
+            
+            // 更新金币显示数量
+            
+            // 更新道具显示数量
+            
+        }
+        
+        onPostShow (): void {
         
         }
         
         // 关闭
-        close (): void {
+        onPreClose (): void {
         
+        }
+        
+        onPostClose (): void {
+            // 添加灰色遮罩
+            if( !this.gray_mask.parent )
+                this.addChild( this.gray_mask );
+            if( !this.btn_begin.parent )
+                this.addChild( this.btn_begin );
         }
         
         // 游戏开始
         async gameStart () {
-            if( this.gameStatus === df.EGameStatus.PLAYING ) return;
+            if( dt.dataMrg.getGameStatus() === df.EGameStatus.PLAYING ) return;
             // 移除灰色遮罩
             if( this.gray_mask.parent )
                 this.gray_mask.parent.removeChild( this.gray_mask );
@@ -189,7 +216,7 @@ namespace game {
             // 加载泡泡
             await this.amLoad();
             // 更新游戏状态
-            this.gameStatus = df.EGameStatus.PLAYING;
+            dt.dataMrg.setGameStatus( df.EGameStatus.PLAYING );
             // 开始倒计时
         }
         
@@ -669,6 +696,11 @@ namespace game {
         
         protected winResult (): void {
             console.log( '你赢了！' );
+            view.viewMrg.showPanel(
+                'ResultPanel',
+                { effectType: ui.BOUNCE_EN.IN },
+                [ EGameModel.LV, 1000 ]
+            );
         }
         
         // 失败检测
@@ -678,6 +710,7 @@ namespace game {
         
         protected loseResult (): void {
             console.log( '你输了！' );
+            view.viewMrg.showPanel( 'ResultPanel', { effectType: ui.BOUNCE_EN.IN } );
         }
         
         /******************** 算分规则  ********************/

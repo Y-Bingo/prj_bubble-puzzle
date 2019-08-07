@@ -27,16 +27,26 @@ namespace game {
             this._arrow           = this._gameView.icon_arrow;
             this._guidLineHandler = new ui.GuidLineHandler( this._gameView.g_guidLine );
             
-            this._gameView.btn_begin.addEventListener( egret.TouchEvent.TOUCH_TAP, this._gameView.gameStart, this._gameView );
-            this._gameView.btn_change.addEventListener( egret.TouchEvent.TOUCH_TAP, this._gameView.amSwitch, this._gameView );
+            this._gameView.btn_pause.addEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnPause, this );
+            this._gameView.btn_begin.addEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnBegin, this );
+            this._gameView.btn_change.addEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnSwitch, this );
             this._gameView.g_tool.addEventListener( egret.TouchEvent.TOUCH_BEGIN, this._onTouchToolBegin, this );
             this._gameView.g_handle.addEventListener( egret.TouchEvent.TOUCH_BEGIN, this._onUserTouchBegin, this );
         }
         
+        private _onBtnPause (): void {
+            view.viewMrg.showPanel( 'PausePanel' );
+        }
+        
+        private _onBtnBegin (): void {
+            console.log( '开始！' );
+            this._gameView.gameStart();
+        }
+        
         // // 交换事件
-        // private _onBtnSwitch (): void {
-        //     this._gameView.amSwitch();
-        // }
+        private _onBtnSwitch (): void {
+            this._gameView.amSwitch();
+        }
         
         // 道具触碰开启
         private _onTouchToolBegin ( evt: egret.Event ): void {
@@ -86,7 +96,7 @@ namespace game {
         /* ----------------------------  用户游戏操作 ----------------------------*/
         private _onUserTouchBegin ( evt: egret.TouchEvent ): void {
             // 游戏中不能触碰
-            if( this._gameView.gameStatus !== df.EGameStatus.PLAYING ) return;
+            if( dt.dataMrg.getGameStatus() !== df.EGameStatus.PLAYING ) return;
             // 发射状态不能触碰
             if( this._gameView.isShooting ) return;
             
@@ -146,5 +156,4 @@ namespace game {
         
         return Math.atan( a / b ) * 180 / Math.PI;
     }
-    
 }

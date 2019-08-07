@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin class="skins.LevelPage" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" height="1136">
 	<e:Image source="bg_png" height="1137" />
-	<e:Button id="btn_return" label="" x="18.18" y="973">
+	<e:Button id="btn_return" label="" x="20" y="970">
 		<e:skinName>
 			<e:Skin states="up,down,disabled">
 				<e:Image width="100%" height="100%" source="btn_return_png" source.down="btn_return_png" />
@@ -9,11 +9,11 @@
 			</e:Skin>
 		</e:skinName>
 	</e:Button>
-	<e:BitmapLabel id="bl_completion" x="337.7" y="998.96" text="14/64" font="fnt_scroe2_fnt" />
+	<e:BitmapLabel id="bl_completion" y="998.96" text="14/62" font="fnt_scroe2_fnt"  right="140"/>
 	<e:Image source="star_noEmpty_b_png" x="510.73" y="975.92" scaleX="0.6" scaleY="0.6" />
 	<e:Scroller id="s_container" y="95" x="40" width="560" height="700">
-		<e:Group id="g_container" y="124" horizontalCenter="0">
-			<e:DataGroup itemRendererSkinName="skins.LevelItem" height="700" width="560" scaleX="1" scaleY="1">
+		<e:Group id="g_container" y="124" horizontalCenter="0" touchEnabled="false">
+			<e:DataGroup itemRendererSkinName="skins.LevelItem" height="720" width="560" scaleX="1" scaleY="1" anchorOffsetY="0">
 				<e:ArrayCollection>
 					<e:Array>
 						<e:Object lv="null" completion="null" />
@@ -40,12 +40,13 @@
 				</e:layout>
 			</e:DataGroup>
 			<e:layout>
-				<e:HorizontalLayout/>
+				<e:HorizontalLayout gap="10"/>
 			</e:layout>
+
 
 		</e:Group>
 	</e:Scroller>
-	<e:Group id="g_pages" y="852" anchorOffsetY="0" width="600" horizontalCenter="10">
+	<e:Group id="g_pages" y="852" anchorOffsetY="0" width="600" horizontalCenter="10" touchEnabled="false" touchChildren="true">
 		<e:RadioButton label="" x="6" y="16" width="55" height="15">
 			<e:skinName>
 				<e:Skin states="up,down,disabled">
@@ -92,4 +93,5 @@
 			<e:HorizontalLayout horizontalAlign="center" gap="30" />
 		</e:layout>
 	</e:Group>
+	<e:Image source="text_guanqia_png" x="18" y="25"/>
 </e:Skin>

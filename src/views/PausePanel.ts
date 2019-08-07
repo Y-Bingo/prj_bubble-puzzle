@@ -39,11 +39,11 @@ namespace view {
             }
         }
         
-        show (): void {
+        onPreShow (): void {
         
         }
         
-        close (): void {
+        onPreClose (): void {
         
         }
     }

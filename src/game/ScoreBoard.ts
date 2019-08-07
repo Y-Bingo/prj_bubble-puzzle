@@ -28,21 +28,25 @@ namespace game {
             super();
         }
         
-        childrenCreated (): void {
+        protected createChildren (): void {
             this.pg_thumb.mask = this.pg_thumb_mask;
-            
-            this.reset();
         }
+        
+        // childrenCreated (): void {
+        // }
         
         // 游戏开始设置数据
         setData ( lv: number, data: dt.ILVData ): void {
-            this._lv        = lv;
-            this._maxScore  = data.maxScore;
-            this._userScore = 0;
+            const self = this;
+            self.reset();
             
-            this.setScoreLv( data.scoreLv );
-            this._progress = Math.floor( ( this._userScore / this._maxScore ) * 100 ) / 100;
-            this._updateRes();
+            self._lv        = lv;
+            self._maxScore  = data.maxScore;
+            self._userScore = 0;
+            
+            self.setScoreLv( data.scoreLv );
+            self._progress = Math.floor( ( this._userScore / this._maxScore ) * 100 ) / 100;
+            self._updateRes();
         }
         
         setScoreLv ( value: number[] ): void {

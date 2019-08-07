@@ -29,16 +29,15 @@
 	<e:Rect id="btn_change" width="60" height="60" ellipseWidth="60" ellipseHeight="60" x="177" y="982"
 	        fillColor="0xffffff" fillAlpha="0" strokeAlpha="0"  touchEnabled="true"/>
 	<ui:ImageButton id="btn_pause" source="btn_pause_png" right="0" top="0" anchorOffsetX="92"/>
-	<e:Rect id="gray_mask" left="0" right="0" top="0" bottom="0" fillAlpha="0.3"/>
+	<e:Group x="5.71" y="1046.47" width="200" height="74">
+		<e:Label id="l_coin" text="12312" size="34" fontFamily="Tahoma" bold="true" horizontalCenter="22.5" y="20"/>
+		<e:Image source="icon_coin_png" y="3.04"/>
+	</e:Group>
+	<e:Rect id="gray_mask" left="0" right="0" top="0" bottom="0" fillAlpha="0.3" locked="true"/>
 	<ui:ImageButton id="btn_begin" source="btn_begin_png" verticalCenter="0" horizontalCenter="0"/>
 
 
 
 
-	<e:Group x="5.71" y="1046.47" width="200" height="74">
 
-		<e:Label id="l_coin" text="12312" size="34" fontFamily="Tahoma" bold="true" horizontalCenter="22.5" y="20"/>
-		<e:Image source="icon_coin_png" y="3.04"/>
-		
-	</e:Group>
 </e:Skin>

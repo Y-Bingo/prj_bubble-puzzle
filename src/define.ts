@@ -98,6 +98,7 @@ namespace df {
     
     // 游戏模式
     export enum EGameModel {
+        NONE,   // 空
         LV,     // 闯关模式
         FREE    // 自由模式
     }

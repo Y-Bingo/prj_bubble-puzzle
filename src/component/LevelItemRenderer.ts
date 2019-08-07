@@ -1,6 +1,6 @@
 namespace ui {
     
-    export class LevelItemRenderer extends eui.Component {
+    export class LevelItemRenderer extends eui.ItemRenderer {
         
         // 组件
         l_level: eui.BitmapLabel;       // 关卡数字
@@ -8,17 +8,9 @@ namespace ui {
         tg_star_2: eui.ToggleButton;    //
         tg_star_3: eui.ToggleButton;    //
         
-        data: any;
-        
-        constructor ( data: any ) {
+        constructor () {
             super();
-            this.data     = data;
             this.skinName = skins.LevelItem;
-        }
-        
-        protected childrenCreated (): void {
-            this.dataChanged();
-            console.log( this.data.lv );
         }
         
         setData ( data: any ): void {
@@ -29,9 +21,9 @@ namespace ui {
         }
         
         protected dataChanged (): void {
-            const { lv, completion } = this.data;
-            this.l_level.text        = `${ lv }`;
-            if( completion === 0 ) {
+            const { lv, completion, bLock } = this.data;
+            this.l_level.text               = `${ lv }`;
+            if( bLock ) {
                 this.currentState = 'lock'
             } else {
                 this.currentState = 'unlock';

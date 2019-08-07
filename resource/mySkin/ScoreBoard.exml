@@ -8,9 +8,9 @@
 	</e:Group>
 
 	<e:Group horizontalCenter="38" y="1">
-		<e:Image id="pg_trace" source="progress_trace_png" y="50.08" x="0"/>
-		<e:Image id="pg_thumb" source="progress_thumb_png" x="0" y="50"/>
-		<e:Image id="pg_thumb_mask" source="progress_thumb_png" x="0" y="50"/>
+		<e:Image id="pg_trace" source="progress_trace_png" y="50.08" x="0" width="348" height="42"/>
+		<e:Image id="pg_thumb" source="progress_thumb_png" x="0" y="50" width="348" height="42"/>
+		<e:Image id="pg_thumb_mask" source="progress_thumb_png" x="0" y="50" height="42" width="348"/>
 		<e:Component id="pg_star_0" currentState="one_1" y="70" x="91.66" scaleX="1" scaleY="1" skinName="skins.ProgressStar" anchorOffsetX="30" anchorOffsetY="16"/>
 		<e:Component id="pg_star_1" x="194" currentState="two_1" y="70" scaleX="1" scaleY="1" skinName="skins.ProgressStar" anchorOffsetY="16" anchorOffsetX="20"/>
 		<e:Component id="pg_star_2" x="312.35" currentState="three_1" y="70" scaleX="1" scaleY="1" skinName="skins.ProgressStar" anchorOffsetY="16" anchorOffsetX="40"/>

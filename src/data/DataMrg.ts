@@ -3,48 +3,25 @@ namespace dt {
     const USER_KEY         = 'user';
     const USER_SETTING_KEY = 'setting';
     
-    // 关卡数据
-    export interface ILVData {
-        lv: number;             // 关卡
-        map: any[][];            // 地图数据
-        next?: any[];            // 待发
-        types?: any[];           // 类型种类
-        maxScore?: number;       // 最高分
-        cellScore?: number;      // 底分
-        time?: number;           // 游戏通关时间
-        scoreLv: number[];       // 游戏分数等级
-    }
-    
-    // 用户数据
-    export interface IUserData {
-        name?: string;       // 用户名
-        id?: number;         // 用户ID
-        coin?: number;       // 金币数量
-        completion?: number[];  // 通关情况 0,1,2,3 代表通关结果
-        maxScore?: number;   // 自由模式最高分数
-        toolCount?: {        // 可用道具
-            hummer: number;
-            color: number;
-            bomb: number;
-            guid: number;
-        };
-    }
-    
-    // 自定义地图
-    export interface ISelfMap extends ILVData {}
-    
     class DataMrg {
         
-        private _user: IUserData;             // 用户数据
-        private _lvMap: ILVData[];           // 关卡数据
+        private _user: IUserData;           // 用户数据
+        private _lvMap: ILVData[];          // 关卡数据
         
-        constructor () {}
+        private _curLv: number;             // 当前关卡
+        private _gameModel: df.EGameModel;  // 游戏模式
+        private _gameStatus: df.EGameStatus;// 游戏状态
         
+        constructor () {
+            this._gameModel  = df.EGameModel.NONE;
+            this._gameStatus = df.EGameStatus.FREE;
+        }
+        
+        /******************** 数据初始化  ********************/
         async init () {
             this._initUserData();
             await this.loadLVMap();
         }
-        
         // 加载关卡数据
         async loadLVMap ( res: string = LV_MAP_RES ) {
             this._lvMap = await RES.getResAsync( res );
@@ -78,60 +55,76 @@ namespace dt {
             egret.localStorage.setItem( USER_KEY, JSON.stringify( this._user ) );
         }
         
-        // 获取关卡数据
-        getLvDt ( lv: number ): ILVData {
-            if( this._lvMap[ lv ] )
-                return this._lvMap[ lv ];
-            return null;
-        }
+        /******************** 关卡数据操作  ********************/
+        // 获取当前关卡
+        getCurLv (): number {return this._curLv;}
+        setCurLv ( value: number ) {this._curLv = value;}
+        
+        // 获取关卡地图
+        getLvMap ( lv: number ): ILVData { return this._lvMap[ lv ] || null;}
+        
         // 获取总关卡数
-        getLvs (): number {
-            return this._lvMap.length - 1;
+        getLvCount (): number {return this._lvMap.length - 1;}
+        
+        // 关卡成绩
+        getLvCompletion () {
+            let { completion } = this._user;
+            if( completion ) {
+                return completion.slice( 1 );
+            }
+            return [];
+        }
+        updateLvCompletion ( lv: number, value: number ): void {
+            if( this._user.completion[ lv ] ) {
+                value = Math.min( Math.max( value, this._user.completion[ lv ] ), 3 );
+            }
+            this._user.completion[ lv ] = value;
+            if( lv + 1 >= this._user.completion.length )
+                this._user.completion[ lv + 1 ] = 0;
+            this._saveDataToStorage();
         }
         
-        /******************** 获取用户数据  ********************/
+        /******************** 游戏数据操作  ********************/
+        getGameModel (): df.EGameModel { return this._gameModel; }
+        setGameModel ( value: df.EGameModel ) { this._gameModel = value;}
+        
+        getGameStatus (): df.EGameStatus { return this._gameStatus; }
+        setGameStatus ( value: df.EGameStatus ) { this._gameStatus = value;}
+        
+        /******************** 用户数据操作  ********************/
         getUserInfo () {
             let { name, id } = this._user;
             return { name, id };
         }
         
-        // 获取金币数量
+        // 用户金币
         getCoin () {
-            let { coin } = this._user;
-            return coin;
+            // todo 做长度移除处理
+            return this._user.coin;
         }
-        // 更新金币 值为增量
-        updateCoin ( value: number ): void {
+        // value 值为增量
+        updateCoin ( delta: number ): void {
             let { coin }    = this._user;
-            this._user.coin = Math.max( coin + value, 0 );
+            this._user.coin = Math.max( coin + delta, 0 );
             this._saveDataToStorage();
         }
         
+        // 用户最大分数
         getMaxScore () {
             let { maxScore } = this._user;
             return maxScore;
         }
-        // 更新用户最大分数
         updateMaxScore ( value: number ): void {
             this._user.maxScore = Math.max( value, 0 );
             this._saveDataToStorage();
         }
         
-        getCompletion () {
-            let { completion } = this._user;
-            return completion || [];
-        }
-        // 更新关卡成绩
-        updateLvScore ( lv: number, value: number ): void {
-            this._user.completion[ lv ] = Math.max( value, 0 );
-            this._saveDataToStorage();
-        }
-        
+        // 用户道具
         getToolCount () {
             let { toolCount } = this._user;
             return toolCount;
         }
-        // 更新道具存量 值为增量
+        // delta 为增量
         updateToolCount ( toolName: string, delta: number ): void {
             let value = this._user.toolCount[ toolName ];
             if( value == null ) return;
@@ -139,12 +132,6 @@ namespace dt {
             
             this._saveDataToStorage();
         }
-        
-        // 更新用户数据
-        updateUser (): void {
-        
-        }
-        
     }
     
     export const dataMrg = new DataMrg();

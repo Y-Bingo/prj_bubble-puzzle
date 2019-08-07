@@ -17,8 +17,10 @@ namespace view {
     }
     
     interface IViewHandle {
+        // 接受显示时的参数
+        applyArgs? ( ...args ): void;
         // 显示前回调
-        onPreShow? (): void;
+        onPreShow? ( ...args ): void;
         // 显示前回调
         onPreClose? (): void;
         
@@ -96,15 +98,15 @@ namespace view {
         
         /*************** 页面显示 与 关闭 ***************/
         // 显示page
-        async showPage ( page: string, amOption?: ui.IAmShowOptions ): Promise<any> {
+        async showPage ( page: string, amOption?: ui.IAmShowOptions, showArgs?: any ): Promise<any> {
             const self = this;
             const am   = [];
-            am.push( self._showPage( page, amOption ) );
+            am.push( self._showPage( page, amOption, showArgs ) );
             if( self._curPage )
-                am.push( self._closePage( self._curPage.viewName, { ...amOption, isReverse: true } as ui.IAmCloseOptions ) )
+                am.push( self._closePage( self._curPage.viewName, { ...amOption, isReverse: true } as ui.IAmCloseOptions ) );
             
             // 执行动画
-            const [ curPage, lastPage ] = await Promise.all( am );
+            const [ curPage ] = await Promise.all( am );
             
             // 更新
             self._curPage = curPage;
@@ -117,7 +119,7 @@ namespace view {
                 return Promise.resolve( null );
             }
             // 执行生命周期
-            curPage.onPreShow && curPage.onPreShow();
+            curPage.onPreShow && curPage.onPreShow.apply( curPage, showArgs );
             return ui.Am.show( self._pageLayer, curPage, amOption ).then( () => {
                 curPage.onPostShow && curPage.onPostShow();
                 return Promise.resolve( curPage );
@@ -136,7 +138,6 @@ namespace view {
                 console.warn( `page【${ page }】没有注册` );
                 return Promise.resolve( null );
             }
-            
             // 执行生命周期
             curPage.onPreClose && curPage.onPreClose();
             return ui.Am.close( self._pageLayer, curPage, amOption ).then( () => {
@@ -149,9 +150,10 @@ namespace view {
         // 显示 panel
         async showPanel ( panel: string, amOption?: ui.IAmShowOptions, showArgs?: any ) {
             const self = this;
-            if( self._curPanel )
+            if( self._curPanel ) {
                 await self._closePanel( self._curPanel.viewName, amOption );
-            self._curPanel = await self._showPanel( panel, amOption );
+            }
+            self._curPanel = await self._showPanel( panel, amOption, showArgs );
         }
         private _showPanel ( panel: string, amOption?: ui.IAmShowOptions, showArgs?: any ) {
             const self     = this;
@@ -161,7 +163,7 @@ namespace view {
                 return Promise.resolve( curPanel );
             }
             // 执行生命周期
-            curPanel.onPreShow && curPanel.onPreShow();
+            curPanel.onPreShow && curPanel.onPreShow.apply( curPanel, showArgs );
             return ui.Am.show( self._panelLayer, curPanel, { ...amOption, dark: true } ).then( () => {
                 curPanel.onPostShow && curPanel.onPostShow();
                 return Promise.resolve( curPanel );
@@ -187,7 +189,6 @@ namespace view {
                 console.warn( `panel【${ panel }】没有注册` );
                 return Promise.resolve( curPanel );
             }
-            
             // 执行生命周期
             curPanel.onPreClose && curPanel.onPreClose();
             return ui.Am.close( self._panelLayer, curPanel, { ...amOption } ).then( () => {
