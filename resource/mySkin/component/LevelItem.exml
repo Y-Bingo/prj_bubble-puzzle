@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="LevelItem" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" states="lock,unlock" >
-	<e:Image includeIn="unlock" source="item_level_unlock_png"/>
-	<e:BitmapLabel id="level" includeIn="unlock" font="fnt_level_fnt" rotation="357.92" horizontalCenter="0.5" verticalCenter="-9" text="1"/>
-	<e:Component id="star_1" includeIn="unlock"  currentState="empty_s" left="0" bottom="0"/>
-	<e:Component id="star_2" includeIn="unlock"  currentState="empty_s" bottom="0" horizontalCenter="0"/>
-	<e:Component id="star_3" includeIn="unlock"  currentState="empty_s" bottom="0" right="0"/>
-	<e:Image includeIn="lock" source="item_level_lock_png"/>
+<e:Skin class="skins.LevelItem" currentState="unlock" xmlns:e="http://ns.egret.com/eui"
+        xmlns:w="http://ns.egret.com/wing" states="lock,unlock">
+	<e:Image source="item_level_unlock_png"  touchEnabled="false" source.lock="item_level_lock_png"/>
+	<e:BitmapLabel id="l_level" includeIn="unlock" rotation="357.92" text="1" font="fnt_scroe2_fnt" horizontalCenter="-2.5"
+	               y="32"  touchEnabled="false"/>
+
+	<e:ToggleButton id="tg_star_1" label="" y="87" includeIn="unlock" width="42" height="43" touchEnabled="false">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="star_empty_s_png" source.down="star_noEmpty_s_png" />
+			</e:Skin>
+		</e:skinName>
+	</e:ToggleButton>
+	<e:ToggleButton id="tg_star_2" label="" x="41.5" y="87" includeIn="unlock" width="42" height="43" touchEnabled="false">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="star_empty_s_png" source.down="star_noEmpty_s_png" />
+			</e:Skin>
+		</e:skinName>
+	</e:ToggleButton>
+	<e:ToggleButton id="tg_star_3" label="" y="87" includeIn="unlock" x="83" width="42" height="43" touchEnabled="false">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="star_empty_s_png" source.down="star_noEmpty_s_png" />
+			</e:Skin>
+		</e:skinName>
+	</e:ToggleButton>
 </e:Skin>

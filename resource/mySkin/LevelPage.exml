@@ -1,43 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin class="skins.LevelPage" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" height="1136">
-	<e:Image source="bg_png" height="1137"/>
-	<e:List itemRendererSkinName="LevelItem" anchorOffsetX="0" anchorOffsetY="0" y="60" left="0" right="0">
-		<e:ArrayCollection>
-			<e:Array>
-				<e:Object level="1" stars="2"/>
-				<e:Object level="null" stars="null"/>
-				<e:Object level="null" stars="null"/>
-				<e:Object level="null" stars="null"/>
-				<e:Object level="null" stars="null"/>
-				<e:Object level="null" stars="null"/>
-				<e:Object level="null" stars="null"/>
-				<e:Object level="null" stars="null"/>
-				<e:Object level="null" stars="null"/>
-				<e:Object level="null" stars="null"/>
-				<e:Object level="null" stars="null"/>
-				<e:Object level="null" stars="null"/>
-				<e:Object level="null" stars="null"/>
-				<e:Object level="null" stars="null"/>
-				<e:Object level="null" stars="null"/>
-				<e:Object level="null" stars="null"/>
-				<e:Object level="null" stars="null"/>
-				<e:Object level="null" stars="null"/>
-				<e:Object level="null" stars="null"/>
-				<e:Object level="null" stars="null"/>
-			</e:Array>
-		</e:ArrayCollection>
-		<e:layout>
-			<e:TileLayout  orientation="rows" horizontalGap="15" paddingRight="45" paddingLeft="50" verticalGap="10" requestedColumnCount="4"/>
-		</e:layout>
-	</e:List>
-	<e:Button id="btn_return" label="" x="44.48" y="960.48">
+	<e:Image source="bg_png" height="1137" />
+	<e:Button id="btn_return" label="" x="18.18" y="973">
 		<e:skinName>
 			<e:Skin states="up,down,disabled">
-			<e:Image width="100%" height="100%" source="btn_return_png" source.down="btn_return_png"/>
-			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+				<e:Image width="100%" height="100%" source="btn_return_png" source.down="btn_return_png" />
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" />
 			</e:Skin>
 		</e:skinName>
 	</e:Button>
-	<e:Component y="816" currentState="noEmpty_b" scaleX="0.5" scaleY="0.5" right="40"/>
-	<e:BitmapLabel width="20" height="20" x="441" y="842"/>
+	<e:BitmapLabel id="bl_completion" x="337.7" y="998.96" text="14/64" font="fnt_scroe2_fnt" />
+	<e:Image source="star_noEmpty_b_png" x="510.73" y="975.92" scaleX="0.6" scaleY="0.6" />
+	<e:Scroller id="s_container" y="95" x="40" width="560" height="700">
+		<e:Group id="g_container" y="124" horizontalCenter="0">
+			<e:DataGroup itemRendererSkinName="skins.LevelItem" height="700" width="560" scaleX="1" scaleY="1">
+				<e:ArrayCollection>
+					<e:Array>
+						<e:Object lv="null" completion="null" />
+						<e:Object lv="null" completion="null" />
+						<e:Object lv="null" completion="null" />
+						<e:Object lv="null" completion="null" />
+						<e:Object lv="null" completion="null" />
+						<e:Object lv="null" completion="null" />
+						<e:Object lv="null" completion="null" />
+						<e:Object lv="null" completion="null" />
+						<e:Object lv="null" completion="null" />
+						<e:Object lv="null" completion="null" />
+						<e:Object lv="null" completion="null" />
+						<e:Object lv="null" completion="null" />
+						<e:Object lv="null" completion="null" />
+						<e:Object lv="null" completion="null" />
+						<e:Object lv="null" completion="null" />
+						<e:Object lv="null" completion="null" />
+						<e:Object lv="null" completion="null" />
+					</e:Array>
+				</e:ArrayCollection>
+				<e:layout>
+					<e:TileLayout orientation="rows" horizontalAlign="left" rowAlign="top" horizontalGap="18" verticalGap="14" />
+				</e:layout>
+			</e:DataGroup>
+			<e:layout>
+				<e:HorizontalLayout/>
+			</e:layout>
+
+		</e:Group>
+	</e:Scroller>
+	<e:Group id="g_pages" y="852" anchorOffsetY="0" width="600" horizontalCenter="10">
+		<e:RadioButton label="" x="6" y="16" width="55" height="15">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+					<e:Image width="100%" height="100%" source="fanyean_png" source.down="fanyeliang_png" scale9Grid="13,6,17,4" />
+				</e:Skin>
+			</e:skinName>
+		</e:RadioButton>
+		<e:RadioButton label="" x="16" y="26" width="55" height="15">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+					<e:Image width="100%" height="100%" source="fanyean_png" source.down="fanyeliang_png" scale9Grid="13,6,17,4" />
+				</e:Skin>
+			</e:skinName>
+		</e:RadioButton>
+		<e:RadioButton label="" x="26" y="36" width="55" height="15">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+					<e:Image width="100%" height="100%" source="fanyean_png" source.down="fanyeliang_png" scale9Grid="13,6,17,4" />
+				</e:Skin>
+			</e:skinName>
+		</e:RadioButton>
+		<e:RadioButton label="" x="36" y="46" width="55" height="15">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+					<e:Image width="100%" height="100%" source="fanyean_png" source.down="fanyeliang_png" scale9Grid="13,6,17,4" />
+				</e:Skin>
+			</e:skinName>
+		</e:RadioButton>
+		<e:RadioButton label="" x="16" y="26" width="55" height="15">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+					<e:Image width="100%" height="100%" source="fanyean_png" source.down="fanyeliang_png" scale9Grid="13,6,17,4" />
+				</e:Skin>
+			</e:skinName>
+		</e:RadioButton>
+		<e:RadioButton label="" x="26" y="36" width="55" height="15">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+					<e:Image width="100%" height="100%" source="fanyean_png" source.down="fanyeliang_png" scale9Grid="13,6,17,4" />
+				</e:Skin>
+			</e:skinName>
+		</e:RadioButton>
+		<e:layout>
+			<e:HorizontalLayout horizontalAlign="center" gap="30" />
+		</e:layout>
+	</e:Group>
 </e:Skin>
