@@ -1,38 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="ShopPage" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
-	<e:Image source="bg_png" height="1136" locked="true"/>
-	<e:Button id="btn_return" label="" x="35" y="35.76">
-		<e:skinName>
-		<e:Skin states="up,down,disabled" xmlns:w="http://ns.egret.com/wing">
-			<e:Image width="100%" height="100%" source="btn_return_png" source.down="btn_return_png"/>
-			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
-		</e:Skin>
-		</e:skinName>
-	</e:Button>
-	<e:Image source="text_shangcheng_png" y="52.26" x="257"/>
-	<e:Button id="btn_return0" label="" x="345.5" y="952.64">
-		<e:skinName>
-		<e:Skin states="up,down,disabled">
-			<e:Image width="100%" height="100%" source="btn_buy_up_png" source.down="btn_buy_down_png"/>
-			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
-		</e:Skin>
-		</e:skinName>
-	</e:Button>
-	<e:Group x="293.21" y="279.87">
-		<e:Group y="5" horizontalCenter="0">
-			<e:Image source="an_png" scale9Grid="39,21,43,19"/>
-			<e:BitmapLabel text="12" font="fnt_scroe2_fnt" y="6" horizontalCenter="0"/>
-		</e:Group>
-		<e:Image source="btn_add_png" x="177.42" y="0"/>
-		<e:Image source="btn_min_png" x="0" y="0"/>
-	</e:Group>
-	<e:Component id="tool_hummer" x="45.45" y="287.58" skinName="skins.ToolItem" currentState="hummer" name="hummer" touchEnabled="true" touchChildren="false"/>
-	<e:Component id="tool_bomb" x="45.45" y="433.91" skinName="skins.ToolItem" currentState="bomb" name="bomb" touchChildren="false" touchEnabled="true"/>
-	<e:Component id="tool_color" x="45.45" y="580.24" skinName="skins.ToolItem" currentState="color" name="color" touchChildren="false" touchEnabled="true"/>
-	<e:Component id="tool_guid" x="45.45" y="726.98" skinName="skins.ToolItem" currentState="guid" name="guid" touchChildren="false" touchEnabled="true"/>
+<e:Skin class="skins.ShopPage" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:ui="ui.*">
+	<e:Image source="bg_png" height="1136" locked="true" />
+	<e:Image source="text_shangcheng_png" y="52.26" x="257" />
 	<e:Group x="36.01" y="970.71" width="200" height="74">
-		<e:Image source="dijinbi_png" scaleX="1" scaleY="1"/>
-		<e:Image source="icon_coin_png" x="-6.08" y="-1.04"/>
-		<e:Label id="l_coin" text="12312" size="34" fontFamily="Tahoma" bold="true" horizontalCenter="14.5" y="12"/>
+		<e:Image source="dijinbi_png" scaleX="1" scaleY="1" />
+		<e:Image source="icon_coin_png" x="-6.08" y="-1.04" />
+		<e:Label id="l_coin" text="12123" size="34" fontFamily="Tahoma" bold="true" y="12" horizontalCenter="18" />
+	</e:Group>
+	<ui:ImageButton id="btn_return" source="btn_return_png" anchorOffsetY="54" anchorOffsetX="52" x="87" y="89"></ui:ImageButton>
+	<e:Button id="btn_pay" label="" x="345.5" y="952.64">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="btn_buy_up_png" source.down="btn_buy_down_png"
+				         source.disabled="btn_buy_down_png" />
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Group id="g_btns" x="340" scaleX="1" scaleY="1" y="8">
+		<ui:ImageButton id="btn_min" source="btn_min_png" anchorOffsetX="45" anchorOffsetY="40" x="45" y="40"></ui:ImageButton>
+		<ui:ImageButton id="btn_add" source="btn_add_png" anchorOffsetX="45" anchorOffsetY="40" x="215" y="40"></ui:ImageButton>
+	</e:Group>
+	<e:Group id="g_tool" height="200" y="242" left="0" right="0" touchEnabled="false">
+		<e:Group id="g_hummer" left="0" right="0" x="0" scaleX="1" scaleY="1" touchChildren="false">
+			<e:Component id="tool_hummer" x="90" y="0" skinName="skins.ToolItem" currentState="hummer" name="hummer"
+			             touchEnabled="true" touchChildren="false" />
+			<e:Image source="icon_coin_png" y="26" scaleX="0.4" scaleY="0.4" x="260" />
+			<e:BitmapLabel id="bl_cost_hummer" font="fnt_coin_fnt" text="100" y="28" left="290" />
+			<e:Image source="an_png" scale9Grid="39,21,43,19" x="410" y="10" />
+			<e:BitmapLabel id="bl_count_hummer" text="12" font="fnt_scroe2_fnt" y="16" horizontalCenter="151" />
+		</e:Group>
+		<e:Group id="g_bomb" left="0" right="0" x="0" scaleX="1" scaleY="1" y="133.66666666666669" touchChildren="false">
+			<e:Component id="tool_bomb" skinName="skins.ToolItem" currentState="bomb" name="bomb" touchChildren="false"
+			             touchEnabled="true" x="90" />
+			<e:Image source="icon_coin_png" y="26" scaleX="0.4" scaleY="0.4" x="260" />
+			<e:BitmapLabel id="bl_cost_bomb" font="fnt_coin_fnt" text="100" y="29" left="290" />
+			<e:Image source="an_png" scale9Grid="39,21,43,19" x="409" y="10" />
+			<e:BitmapLabel id="bl_count_bomb" text="12" font="fnt_scroe2_fnt" y="16" horizontalCenter="150" />
+		</e:Group>
+		<e:Group id="g_color" left="0" right="0" x="0" scaleX="1" scaleY="1" y="266.33333333333337" touchChildren="false">
+			<e:Component id="tool_color" x="90" skinName="skins.ToolItem" currentState="color" name="color" touchChildren="false"
+			             touchEnabled="true" />
+			<e:Image source="icon_coin_png" y="26" scaleX="0.4" scaleY="0.4" x="260" />
+			<e:BitmapLabel id="bl_cost_color" font="fnt_coin_fnt" text="100" y="29" left="290" />
+			<e:Image source="an_png" scale9Grid="39,21,43,19" x="409" y="10" />
+			<e:BitmapLabel id="bl_count_color" text="12" font="fnt_scroe2_fnt" y="16" horizontalCenter="150" />
+		</e:Group>
+		<e:Group id="g_guid" left="0" right="0" x="0" scaleX="1" scaleY="1" y="400" touchChildren="false">
+			<e:Component id="tool_guid" x="90" skinName="skins.ToolItem" currentState="guid" name="guid" touchChildren="false"
+			             touchEnabled="true" />
+			<e:Image source="icon_coin_png" y="26" scaleX="0.4" scaleY="0.4" x="260" />
+			<e:BitmapLabel id="bl_cost_guid" font="fnt_coin_fnt" text="100" y="29" left="290" />
+			<e:Image source="an_png" scale9Grid="39,21,43,19" x="409" y="10" />
+			<e:BitmapLabel id="bl_count_guid" text="120" font="fnt_scroe2_fnt" y="16" horizontalCenter="150" />
+		</e:Group>
 	</e:Group>
 </e:Skin>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin class="skins.MenuPage" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing"
-        xmlns:tween="egret.tween.*" width="640" height="1136">
+        xmlns:tween="egret.tween.*" xmlns:ui="ui.*" width="640" height="1136">
 	<w:Declarations>
 		<tween:TweenGroup id="tgShow">
 			<tween:TweenItem target="{logo}">
@@ -16,54 +16,53 @@
 			<tween:TweenItem target="{btn_start}">
 				<tween:Set>
 					<tween:props>
-						<e:Object alpha="{0}" x="{-199}" />
+						<e:Object alpha="{0}"  x="{-99}"/>
 					</tween:props>
 				</tween:Set>
 				<tween:Wait duration="500" />
 				<tween:Set>
 					<tween:props>
-						<e:Object alpha="{1}" x="{-199}" />
+						<e:Object alpha="{1}"  x="{-99}"/>
 					</tween:props>
 				</tween:Set>
 				<tween:To duration="400" ease="backIn">
 					<tween:props>
-						<e:Object x="{381}" />
+						<e:Object  x="{420}"/>
 					</tween:props>
 				</tween:To>
 				<tween:To duration="300" ease="quintOut">
 					<tween:props>
-						<e:Object x="{221}" />
+						<e:Object  x="{320}"/>
 					</tween:props>
 				</tween:To>
 			</tween:TweenItem>
 			<tween:TweenItem target="{btn_help}">
 				<tween:Set>
 					<tween:props>
-						<e:Object alpha="{0}" x="{-199}" />
+						<e:Object alpha="{0}"  x="{-99}"/>
 					</tween:props>
 				</tween:Set>
 				<tween:Wait duration="650" />
 				<tween:Set>
 					<tween:props>
-						<e:Object alpha="{1}" x="{-199}" />
+						<e:Object alpha="{1}"  x="{-99}"/>
 					</tween:props>
 				</tween:Set>
-				<tween:To duration="400" ease="backIn">
+				<tween:To duration="350" ease="backIn">
 					<tween:props>
-						<e:Object x="{341}" />
+						<e:Object  x="{390}"/>
 					</tween:props>
 				</tween:To>
-				<tween:To duration="150" ease="backInOut">
+				<tween:To duration="200" ease="backInOut">
 					<tween:props>
-						<e:Object x="{221}" />
+						<e:Object  x="{320}"/>
 					</tween:props>
 				</tween:To>
 			</tween:TweenItem>
 		</tween:TweenGroup>
 	</w:Declarations>
-	<e:Image source="bg_png"  height="1136"/>
-	<e:Image id="logo" source="logo_png" scaleX="0.5" scaleY="0.5" anchorOffsetX="252" anchorOffsetY="146" y="450"
-	          x="320"/>
+	<e:Image source="bg_png" height="1136" />
+	<e:Image id="logo" source="logo_png" scaleX="0.5" scaleY="0.5" anchorOffsetX="252" anchorOffsetY="146" y="450" x="320" />
 	<e:Button id="btn_infinite" label="" anchorOffsetX="157" anchorOffsetY="68" horizontalCenter="0.5"
 	          verticalCenter="-100" visible="false">
 		<e:skinName>
@@ -82,30 +81,10 @@
 			</e:Skin>
 		</e:skinName>
 	</e:Button>
-	<e:Button id="btn_start" label="" y="525" x="221">
-		<e:skinName>
-			<e:Skin states="up,down,disabled">
-				<e:Image width="100%" height="100%" source="btn_start_png" scaleY.down="1.1" scaleX.down="1.1" />
-				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" />
-			</e:Skin>
-		</e:skinName>
-	</e:Button>
-	<e:Button id="btn_help" label="" x="221" y="752">
-		<e:skinName>
-			<e:Skin states="up,down,disabled">
-				<e:Image width="100%" height="100%" source="btn_help_png" scaleY.down="1.1" scaleX.down="1.1" />
-				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" />
-			</e:Skin>
-		</e:skinName>
-	</e:Button>
-	<e:Button id="btn_shop" label="" x="21.9" y="1001.39">
-		<e:skinName>
-			<e:Skin states="up,down,disabled">
-			<e:Image width="100%" height="100%" source="icon_shop_png"/>
-			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
-			</e:Skin>
-		</e:skinName>
-	</e:Button>
-	<e:Image source="btn_model_infinite_png" x="163.5" y="617"/>
-	<e:Image source="btn_model_level_png" x="163.5" y="815"/>
+	
+	<ui:ImageButton id="btn_start" source="btn_start_png" anchorOffsetX="99" anchorOffsetY="48" x="320" y="573" />
+	<ui:ImageButton id="btn_help" source="btn_help_png" anchorOffsetX="99" anchorOffsetY="48" x="320" y="800" />
+
+	<ui:ImageButton id="btn_shop" source="icon_shop_png" anchorOffsetX="50" anchorOffsetY="58" y="1053" x="90" />
+
 </e:Skin>

@@ -1,17 +1,19 @@
 {
-    "skins": {},
-    "autoGenerateExmlsList": true,
-    "exmls": [
-        "resource/mySkin/component/LevelItem.exml",
-        "resource/mySkin/component/ProgressStar.exml",
-        "resource/mySkin/component/Timer.exml",
-        "resource/mySkin/component/ToolItem.exml",
-        "resource/mySkin/ScoreBoard.exml",
-        "resource/mySkin/GamePage.exml",
-        "resource/mySkin/LevelPage.exml",
-        "resource/mySkin/MenuPage.exml",
-        "resource/mySkin/PausePanel.exml",
-        "resource/mySkin/ResultPanel.exml"
-    ],
-    "path": "resource/default.thm.json"
+	"skins": {},
+	"autoGenerateExmlsList": true,
+	"exmls": [
+		"resource/mySkin/component/LevelItem.exml",
+		"resource/mySkin/component/ProgressStar.exml",
+		"resource/mySkin/component/Timer.exml",
+		"resource/mySkin/component/ToolItem.exml",
+		"resource/mySkin/ScoreBoard.exml",
+		"resource/mySkin/GamePage.exml",
+		"resource/mySkin/HelpPage.exml",
+		"resource/mySkin/LevelPage.exml",
+		"resource/mySkin/MenuPage.exml",
+		"resource/mySkin/PausePanel.exml",
+		"resource/mySkin/ResultPanel.exml",
+		"resource/mySkin/ShopPage.exml"
+	],
+	"path": "resource/default.thm.json"
 }

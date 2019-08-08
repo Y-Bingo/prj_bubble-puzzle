@@ -1,5 +1,5 @@
-namespace game {
-    import EGameModel = df.EGameModel;
+namespace view {
+    
     export const SHOOT_START_POSITION = {
         x: 320,
         y: 985,
@@ -73,7 +73,7 @@ namespace game {
             super.childrenCreated();
             console.log( 'childrenCreated' );
             
-            this._gameHandler = new game.GameHandler( this );
+            this._gameHandler = new GameHandler( this );
             this.$initSkinPart();
         }
         
@@ -699,7 +699,7 @@ namespace game {
             view.viewMrg.showPanel(
                 'ResultPanel',
                 { effectType: ui.BOUNCE_EN.IN },
-                [ EGameModel.LV, 1000 ]
+                [ df.EGameModel.LV, 1000 ]
             );
         }
         

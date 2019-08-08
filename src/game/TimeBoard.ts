@@ -1,4 +1,4 @@
-namespace game {
+namespace view {
     export class TimeBoard extends eui.Component {
         // 组件
         bl_time: eui.BitmapLabel;       // 时间文本

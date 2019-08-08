@@ -1,4 +1,4 @@
-namespace game {
+namespace view {
     /**
      * 控制器
      */
@@ -6,7 +6,7 @@ namespace game {
         private _gameView: GameView;
         private _angle: number;             // 发射角度
         
-        private _guidLineHandler: ui.GuidLineHandler;     // 弹道辅助线
+        private _guidLineHandler: GuidLineHandler;     // 弹道辅助线
         private _arrow: ui.Arrow;           // 箭头
         
         // 状态属性
@@ -25,7 +25,7 @@ namespace game {
         
         private _initHandler (): void {
             this._arrow           = this._gameView.icon_arrow;
-            this._guidLineHandler = new ui.GuidLineHandler( this._gameView.g_guidLine );
+            this._guidLineHandler = new GuidLineHandler( this._gameView.g_guidLine );
             
             this._gameView.btn_pause.addEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnPause, this );
             this._gameView.btn_begin.addEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnBegin, this );

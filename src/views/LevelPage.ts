@@ -1,7 +1,5 @@
 namespace view {
     
-    import EGameModel = df.EGameModel;
-    
     interface ItemData {
         lv: number,
         completion: number;
@@ -158,7 +156,7 @@ namespace view {
             view.viewMrg.showPage(
                 'GameView',
                 { effectType: ui.BOUNCE_EN.RIGHT },
-                [ EGameModel.LV, evt.target.data.lv ]
+                [ df.EGameModel.LV, evt.target.data.lv ]
             );
         }
         

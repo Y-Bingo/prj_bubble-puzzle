@@ -1,4 +1,4 @@
-namespace game {
+namespace view {
     /**
      * 积分面板
      */

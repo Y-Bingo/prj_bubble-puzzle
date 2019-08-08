@@ -1,4 +1,4 @@
-namespace ui {
+namespace view {
     const GAP = 30;                 // 辅助线 点间距
     
     const START_Y = 0;              // 开始画的Y坐标

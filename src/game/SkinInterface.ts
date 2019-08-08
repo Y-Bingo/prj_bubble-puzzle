@@ -1,4 +1,4 @@
-namespace game {
+namespace view {
     
     // skin: Timer
     export interface ITimer extends eui.Component {

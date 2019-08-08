@@ -42,8 +42,8 @@ export class WxgamePlugin implements plugins.Command {
         return file;
     }
     async onFinish(pluginContext: plugins.CommandContext) {
-        //同步 index.html 配置到 game.js
-        const gameJSPath = path.join(pluginContext.outputDir, "game.js");
+        //同步 index.html 配置到 view.js
+        const gameJSPath = path.join(pluginContext.outputDir, "view.js");
         if(!fs.existsSync(gameJSPath)) {
             console.log(`${gameJSPath}不存在，请先使用 Launcher 发布微信小游戏`);
             return;
@@ -74,7 +74,7 @@ export class WxgamePlugin implements plugins.Command {
         else {
             orientation = "portrait";
         }
-        const gameJSONPath = path.join(pluginContext.outputDir, "game.json");
+        const gameJSONPath = path.join(pluginContext.outputDir, "view.json");
         let gameJSONContent = JSON.parse(fs.readFileSync(gameJSONPath, { encoding: "utf8" }));
         gameJSONContent.deviceOrientation = orientation;
         fs.writeFileSync(gameJSONPath, JSON.stringify(gameJSONContent, null, "\t"));
