@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin class="skins.GamePage" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:ui="ui.*"
         xmlns:view="view.*" width="640" height="1136">
-	<e:Image id="bg" height="1136" source="bg_png" />
+	<e:Image id="bg" height="1136" source="bg_png"  locked="true"/>
 	<e:Group id="g_bubble" y="117" height="735" touchEnabled="false" touchChildren="false" width="618" x="11" locked="true" />
 	<e:Group id="g_guidLine" y="117" height="735" width="618" x="11" locked="true" />
 	<e:Image id="curtain" source="hanging_curtain_png" scale9Grid="32,10,541,5" top="95" horizontalCenter="0" />

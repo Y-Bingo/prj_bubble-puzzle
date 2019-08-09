@@ -21,17 +21,19 @@ namespace ui {
     // 退出动画
     export enum BOUNCE_EX {
         // 没有动画
-        NONE  = 0,
+        NONE   = 0,
         // 从中间消失
-        OUT   = 1,
+        OUT    = 1,
+        // 从中间弹性消失
+        IN_OUT = 2,
         // 从左到右
-        LEFT  = 3,
+        LEFT   = 3,
         // 从右向左
-        RIGHT = 4,
+        RIGHT  = 4,
         // 从上到下
-        UP    = 5,
+        UP     = 5,
         // 从下到上
-        DOWN  = 6
+        DOWN   = 6
     }
     
     // 进出映射
@@ -40,7 +42,7 @@ namespace ui {
         // 从中间轻微弹出
         [ BOUNCE_EN.IN ]: BOUNCE_EX.OUT,
         // 从中间猛烈弹出
-        [ BOUNCE_EN.IN_RUDE ]: BOUNCE_EX.OUT,
+        [ BOUNCE_EN.IN_RUDE ]: BOUNCE_EX.IN_OUT,
         // 从左到右
         [ BOUNCE_EN.LEFT ]: BOUNCE_EX.LEFT,
         // 从右刀座
@@ -132,7 +134,7 @@ namespace ui {
             let leftX: number = rootView.width / 2 - popUpWidth / 2;
             let upY: number   = rootView.height / 2 - popUpHeight / 2;
             switch( effectType ) {
-                case 1:
+                case BOUNCE_EN.IN:
                     view.alpha  = 0;
                     view.scaleX = 0.5;
                     view.scaleY = 0.5;
@@ -145,10 +147,10 @@ namespace ui {
                              scaleY: 1,
                              x: view.x - popUpWidth / 4,
                              y: view.y - popUpHeight / 4
-                         }, 300, egret.Ease.backOut )
+                         }, 300, egret.Ease.backIn )
                          .call( resolve );
                     break;
-                case 2:
+                case BOUNCE_EN.IN_RUDE:
                     view.alpha  = 0;
                     view.scaleX = 0.5;
                     view.scaleY = 0.5;
@@ -164,7 +166,7 @@ namespace ui {
                          }, 600, egret.Ease.elasticOut )
                          .call( resolve );
                     break;
-                case 3:
+                case BOUNCE_EN.LEFT:
                     if( isAlert ) {
                         view.x = -popUpWidth;
                         egret.Tween.get( view )
@@ -178,7 +180,7 @@ namespace ui {
                         egret.Tween.get( view ).to( { x: 0 }, 500, egret.Ease.cubicOut ).call( resolve );
                     }
                     break;
-                case 4:
+                case BOUNCE_EN.RIGHT:
                     // panel.alpha = 1;
                     view.x = popUpWidth;
                     if( isAlert )
@@ -187,14 +189,14 @@ namespace ui {
                         egret.Tween.get( view ).to( { x: 0 }, 500, egret.Ease.cubicOut ).call( resolve );
                     
                     break;
-                case 5:
+                case BOUNCE_EN.UP:
                     view.y = -popUpHeight;
                     if( isAlert )
                         egret.Tween.get( view ).to( { y: upY }, 500, egret.Ease.cubicOut ).call( resolve );
                     else
                         egret.Tween.get( view ).to( { y: 0 }, 500, egret.Ease.cubicOut ).call( resolve );
                     break;
-                case 6:
+                case BOUNCE_EN.DOWN:
                     if( isAlert ) {
                         view.y = rootView.height;
                         egret.Tween.get( view ).to( { y: upY }, 500, egret.Ease.cubicOut ).call( resolve );
@@ -245,7 +247,18 @@ namespace ui {
             };
             //以下是弹窗动画
             switch( effectType ) {
-                case 1:
+                case BOUNCE_EX.OUT:
+                    egret.Tween.get( view )
+                         .to( {
+                             alpha: 0.5,
+                             scaleX: 1,
+                             scaleY: 1
+                             // x: view.x + view.width / 2,
+                             // y: view.y + view.height / 2
+                         }, 300 )
+                         .call( cb );
+                    break;
+                case 2:
                     egret.Tween.get( view )
                          .to( {
                              alpha: 0,
@@ -256,18 +269,16 @@ namespace ui {
                          }, 300 )
                          .call( cb );
                     break;
-                case 2:
-                    break;
-                case 3:
+                case BOUNCE_EX.LEFT:
                     egret.Tween.get( view ).to( { x: view.width }, 500, egret.Ease.cubicOut ).call( cb );
                     break;
-                case 4:
+                case BOUNCE_EX.RIGHT:
                     egret.Tween.get( view ).to( { x: -view.width }, 500, egret.Ease.cubicOut ).call( cb );
                     break;
-                case 5:
+                case BOUNCE_EX.UP:
                     egret.Tween.get( view ).to( { y: view.height }, 500, egret.Ease.cubicOut ).call( cb );
                     break;
-                case 6:
+                case BOUNCE_EX.DOWN:
                     egret.Tween.get( view ).to( { y: -view.height }, 500, egret.Ease.cubicOut ).call( cb );
                     break;
                 case 0:

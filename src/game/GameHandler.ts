@@ -20,7 +20,7 @@ namespace view {
             this._onGuildLine = false;
             
             this._initHandler();
-            
+            timerHandler.bindRes( res );
         }
         
         private _initHandler (): void {
@@ -35,11 +35,11 @@ namespace view {
         }
         
         private _onBtnPause (): void {
-            view.viewMrg.showPanel( 'PausePanel' );
+            view.viewMrg.showPanel( 'PausePanel', { effectType: ui.BOUNCE_EN.IN } );
         }
         
         private _onBtnBegin (): void {
-            console.log( '开始！' );
+            timerHandler.reset();
             this._gameView.gameStart();
         }
         

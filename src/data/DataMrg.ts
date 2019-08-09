@@ -41,13 +41,16 @@ namespace dt {
             user.id        = user.id || df.ID;
             user.maxScore  = user.maxScore || df.MAX_SCORE;
             user.lvScore   = user.lvScore || [];
+            user.onMusic   = user.onMusic != undefined ? user.onMusic : false;
+            user.onVoice   = user.onVoice != undefined ? user.onVoice : false;
             user.toolCount = user.toolCount || {
                 hummer: 1,
                 color: 1,
                 bomb: 1,
                 guid: 1
             };
-            this._user     = user;
+            
+            this._user = user;
             this._saveDataToStorage();
         }
         // 保存数据
@@ -55,10 +58,24 @@ namespace dt {
             egret.localStorage.setItem( USER_KEY, JSON.stringify( this._user ) );
         }
         
+        /******************** 游戏配置、设置 ********************/
+        // 背景音乐设置
+        getOnMusic (): boolean { return this._user.onMusic }
+        setOnMusic ( value: boolean ) {
+            this._user.onMusic = value;
+            this._saveDataToStorage();
+        }
+        // 特效音乐
+        getOnVoice (): boolean { return this._user.onVoice }
+        setOnVoice ( value: boolean ) {
+            this._user.onVoice = value;
+            this._saveDataToStorage();
+        }
+        
         /******************** 关卡数据操作  ********************/
         // 获取当前关卡
         getCurLv (): number {return this._curLv;}
-        setCurLv ( value: number ) {this._curLv = value;}
+        setCurLv ( value: number ) {this._curLv = Math.max( value, 1 );}
         
         // 获取关卡地图
         getLvMap ( lv: number ): ILVData { return this._lvMap[ lv ] || null;}
@@ -83,6 +100,9 @@ namespace dt {
                 this._user.completion[ lv + 1 ] = 0;
             this._saveDataToStorage();
         }
+        
+        // 获取游戏时间
+        getLvTime ( lv: number = this._curLv ): number { return this._lvMap[ lv ].time || df.GAME_TIME;}
         
         /******************** 游戏数据操作  ********************/
         getGameModel (): df.EGameModel { return this._gameModel; }

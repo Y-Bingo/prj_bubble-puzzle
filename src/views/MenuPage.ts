@@ -13,7 +13,7 @@ namespace view {
         // 动画组件
         tgShow: egret.tween.TweenGroup;
         
-        constructor ( name?: string ) {
+        constructor () {
             super();
             this.once( eui.UIEvent.COMPLETE, this._onComplete, this );
             this.addEventListener( eui.UIEvent.ADDED_TO_STAGE, this._onAddToStage, this );
@@ -38,7 +38,7 @@ namespace view {
         }
         
         private _onBtnStart (): void {
-            viewMrg.showPage( 'LevelPage', { effectType: ui.BOUNCE_EN.LEFT } );
+            viewMrg.showPanel( 'GameModelPanel', { effectType: ui.BOUNCE_EN.IN } );
             console.log( '开始' );
         }
         
@@ -52,22 +52,20 @@ namespace view {
         }
         
         onPreShow (): void {
-            console.log( `【${ this.viewName }】:preShow` );
+            
             this.tgShow.play( 0 );
-            // this.tgPreShow.play(1);
         }
         
         onPostShow (): void {
-            console.log( `【${ this.viewName }】:postShow` );
-            
+        
         }
         
         onPreClose (): void {
-            console.log( `【${ this.viewName }】: preClose` );
+        
         }
         
         onPostClose (): void {
-            console.log( `【${ this.viewName }】:postClose` );
+        
         }
     }
 }

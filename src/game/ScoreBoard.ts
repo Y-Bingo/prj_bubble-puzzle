@@ -36,11 +36,11 @@ namespace view {
         // }
         
         // 游戏开始设置数据
-        setData ( lv: number, data: dt.ILVData ): void {
+        setData ( data: dt.ILVData ): void {
             const self = this;
             self.reset();
             
-            self._lv        = lv;
+            self._lv        = dt.dataMrg.getCurLv();
             self._maxScore  = data.maxScore;
             self._userScore = 0;
             

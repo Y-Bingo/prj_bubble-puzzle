@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="skins.PausePanel" xmlns:e="http://ns.egret.com/eui" xmlns:ui="ui.*" xmlns:w="http://ns.egret.com/wing" >
-	<e:Image source="bg_panel_blue_png"/>
-    <ui:ImageButton id="btn_last" source="btn_last_png" x="175" y="323" anchorOffsetX="31" anchorOffsetY="32"/>
-	<ui:ImageButton id="btn_continue" source="btn_contuine_png" y="322" anchorOffsetX="22" anchorOffsetY="32" horizontalCenter="0" x="286"/>
-	<ui:ImageButton id="btn_restart" source="btn_restart_png" x="400" y="321" anchorOffsetX="34" anchorOffsetY="33"/>
-	<ui:ImageButton id="btn_close" source="btn_close_png" x="493" y="52" anchorOffsetX="45" anchorOffsetY="37"/>
-	<e:ToggleButton id="btn_music" x="154.5" y="136">
+<e:Skin class="skins.PausePanel" xmlns:e="http://ns.egret.com/eui" xmlns:ui="ui.*" xmlns:w="http://ns.egret.com/wing">
+	<e:Image source="bg_panel_blue_png" touchEnabled="false" locked="true" />
+	<ui:ImageButton id="btn_close" source="btn_close_png" x="493" y="52" anchorOffsetX="45" anchorOffsetY="37" />
+	<ui:ImageButton id="btn_back" source="btn_last_png" x="115" y="312" anchorOffsetX="31" anchorOffsetY="32" />
+	<ui:ImageButton id="btn_last" source="btn_next_png" x="230.33" y="312" skewY="180" anchorOffsetX="33"
+	                anchorOffsetY="28" />
+	<ui:ImageButton id="btn_continue" source="btn_contuine_png" y="311" anchorOffsetX="22" anchorOffsetY="32" x="340.67" />
+	<ui:ImageButton id="btn_restart" source="btn_restart_png" x="450" y="310" anchorOffsetX="34" anchorOffsetY="33" />
+	<e:ToggleButton id="btn_music" x="134.5" y="136">
 		<e:skinName>
 			<e:Skin states="up,down,disabled">
-			<e:Image width="100%" height="100%" source="btn_bgm_up_png" source.down="btn_bgm_down_png"/>
-			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+				<e:Image width="100%" height="100%" source="btn_bgm_up_png" source.down="btn_bgm_down_png" />
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" />
 			</e:Skin>
 		</e:skinName>
 	</e:ToggleButton>
-	<e:ToggleButton id="btn_sound"  x="336" y="136">
+	<e:ToggleButton id="btn_voice" x="346" y="136">
 		<e:skinName>
 			<e:Skin states="up,down,disabled">
-			<e:Image width="100%" height="100%" source="btn_music_effect_up_png" source.down="btn_music_effect_down_png"/>
-			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+				<e:Image width="100%" height="100%" source="btn_music_effect_up_png" source.down="btn_music_effect_down_png" />
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" />
 			</e:Skin>
 		</e:skinName>
 	</e:ToggleButton>

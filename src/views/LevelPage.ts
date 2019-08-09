@@ -151,12 +151,11 @@ namespace view {
         // 触碰lvItem
         private _onTouchLvItem ( evt: egret.TouchEvent ): void {
             if( evt.target.data.bLock ) return;
-            
             dt.dataMrg.setCurLv( evt.target.data.lv );
             view.viewMrg.showPage(
                 'GameView',
-                { effectType: ui.BOUNCE_EN.RIGHT },
-                [ df.EGameModel.LV, evt.target.data.lv ]
+                { effectType: ui.BOUNCE_EN.UP },
+                // [ df.EGameModel.LV, evt.target.data.lv ]
             );
         }
         

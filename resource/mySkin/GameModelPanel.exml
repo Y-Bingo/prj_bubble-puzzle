@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.GameModelPanel" xmlns:e="http://ns.egret.com/eui" xmlns:ui="ui.*">
+    <ui:ImageButton id="btn_infinite" source="btn_model_infinite_png" anchorOffsetX="157" anchorOffsetY="68"
+                     x="157" y="80"/>
+    <ui:ImageButton id="btn_level" source="btn_model_level_png" anchorOffsetX="157" anchorOffsetY="68"  y="310" x="157"/>
+</e:Skin>

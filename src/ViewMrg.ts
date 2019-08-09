@@ -102,7 +102,7 @@ namespace view {
             const self = this;
             const am   = [];
             am.push( self._showPage( page, amOption, showArgs ) );
-            if( self._curPage )
+            if( self._curPage && self._curPage.viewName !== page )
                 am.push( self._closePage( self._curPage.viewName, { ...amOption, isReverse: true } as ui.IAmCloseOptions ) );
             
             // 执行动画
@@ -169,6 +169,24 @@ namespace view {
                 return Promise.resolve( curPanel );
             } );
         }
+        
+        // // 显示不注册的面板
+        // showPanelView ( panel: IView, amOption?: ui.IAmShowOptions, showArgs?: any ) {
+        //     panel.onPreShow && panel.onPreShow.apply( panel, showArgs );
+        //     return ui.Am.show( this._panelLayer, panel, { ...amOption, dark: true } ).then( () => {
+        //         panel.onPostShow && panel.onPostShow();
+        //         return Promise.resolve( panel );
+        //     } );
+        // }
+        //
+        // closePanelView ( panel: IView, amOption?: ui.IAmShowOptions, showArgs?: any ) {
+        //     // 执行生命周期
+        //     panel.onPreClose && panel.onPreClose();
+        //     return ui.Am.close( this._panelLayer, panel, { ...amOption } ).then( () => {
+        //         panel.onPostClose && panel.onPostClose();
+        //         return Promise.resolve( panel );
+        //     } );
+        // }
         
         // 关闭 panel
         async closePanel ( page?: string, amOption?: ui.IAmCloseOptions ) {

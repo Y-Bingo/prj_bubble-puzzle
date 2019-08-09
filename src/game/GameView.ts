@@ -44,14 +44,7 @@ namespace view {
         private _mcHummer: ui.MovieClip;    // 锤子动画
         
         // 游戏属性
-        private _lv: number         = -1;       // 关卡等级
         private _lvData: dt.ILVData = null;     // 关卡数据
-        private _toolDt: {                      // 道具数据
-            hummer?: number;
-            color?: number;
-            bomb?: number;
-            guid?: number;
-        }                           = {};
         
         private _curBubble: ui.Bubble  = null;          // 当前泡泡
         private _nextBubble: ui.Bubble = null;          // 下一个泡泡
@@ -62,6 +55,8 @@ namespace view {
         // 状态属性
         isShooting: boolean = false;              // 是否正在发射中
         
+        private _timeCount: number = 0;                 //  时间计时
+        
         private _gameHandler: GameHandler;           // 游戏控制器
         
         constructor () {
@@ -71,19 +66,12 @@ namespace view {
         
         protected childrenCreated () {
             super.childrenCreated();
-            console.log( 'childrenCreated' );
             
             this._gameHandler = new GameHandler( this );
-            this.$initSkinPart();
-        }
-        
-        // 初始化游戏界面组件
-        private $initSkinPart (): void {
-            this._initMc();
-            this._initTool();
             
-            core.word.addStage( this.g_bubble );
+            this._initMc();
             this.setChildIndex( this.btn_change, 200 );
+            core.word.addStage( this.g_bubble );
         }
         // 初始化mc组件
         private _initMc (): void {
@@ -118,9 +106,8 @@ namespace view {
         }
         // 设置工具数量
         private _setToolValue ( tool: IToolItem, value: number ): void {
-            this._toolDt[ tool.name ] = value;
-            tool.bl_num.text          = `${ value }`;
-            tool.touchEnabled         = value > 0;
+            tool.bl_num.text  = `${ value }`;
+            tool.touchEnabled = value > 0;
             utils.SetImageGray( tool.icon_tool, value <= 0 );
         }
         // 使用道具
@@ -141,66 +128,88 @@ namespace view {
                 default:
                     break;
             }
-            
-            self._toolDt[ tool.name ] -= 1;
-            
-            self._setToolValue( tool, self._toolDt[ tool.name ] );
             self.icon_arrow.setValue( self._curBubble.value );
+            
             // 更新道具使用情况
+            tool.bl_num.text = `${ Number( tool.bl_num.text ) - 1 }`;
             dt.dataMrg.updateToolCount( tool.name, -1 );
             return true;
         }
         
-        // 设置等级
-        setLv ( lv: number ): void {
-            this._lv     = lv;
+        /******************** 游戏设置 ********************/
+        // 设置关卡数据
+        private _setLvData ( lv: number ): void {
+            // this._lv     = lv;
             this._lvData = dt.dataMrg.getLvMap( lv );
             
+            let map = JSON.parse( JSON.stringify( this._lvData.map ) );
             if( this._lvData !== null ) {
-                this._lvData.map[ -1 ] = df.B1;
-                core.model.setMap( this._lvData.map );
-                core.model.setNext( this._lvData.next );
+                map[ -1 ] = df.B1;
+                core.model.setMap( map );
+                core.model.setNext( JSON.parse( JSON.stringify( this._lvData.next ) ) );
                 
-                this._gameSceneInit();
+                this._timeCount = dt.dataMrg.getLvTime( lv )
+                this._updateTimeBoard();
+                this._updateScoreBoard();
+                this._updateBubbleGroup();
+                
             } else {
                 console.warn( `不能存在关卡【${ lv }】的游戏数据！` );
             }
         }
         
-        private _gameSceneInit (): void {
-            this._updateTimeBoard();
-            this._updateScoreBoard();
-            this._updateBubbleGroup();
-        }
-        
+        //
         // 显示
-        onPreShow ( gameModel: df.EGameModel, lv?: number ): void {
-            if( gameModel == df.EGameModel.LV ) {
-                this.setLv( lv );
-            }
-            
-            // 更新金币显示数量
-            
-            // 更新道具显示数量
-            
-        }
-        
-        onPostShow (): void {
-        
-        }
-        
-        // 关闭
-        onPreClose (): void {
-        
-        }
-        
-        onPostClose (): void {
+        onPreShow (): void {
+            this._reset();
             // 添加灰色遮罩
             if( !this.gray_mask.parent )
                 this.addChild( this.gray_mask );
             if( !this.btn_begin.parent )
                 this.addChild( this.btn_begin );
+            
+            if( dt.dataMrg.getGameModel() == df.EGameModel.LV ) {
+                this._setLvData( dt.dataMrg.getCurLv() );
+            }
+            
+            // 更新金币显示数量
+            this.l_coin.text = `${ dt.dataMrg.getCoin() }`;
+            // 更新道具显示数量
+            this._initTool();
+            
         }
+        
+        onPostClose (): void {
+            this._reset();
+        }
+        
+        // 重置
+        private _reset (): void {
+            const self = this;
+            // 清空所有显示泡泡
+            this.g_bubble.removeChildren();
+            this._curBubble && this._curBubble.parent && this._curBubble.parent.removeChild( this._curBubble );
+            this._nextBubble && this._nextBubble.parent && this._nextBubble.parent.removeChild( this._nextBubble );
+            this._curBubble              = null;
+            this._nextBubble             = null;
+            this._bubbleMap.length       = 0;
+            this._droppingBubbles.length = 0;
+            this._lvData                 = null;
+        }
+        
+        // 更新计分板
+        private _updateScoreBoard (): void {
+            this.score_board.setData( this._lvData );
+        }
+        
+        // 更新时间面板
+        private _updateTimeBoard (): void {
+            let time = Math.max( this._timeCount, 0 );
+            
+            this.time_board.bl_time.text = `${ time }`;
+        }
+        
+        /******************** 游戏控制 ********************/
         
         // 游戏开始
         async gameStart () {
@@ -218,17 +227,24 @@ namespace view {
             // 更新游戏状态
             dt.dataMrg.setGameStatus( df.EGameStatus.PLAYING );
             // 开始倒计时
+            timerHandler.star();
         }
         
-        // 更新计分板
-        private _updateScoreBoard (): void {
-            this.score_board.setData( this._lv, this._lvData );
+        // 游戏停止
+        onTimerEvent (): void {
+            this._timeCount--;
+            this._updateTimeBoard()
+            console.log( '游戏运行中：', this._timeCount );
         }
         
-        // 更新时间面板
-        private _updateTimeBoard (): void {
-            this.time_board.bl_time.text = `${ this._lvData.time || df.GAME_TIME }`;
-            this.time_board.touchEnabled = true;
+        onTimeEnd (): void {
+            this._timeCount = 0;
+            console.log( '游戏结束' );
+        }
+        
+        // 游戏结束
+        gameEnd (): void {
+        
         }
         
         // 更新泡泡容器内的泡泡
@@ -293,6 +309,8 @@ namespace view {
             core.model.addNode( row, col, bubble.value );
         }
         
+        /******************** 动画 ********************/
+        
         // 动画: 待射区
         amBallRoll ( isNext2Cur: boolean ): Promise<any> {
             let self     = this;
@@ -328,7 +346,6 @@ namespace view {
                 console.warn( '当前存在泡泡！' );
                 this._curBubble = null;
             }
-            // console.log( `上弹前：cur:【${ this._curBubble }】next:【${ df.BubbleName[ this._nextBubble.value as number ] }】` );
             
             return self.amBallRoll( true ).then( () => {
                 self._curBubble  = self._nextBubble;
@@ -336,8 +353,6 @@ namespace view {
                 
                 self._createNextBubble();
                 self.icon_arrow.setValue( self._curBubble.value );
-                
-                // console.log( `上弹后 cur:【${ df.BubbleName[ this._curBubble.value as number ] }】next:【${ df.BubbleName[ this._nextBubble.value as number ] }】` );
                 
                 self.isShooting = false;
             } );
@@ -381,7 +396,6 @@ namespace view {
             const x = self._curBubble.x;
             if( core.word.isHitSideWall( self._curBubble.x ) ) {
                 self._curBubble.speedX = -self._curBubble.speedX;
-                // this._curBubble.x      = Math.max( Math.min( x, this.g_bubble.x + this.g_bubble.width - df.RADIUS ), this.g_bubble.x + df.RADIUS );
                 if( self._curBubble.x < self.g_bubble.x + df.RADIUS )
                     self._curBubble.x = self.g_bubble.x + df.RADIUS;
                 else if( this._curBubble.x > this.g_bubble.x + self.g_bubble.width - df.RADIUS )
