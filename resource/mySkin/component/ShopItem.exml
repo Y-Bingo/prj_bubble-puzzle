@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.ShopItem" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" width="640"
+        states="hummer,color,bomb,guid">
+	<e:Group top="0" bottom="0" left="0" right="0">
+		<e:Component id="tool" x="90" y="0" skinName="skins.ToolItem" currentState="hummer" name="hummer" touchEnabled="true" touchChildren="false" currentState.color="color" currentState.bomb="bomb" currentState.guid="guid" scaleX="1" scaleY="1"/>
+		<e:Image source="icon_coin_png" y="26" scaleX="0.4" scaleY="0.4" x="260"/>
+		<e:BitmapLabel id="bl_cost" text="100" y="23" left="290" font="fnt_score_fnt" x="290" scaleX="1" scaleY="1"/>
+		<e:Image source="an_png" scale9Grid="39,21,43,19" x="410" y="10" scaleX="1" scaleY="1"/>
+		<e:BitmapLabel id="bl_count" text="12" font="fnt_scroe2_fnt" y="16" horizontalCenter="151" x="441" scaleX="1" scaleY="1"/>
+	</e:Group>
+</e:Skin>

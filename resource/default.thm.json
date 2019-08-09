@@ -4,8 +4,9 @@
 	"exmls": [
 		"resource/mySkin/component/LevelItem.exml",
 		"resource/mySkin/component/ProgressStar.exml",
-		"resource/mySkin/component/Timer.exml",
 		"resource/mySkin/component/ToolItem.exml",
+		"resource/mySkin/component/ShopItem.exml",
+		"resource/mySkin/component/Timer.exml",
 		"resource/mySkin/ScoreBoard.exml",
 		"resource/mySkin/GamePage.exml",
 		"resource/mySkin/HelpPage.exml",

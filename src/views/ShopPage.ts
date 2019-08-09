@@ -1,5 +1,11 @@
 namespace view {
     
+    interface IShopItem extends eui.Component {
+        tool: IToolItem;
+        bl_cost: eui.BitmapLabel;
+        bl_count: eui.BitmapLabel;
+    }
+    
     export class ShopPage extends eui.Component implements IView {
         viewName: string    = 'ShopPage';
         viewType: EViewType = EViewType.PAGE;
@@ -7,25 +13,10 @@ namespace view {
         // 组件
         l_coin: eui.Label;
         // 组
-        g_hummer: eui.Group;
-        g_bomb: eui.Group;
-        g_color: eui.Group;
-        g_guid: eui.Group;
-        // 道具
-        tool_hummer: IToolItem;
-        tool_bomb: IToolItem;
-        tool_color: IToolItem;
-        tool_guid: IToolItem;
-        // 花费金额
-        bl_cost_hummer: eui.BitmapLabel;
-        bl_cost_bomb: eui.BitmapLabel;
-        bl_cost_color: eui.BitmapLabel;
-        bl_cost_guid: eui.BitmapLabel;
-        // 购买数量
-        bl_count_hummer: eui.BitmapLabel;
-        bl_count_bomb: eui.BitmapLabel;
-        bl_count_color: eui.BitmapLabel;
-        bl_count_guid: eui.BitmapLabel;
+        c_hummer: IShopItem;
+        c_bomb: IShopItem;
+        c_color: IShopItem;
+        c_guid: IShopItem;
         // 按钮
         btn_return: eui.Button;
         btn_pay: eui.Button;
@@ -35,13 +26,8 @@ namespace view {
         g_tool: eui.Group;
         
         // 属性
-        private _curOperate: eui.BitmapLabel;   // 当前操作的对象
-        private _buyCount: {
-            hummer?: number;
-            color?: number;
-            bomb?: number;
-            guid?: number;
-        } = {};
+        private _curOperate: IShopItem;     // 当前操作的对象
+        private _totalCost: number;         // 总花费
         
         constructor () {
             super();
@@ -52,8 +38,6 @@ namespace view {
             if( this.g_btns.parent ) {
                 this.g_btns.parent.removeChild( this.g_btns );
             }
-            
-            this.g_hummer.touchChildren = false;
         }
         
         // 添加事件
@@ -70,52 +54,60 @@ namespace view {
         }
         
         private _onBtnAdd (): void {
-            let value             = Number( this._curOperate.text );
-            value                 = Math.min( 100, value + 1 );
-            this._curOperate.text = `${ value }`;
+            let count = Math.min( 100, Number( this._curOperate.bl_count.text ) + 1 );
+            let cost  = count * df.TOOL_PRICE[ this._curOperate.currentState ];
+            
+            this._curOperate.bl_count.text = `${ count }`;
+            this._curOperate.bl_cost.text  = `${ cost }`;
             this._updatePay();
         }
         
         private _onBtnMin (): void {
-            let value             = Number( this._curOperate.text );
-            value                 = Math.max( 0, value - 1 );
-            this._curOperate.text = `${ value }`;
+            let count = Math.max( 0, Number( this._curOperate.bl_count.text ) - 1 );
+            let cost  = count * df.TOOL_PRICE[ this._curOperate.currentState ];
+            
+            this._curOperate.bl_count.text = `${ count }`;
+            this._curOperate.bl_cost.text  = `${ cost }`;
             this._updatePay();
         }
         
         private _onBtnPay (): void {
-            console.log( 'pay' );
+            // 更新数据
+            const countHummer = Number( this.c_hummer.bl_count.text );
+            const countBomb   = Number( this.c_bomb.bl_count.text );
+            const countColor  = Number( this.c_color.bl_count.text );
+            const countGuid   = Number( this.c_guid.bl_count.text );
+            
+            dt.dataMrg.updateToolCount( 'hummer', countHummer );
+            dt.dataMrg.updateToolCount( 'bomb', countBomb );
+            dt.dataMrg.updateToolCount( 'color', countColor );
+            dt.dataMrg.updateToolCount( 'guid', countGuid );
+            
+            dt.dataMrg.updateCoin( -this._totalCost );
+            
+            this._updateBtns( false );
+            
+            this._updateCost();
+            this._updateCount();
+            this._updateTool();
+            this._updateCoin();
+            this._updatePay();
+            
+            console.log( 'pay', this._totalCost );
+            this._totalCost = 0;
         }
         
         private _onSelectTool ( evt: egret.TouchEvent ): void {
             const self = this;
             
             if( self._curOperate === evt.target ) {
-                if( self.g_btns.parent )
-                    self.g_btns.parent.removeChild( self.g_btns );
+                self._curOperate = null;
+                self._updateBtns( false );
                 return;
             }
             
-            switch( evt.target ) {
-                case self.g_bomb:
-                    self._curOperate = self.bl_count_bomb;
-                    break;
-                case self.g_hummer:
-                    self._curOperate = self.bl_count_hummer;
-                    break;
-                case self.g_color:
-                    self._curOperate = self.bl_count_color;
-                    break;
-                case self.g_guid:
-                    self._curOperate = self.bl_count_guid;
-                    break;
-                default:
-                    break;
-            }
-            
-            if( !self.g_btns.parent )
-                self.addChild( self.g_btns );
-            self.g_btns.y = self.g_tool.y + evt.target.y + 4;
+            self._curOperate = evt.target;
+            self._updateBtns( true );
         }
         
         // 移除事件
@@ -128,37 +120,33 @@ namespace view {
         }
         
         private _updateCost (): void {
-            this.bl_cost_hummer.text = '0';
-            this.bl_cost_bomb.text   = '0';
-            this.bl_cost_color.text  = '0';
-            this.bl_cost_guid.text   = '0';
+            this.c_hummer.bl_cost.text = '0';
+            this.c_bomb.bl_cost.text   = '0';
+            this.c_color.bl_cost.text  = '0';
+            this.c_guid.bl_cost.text   = '0';
         }
         
         private _updateCount (): void {
-            this._buyCount.bomb       = 0;
-            this._buyCount.hummer     = 0;
-            this._buyCount.color      = 0;
-            this._buyCount.guid       = 0;
-            this.bl_count_hummer.text = `${ this._buyCount.hummer }`;
-            this.bl_count_bomb.text   = `${ this._buyCount.bomb }`;
-            this.bl_count_color.text  = `${ this._buyCount.color }`;
-            this.bl_count_guid.text   = `${ this._buyCount.guid }`;
+            this.c_hummer.bl_count.text = `${ 0 }`;
+            this.c_bomb.bl_count.text   = `${ 0 }`;
+            this.c_color.bl_count.text  = `${ 0 }`;
+            this.c_guid.bl_count.text   = `${ 0 }`;
         }
         
         private _updateTool (): void {
-            const toolCount              = dt.dataMrg.getToolCount();
-            this.tool_hummer.bl_num.text = `${ toolCount.hummer }`;
-            this.tool_bomb.bl_num.text   = `${ toolCount.bomb }`;
-            this.tool_color.bl_num.text  = `${ toolCount.color }`;
-            this.tool_guid.bl_num.text   = `${ toolCount.guid }`;
+            const toolCount                = dt.dataMrg.getToolCount();
+            this.c_hummer.tool.bl_num.text = `${ toolCount.hummer }`;
+            this.c_bomb.tool.bl_num.text   = `${ toolCount.bomb }`;
+            this.c_color.tool.bl_num.text  = `${ toolCount.color }`;
+            this.c_guid.tool.bl_num.text   = `${ toolCount.guid }`;
         }
         
         private _updatePay (): void {
             let disable       = false;
-            const countHummer = Number( this.bl_count_hummer.text );
-            const countBomb   = Number( this.bl_count_bomb.text );
-            const countColor  = Number( this.bl_count_color.text );
-            const countGuid   = Number( this.bl_count_guid.text );
+            const countHummer = Number( this.c_hummer.bl_count.text );
+            const countBomb   = Number( this.c_bomb.bl_count.text );
+            const countColor  = Number( this.c_color.bl_count.text );
+            const countGuid   = Number( this.c_guid.bl_count.text );
             if( countHummer == 0 &&
                 countBomb == 0 &&
                 countColor == 0 &&
@@ -174,18 +162,35 @@ namespace view {
             if( totalCost > dt.dataMrg.getCoin() ) {
                 disable = true;
             }
-            // this.btn_pay.touchEnabled = !disable;
+            
+            this._totalCost      = totalCost;
             this.btn_pay.enabled = !disable;
+        }
+        
+        private _updateCoin (): void {
+            // 更新金币
+            this.l_coin.text = `${ dt.dataMrg.getCoin() }`;
+        }
+        
+        private _updateBtns ( isShow: boolean ): void {
+            if( isShow ) {
+                if( !this.g_btns.parent )
+                    this.addChild( this.g_btns );
+                this.g_btns.y = this.g_tool.y + this._curOperate.y + 4;
+            } else {
+                if( this.g_btns.parent )
+                    this.g_btns.parent.removeChild( this.g_btns );
+            }
         }
         
         public onPreShow (): void {
             this._addEventListener();
+            this._updateBtns( false );
             this._updateCost();
             this._updateCount();
             this._updateTool();
             this._updatePay();
-            // 更新金币
-            this.l_coin.text = `${ dt.dataMrg.getCoin() }`;
+            this._updateCoin();
         }
         
         public onPreClose (): void {
