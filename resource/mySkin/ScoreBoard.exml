@@ -11,9 +11,9 @@
 		<e:Image id="pg_trace" source="progress_trace_png" y="50.08" x="0" width="348" height="42"/>
 		<e:Image id="pg_thumb" source="progress_thumb_png" x="0" y="50" width="348" height="42"/>
 		<e:Image id="pg_thumb_mask" source="progress_thumb_png" x="0" y="50" height="42" width="348"/>
-		<e:Component id="pg_star_0" currentState="one_1" y="70" x="91.66" scaleX="1" scaleY="1" skinName="skins.ProgressStar" anchorOffsetX="30" anchorOffsetY="16"/>
-		<e:Component id="pg_star_1" x="194" currentState="two_1" y="70" scaleX="1" scaleY="1" skinName="skins.ProgressStar" anchorOffsetY="16" anchorOffsetX="20"/>
-		<e:Component id="pg_star_2" x="312.35" currentState="three_1" y="70" scaleX="1" scaleY="1" skinName="skins.ProgressStar" anchorOffsetY="16" anchorOffsetX="40"/>
+		<e:Component id="pg_star_1" currentState="star_1_down" y="70" x="91.66" scaleX="1" scaleY="1" skinName="skins.ProgressStar" anchorOffsetX="30" anchorOffsetY="16"/>
+		<e:Component id="pg_star_2" x="194" currentState="star_2_down" y="70" scaleX="1" scaleY="1" skinName="skins.ProgressStar" anchorOffsetY="16" anchorOffsetX="20"/>
+		<e:Component id="pg_star_3" x="312.35" currentState="star_3_down" y="70" scaleX="1" scaleY="1" skinName="skins.ProgressStar" anchorOffsetY="16" anchorOffsetX="40"/>
 		<e:Group y="10" scaleX="0.7" scaleY="0.7" horizontalCenter="0">
 			<e:BitmapLabel id="bl_user_score" y="0" text="100" font="fnt_scroe2_fnt" x="156" scaleX="1" scaleY="1"/>
 			<e:BitmapLabel y="0" text="/" font="fnt_scroe2_fnt" x="0"/>

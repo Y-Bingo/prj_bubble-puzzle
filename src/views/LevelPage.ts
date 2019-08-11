@@ -51,7 +51,7 @@ namespace view {
             }
             
             this.data      = data;
-            this.curPage   = 1;
+            this.curPage   = 0;
             this.pageCount = Math.max( Math.ceil( data.length / PER_PAGE_ITEM ), 1 );
             
             this.s_container.throwSpeed = 0;
@@ -64,20 +64,20 @@ namespace view {
         private _updatePages (): void {
             const g_pages   = this.g_pages;
             const pageCount = this.pageCount;
+            
+            g_pages.removeChildren();
             while( pageCount !== g_pages.numElements ) {
                 if( pageCount < g_pages.numElements ) {
                     g_pages.removeChildAt( 0 );
                 } else {
-                    let radioButton      = new eui.RadioButton();
-                    radioButton.skinName = PageItemExml;
+                    let radioButton       = new eui.RadioButton();
+                    radioButton.skinName  = PageItemExml;
+                    radioButton.groupName = 'pages';
                     g_pages.addChild( radioButton );
                 }
             }
-            for( let i = 0; i < g_pages.numElements; i++ ) {
-                ( g_pages.getChildAt( i ) as eui.RadioButton ).groupName = 'pages';
-            }
             
-            ( g_pages.getChildAt( this.curPage - 1 ) as eui.RadioButton ).selected = true;
+            ( g_pages.getChildAt( this.curPage ) as eui.RadioButton ).selected = true;
         }
         // 更新内容
         private _updateContain (): void {
@@ -97,8 +97,8 @@ namespace view {
                 list.layout        = titleLayout;
                 list.touchEnabled  = false;
                 list.touchChildren = true;
-                // list.touchThrough  = true;
-                let source: any    = [];
+                
+                let source: any = [];
                 for( let j = i * PER_PAGE_ITEM; j < Math.min( ( i + 1 ) * PER_PAGE_ITEM, this.data.length ); j++ ) {
                     source.push( this.data[ j ] );
                 }
@@ -138,11 +138,14 @@ namespace view {
             const targetPage = this.g_pages.getChildIndex( evt.target );
             const step       = ( targetPage - this.curPage ) / Math.abs( targetPage - this.curPage );
             
+            console.log( this.curPage, targetPage );
+            
             let tween = egret.Tween.get( viewPort );
             while( this.curPage !== targetPage ) {
                 this.curPage += step;
-                tween = tween.to( { scrollH: ( w + 10 ) * ( this.curPage ) }, 250 ).wait( 80 )
+                tween = tween.to( { scrollH: ( w + 10 ) * ( this.curPage ) }, 250 ).wait( 100 )
             }
+            
             tween.call( () => {
                 this._isChanging = false;
             } );
@@ -150,11 +153,12 @@ namespace view {
         
         // 触碰lvItem
         private _onTouchLvItem ( evt: egret.TouchEvent ): void {
+            if( evt.target === this.g_container ) return;
             if( evt.target.data.bLock ) return;
             dt.dataMrg.setCurLv( evt.target.data.lv );
             view.viewMrg.showPage(
                 'GameView',
-                { effectType: ui.BOUNCE_EN.UP },
+                { effectType: ui.BOUNCE_EN.UP }
                 // [ df.EGameModel.LV, evt.target.data.lv ]
             );
         }
@@ -170,7 +174,8 @@ namespace view {
             if( !data ) return;
             
             let bUpdate = false;
-            for( let i = 0; i < completions.length; i++ ) {
+            let len     = Math.min( data.length, completions.length );
+            for( let i = 0; i < len; i++ ) {
                 if( data[ i ].completion === completions[ i ] ) continue;
                 bUpdate = true;
                 break;

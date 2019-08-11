@@ -44,7 +44,7 @@ namespace view {
         private _mcHummer: ui.MovieClip;    // 锤子动画
         
         // 游戏属性
-        private _lvData: dt.ILVData = null;     // 关卡数据
+        private _lvData: dt.ILVDt = null;     // 关卡数据
         
         private _curBubble: ui.Bubble  = null;          // 当前泡泡
         private _nextBubble: ui.Bubble = null;          // 下一个泡泡
@@ -129,10 +129,9 @@ namespace view {
                     break;
             }
             self.icon_arrow.setValue( self._curBubble.value );
+            self._setToolValue( tool, Number( tool.bl_num.text ) - 1 )
             
-            // 更新道具使用情况
-            tool.bl_num.text = `${ Number( tool.bl_num.text ) - 1 }`;
-            dt.dataMrg.updateToolCount( tool.name, -1 );
+            dt.dataMrg.updateToolCount( tool.currentState, -1 );
             return true;
         }
         
@@ -233,18 +232,15 @@ namespace view {
         // 游戏停止
         onTimerEvent (): void {
             this._timeCount--;
-            this._updateTimeBoard()
-            console.log( '游戏运行中：', this._timeCount );
+            this._updateTimeBoard();
         }
         
         onTimeEnd (): void {
             this._timeCount = 0;
-            console.log( '游戏结束' );
-        }
-        
-        // 游戏结束
-        gameEnd (): void {
-        
+            if( this.hasEventListener( egret.Event.ENTER_FRAME ) ) {
+                this.removeEventListener( egret.Event.ENTER_FRAME, this._amShooting, this );
+            }
+            this.timeOutResult();
         }
         
         // 更新泡泡容器内的泡泡
@@ -709,11 +705,16 @@ namespace view {
         }
         
         protected winResult (): void {
-            console.log( '你赢了！' );
+            const self = this;
+            
+            // 更新游戏数据
+            dt.dataMrg.updateLvCompletion( self.score_board.getUserCompletion() );
+            dt.dataMrg.updateLvMaxScore( self.score_board.getUserScore() );
+            
             view.viewMrg.showPanel(
                 'ResultPanel',
                 { effectType: ui.BOUNCE_EN.IN },
-                [ df.EGameModel.LV, 1000 ]
+                [ self.score_board.getUserScore(), self.score_board.getUserCompletion(), df.EGameModel.LV ]
             );
         }
         
@@ -723,8 +724,33 @@ namespace view {
         }
         
         protected loseResult (): void {
-            console.log( '你输了！' );
-            view.viewMrg.showPanel( 'ResultPanel', { effectType: ui.BOUNCE_EN.IN } );
+            const self = this;
+            
+            // 更新游戏数据
+            dt.dataMrg.updateLvCompletion( self.score_board.getUserCompletion() );
+            dt.dataMrg.updateLvMaxScore( self.score_board.getUserScore() );
+            
+            view.viewMrg.showPanel(
+                'ResultPanel',
+                { effectType: ui.BOUNCE_EN.IN },
+                [ self.score_board.getUserScore(), self.score_board.getUserCompletion(), df.EGameModel.LV ]
+            );
+        }
+        
+        // 超时判定
+        protected timeOutResult (): void {
+            const self = this;
+            
+            // 更新游戏数据
+            dt.dataMrg.updateLvCompletion( self.score_board.getUserCompletion() );
+            dt.dataMrg.updateLvMaxScore( self.score_board.getUserScore() );
+            
+            view.viewMrg.showPanel(
+                'ResultPanel',
+                { effectType: ui.BOUNCE_EN.IN },
+                [ self.score_board.getUserScore(), self.score_board.getUserCompletion(), df.EGameModel.LV ]
+            );
+            
         }
         
         /******************** 算分规则  ********************/
@@ -747,7 +773,6 @@ namespace view {
         protected countCoin ( score: number ): number {
             return Math.floor( score / df.SCORE_CHANGE_COIN );
         }
-        
     }
     
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="skins.ProgressStar" currentState="two_1" xmlns:e="http://ns.egret.com/eui"
-        states="one_0,one_1,two_0,two_1,three_0,three_1" >
-	<e:Image source="star_gray_png"                        y="0" source.one_1="star_light_png" source.two_1="star_light_png" source.three_1="star_light_png"/>
-	<e:Image source="star_gray_png" x="10" y="0" source.two_1="star_light_png" source.three_1="star_light_png" includeIn="two_0,two_1,three_0,three_1"/>
-	<e:Image source="star_gray_png" x="20" y="0" source.three_1="star_light_png" includeIn="three_0,three_1"/>
+<e:Skin class="skins.ProgressStar" currentState="star_2_up" xmlns:e="http://ns.egret.com/eui"
+        states="star_1_down,star_1_up,star_2_down,star_2_up,star_3_down,star_3_up,star_1_light" >
+	<e:Image source="star_gray_png"                        y="0" source.star_1_up="star_light_png" source.star_2_up="star_light_png" source.star_3_up="star_light_png" source.star_1_light="smallStar_png"/>
+	<e:Image source="star_gray_png" x="10" y="0" source.star_2_up="star_light_png" source.star_3_up="star_light_png" includeIn="star_2_down,star_2_up,star_3_down,star_3_up"/>
+	<e:Image source="star_gray_png" x="20" y="0" source.star_3_up="star_light_png" includeIn="star_3_down,star_3_up"/>
 </e:Skin>

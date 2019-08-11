@@ -16,7 +16,6 @@ namespace view {
         constructor () {
             super();
             this.skinName = skins.PausePanel;
-            this.addEventListener( egret.TouchEvent.TOUCH_TAP, this._onTouchTap, this );
         }
         
         private _onTouchTap ( evt: egret.TouchEvent ): void {
@@ -64,8 +63,12 @@ namespace view {
             timerHandler.stop();
         }
         
-        onPreClose (): void {
+        onPostShow (): void {
+            this.addEventListener( egret.TouchEvent.TOUCH_TAP, this._onTouchTap, this );
+        }
         
+        onPreClose (): void {
+            this.removeEventListener( egret.TouchEvent.TOUCH_TAP, this._onTouchTap, this );
         }
     }
 }
