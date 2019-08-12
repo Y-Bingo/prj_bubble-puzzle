@@ -48,7 +48,7 @@ namespace core {
         // private _nextNode: NodeType = NodeType.NONE;  // 下一个节点
         
         // 更新地图
-        setMap ( map: any[][] ): void {
+        setMap ( map: any[][], types?: any[], next?: any[] ): void {
             // 验证
             let rows = map.length;
             let cols = map[ 0 ] ? map[ 0 ].length : 0;
@@ -60,7 +60,8 @@ namespace core {
             this._cols   = cols;
             this._map    = map;
             this._maxRow = this._countMaxRow();
-            this._alzTypes();
+            this.setTypes( types );
+            this.setNext( next );
         }
         // 获取最底层节点的行坐标
         private _countMaxRow (): number {
@@ -94,9 +95,22 @@ namespace core {
             }
         }
         
+        // 设置type
+        setTypes ( value: any[] ): void {
+            if( !value ) {
+                this._alzTypes();
+            } else {
+                this._types = JSON.parse( JSON.stringify( value ) );
+            }
+        }
+        
         // 设置next
         setNext ( value: any[] ): void {
-            this._next = JSON.parse( JSON.stringify( value ) );
+            if( !value ) {
+                this._next.length = 0;
+            } else {
+                this._next = JSON.parse( JSON.stringify( value ) );
+            }
         }
         
         /** ------------- ------------------- 数据模型的操作 ------------------------------ */

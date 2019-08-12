@@ -146,8 +146,7 @@ namespace view {
             let map = JSON.parse( JSON.stringify( this._lvData.map ) );
             if( this._lvData !== null ) {
                 map[ -1 ] = df.B1;
-                core.model.setMap( map );
-                core.model.setNext( JSON.parse( JSON.stringify( this._lvData.next ) ) );
+                core.model.setMap( map, this._lvData.types, this._lvData.next );
                 
                 this._timeCount = dt.dataMrg.getLvTime( lv )
                 this._updateTimeBoard();

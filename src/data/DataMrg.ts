@@ -7,7 +7,7 @@ namespace dt {
     const KEY_MAP = {
         [ USER_KEY ]: '_userDt',
         [ GAME_KEY ]: '_gameDt'
-    }
+    };
     
     class DataMrg {
         

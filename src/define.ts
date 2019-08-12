@@ -150,8 +150,10 @@ namespace df {
     
     // 默认：连击分数奖励
     export const COMBO_LV               = [ 8, 16, 24 ];
+    // 默认： 连击底分
+    export const COMBOS_CELL_SCORE      = 10;
     // 默认：游戏分数奖励
-    export const COMBOS_BONUS           = [ 8, 16, 24 ];
+    export const COMBOS_BONUS           = [ 8, 16, 32 ];
     // 默认：关卡时间
     export const GAME_TIME              = 30;
     // 默认：游戏通关奖励
