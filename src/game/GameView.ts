@@ -185,6 +185,10 @@ namespace view {
         
         onPostClose (): void {
             this._reset();
+            if( this.hasEventListener( egret.Event.ENTER_FRAME ) ) {
+                // this.removeEventListener( egret.Event.ENTER_FRAME, this._amShake, this );
+                this.removeEventListener( egret.Event.ENTER_FRAME, this._amDrop, this );
+            }
         }
         
         // 重置

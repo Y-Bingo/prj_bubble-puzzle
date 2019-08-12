@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.MsgPanel" xmlns:e="http://ns.egret.com/eui" xmlns:ui="ui.*" xmlns:w="http://ns.egret.com/wing">
+	<e:Image touchEnabled="false" source="bg_panel_purple_png"/>
+	<ui:ImageButton id="btn_close" source="btn_close_png" x="493" y="52" anchorOffsetX="45" anchorOffsetY="37"/>
+	<e:Label id="l_msg" text="还没有完成开发阿斯顿发阿斯！！顿阿斯顿发生发" verticalAlign="middle" textAlign="center" anchorOffsetX="0" width="450" fontFamily="Microsoft YaHei" wordWrap="true" horizontalCenter="0" verticalCenter="0"/>
+</e:Skin>

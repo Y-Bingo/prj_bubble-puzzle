@@ -63,9 +63,7 @@ class Main extends eui.UILayer {
      */
     protected createGameScene (): void {
         view.viewMrg.init( this );
-        
-        let menuPage = new view.MenuPage();
-        view.viewMrg.register( menuPage );
+        view.viewMrg.register( new view.MenuPage() );
         view.viewMrg.register( new view.GameModelPanel() );
         view.viewMrg.register( new view.ShopPage() );
         view.viewMrg.register( new view.HelpPage() );
@@ -73,19 +71,9 @@ class Main extends eui.UILayer {
         view.viewMrg.register( new view.PausePanel() );
         view.viewMrg.register( new view.GameView() );
         view.viewMrg.register( new view.ResultPanel() );
+        view.viewMrg.register( new view.MsgPanel() );
         
-        view.viewMrg.showPage( menuPage.viewName );
-        // let gameScene = new view.GameView();
-        //
-        // this.addChild( gameScene );
-        //
-        // new view.GameHandler( gameScene );
-        //
-        // gameScene._setLvData( 1 );
-        
-        // let resultPanel = new view.ResultPanel();
-        // this.addChild( resultPanel );
-        // resultPanel.show( df.EGameModel.FREE );
+        view.viewMrg.showPage( 'MenuPage' );
         this.removeChild( this._loadingView );
     }
     

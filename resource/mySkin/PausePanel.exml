@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin class="skins.PausePanel" xmlns:e="http://ns.egret.com/eui" xmlns:ui="ui.*" xmlns:w="http://ns.egret.com/wing">
-	<e:Image source="bg_panel_blue_png" touchEnabled="false" locked="true" />
+	<e:Image source="bg_panel_blue_png" touchEnabled="false" />
 	<ui:ImageButton id="btn_close" source="btn_close_png" x="493" y="52" anchorOffsetX="45" anchorOffsetY="37" />
 	<ui:ImageButton id="btn_back" source="btn_last_png" x="115" y="312" anchorOffsetX="31" anchorOffsetY="32" />
 	<ui:ImageButton id="btn_last" source="btn_next_png" x="230.33" y="312" skewY="180" anchorOffsetX="33"

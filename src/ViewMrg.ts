@@ -151,7 +151,7 @@ namespace view {
         async showPanel ( panel: string, amOption?: ui.IAmShowOptions, showArgs?: any ) {
             const self = this;
             if( self._curPanel ) {
-                await self._closePanel( self._curPanel.viewName, amOption );
+                await self._closePanel( self._curPanel.viewName, { ...amOption, isReverse: true } as ui.IAmCloseOptions );
             }
             self._curPanel = await self._showPanel( panel, amOption, showArgs );
         }
@@ -169,24 +169,6 @@ namespace view {
                 return Promise.resolve( curPanel );
             } );
         }
-        
-        // // 显示不注册的面板
-        // showPanelView ( panel: IView, amOption?: ui.IAmShowOptions, showArgs?: any ) {
-        //     panel.onPreShow && panel.onPreShow.apply( panel, showArgs );
-        //     return ui.Am.show( this._panelLayer, panel, { ...amOption, dark: true } ).then( () => {
-        //         panel.onPostShow && panel.onPostShow();
-        //         return Promise.resolve( panel );
-        //     } );
-        // }
-        //
-        // closePanelView ( panel: IView, amOption?: ui.IAmShowOptions, showArgs?: any ) {
-        //     // 执行生命周期
-        //     panel.onPreClose && panel.onPreClose();
-        //     return ui.Am.close( this._panelLayer, panel, { ...amOption } ).then( () => {
-        //         panel.onPostClose && panel.onPostClose();
-        //         return Promise.resolve( panel );
-        //     } );
-        // }
         
         // 关闭 panel
         async closePanel ( page?: string, amOption?: ui.IAmCloseOptions ) {

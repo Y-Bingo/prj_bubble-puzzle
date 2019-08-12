@@ -13,6 +13,7 @@
 		"resource/mySkin/HelpPage.exml",
 		"resource/mySkin/LevelPage.exml",
 		"resource/mySkin/MenuPage.exml",
+		"resource/mySkin/MsgPanel.exml",
 		"resource/mySkin/PausePanel.exml",
 		"resource/mySkin/ResultPanel.exml",
 		"resource/mySkin/ShopPage.exml"

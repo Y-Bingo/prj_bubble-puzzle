@@ -20,7 +20,12 @@ namespace view {
         private _onTouchBtn ( evt: egret.TouchEvent ): void {
             switch( evt.target ) {
                 case this.btn_infinite:
-                    dt.dataMrg.setGameModel( df.EGameModel.LV );
+                    view.viewMrg.showPanel(
+                        'MsgPanel',
+                        { effectType: ui.BOUNCE_EN.IN_RUDE },
+                        [ '无限模式暂未开发，敬请期待！' ]
+                    );
+                    // dt.dataMrg.setGameModel( df.EGameModel.LV );
                     break;
                 case this.btn_level:
                     dt.dataMrg.setGameModel( df.EGameModel.LV );

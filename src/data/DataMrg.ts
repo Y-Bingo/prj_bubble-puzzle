@@ -106,6 +106,7 @@ namespace dt {
         setCurLv ( value: number ) {
             
             this._curLv = Math.min( Math.max( value, 1 ), this._gameDt.completion.length );
+            this._curLv = Math.min( Math.max( value, 1 ), this._lvMap.length - 1 );
             
             if( !this._gameDt.completion[ this._curLv - 1 ] )
                 this._gameDt.completion[ this._curLv - 1 ] = 0;
