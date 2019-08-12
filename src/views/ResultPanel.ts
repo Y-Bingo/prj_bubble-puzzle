@@ -1,5 +1,8 @@
 namespace view {
     
+    const ICON_SUCCESS = 'result_wenzigongxiguoguan_png';
+    const ICON_FAILE   = 'result_wenzichuangguanshibai_png';
+    
     export class ResultPanel extends eui.Component implements IView {
         viewName: string    = 'ResultPanel';
         viewType: EViewType = EViewType.PANEL;
@@ -45,14 +48,20 @@ namespace view {
             }
         }
         
-        onPreShow ( userScore: number, completion?: number ): void {
+        onPreShow ( userScore: number, completion: number, isFailed: boolean = false ): void {
             const self      = this;
             const gameModel = dt.dataMrg.getGameModel();
             
             if( gameModel === df.EGameModel.FREE ) {
                 self.currentState     = 'free';
-                self.bl_maxScore.text = `${ dt.dataMrg.getFreeMaxScore() }`
+                self.bl_maxScore.text = `${ dt.dataMrg.getFreeMaxScore() }`;
             } else if( gameModel === df.EGameModel.LV ) {
+                if( !isFailed && completion >= 1 ) {
+                    self.icon_result.source = ICON_SUCCESS;
+                } else {
+                    self.icon_result.source = ICON_FAILE;
+                }
+                
                 self.currentState     = 'lv';
                 self.bl_maxScore.text = `${ dt.dataMrg.getLvMaxScore() }`;
                 self.bl_score.text    = `${ userScore }`;
@@ -66,7 +75,12 @@ namespace view {
             }
             
             if( self.icon_pass ) {
-                egret.Tween.get( self.icon_pass, { loop: true } ).to( { rotation: 360 }, 2000 );
+                if( completion >= 1 && !isFailed ) {
+                    self.icon_pass.visible = true;
+                    egret.Tween.get( self.icon_pass, { loop: true } ).to( { rotation: 360 }, 2000 );
+                } else {
+                    self.icon_pass.visible = false;
+                }
             }
         }
         

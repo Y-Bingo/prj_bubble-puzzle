@@ -104,10 +104,13 @@ namespace dt {
         // 获取当前关卡
         getCurLv (): number {return this._curLv;}
         setCurLv ( value: number ) {
-            this._curLv = Math.max( value, 1 );
             
-            this._gameDt.completion[ this._curLv - 1 ] = 0;
-            this._gameDt.lvMaxScore[ this._curLv - 1 ] = 0;
+            this._curLv = Math.min( Math.max( value, 1 ), this._gameDt.completion.length );
+            
+            if( !this._gameDt.completion[ this._curLv - 1 ] )
+                this._gameDt.completion[ this._curLv - 1 ] = 0;
+            if( !this._gameDt.lvMaxScore[ this._curLv - 1 ] )
+                this._gameDt.lvMaxScore[ this._curLv - 1 ] = 0;
         }
         
         // 获取关卡地图
@@ -128,20 +131,23 @@ namespace dt {
         setGameStatus ( value: df.EGameStatus ) { this._gameStatus = value;}
         
         // 关卡成绩
-        getLvCompletion () { return this._gameDt.completion || [] }
-        updateLvCompletion ( value: number ): void {
-            const lv     = this._curLv - 1;
-            const gameDt = this._gameDt;
-            
-            if( gameDt.completion[ lv ] != undefined ) {
-                gameDt.completion[ lv ] = Math.min( Math.max( value, gameDt.completion[ lv ] ), 3 );
+        getCompletion () { return this._gameDt.completion || [] }
+        getLvCompletion ( lv: number = this._curLv ): number { return this._gameDt.completion[ lv - 1 ] || 0 }
+        updateLvCompletion ( value: number ): number {
+            const lv               = this._curLv - 1;
+            const gameDt           = this._gameDt;
+            const originCompletion = gameDt.completion[ lv ];
+            if( originCompletion != undefined ) {
+                gameDt.completion[ lv ] = Math.min( Math.max( value, originCompletion ), 3 );
             }
             
-            if( lv + 1 >= this._gameDt.completion.length ) {
+            // 开启新关卡
+            if( this._gameDt.completion[ lv ] && lv + 1 >= this._gameDt.completion.length ) {
                 gameDt.completion[ lv + 1 ] = 0;
             }
-            console.log( 'save Completion', this._curLv, value );
+            // console.log( 'save Completion', this._curLv, value );
             this._saveLocalDt( GAME_KEY );
+            return gameDt.completion[ lv ] - originCompletion;
         }
         
         // 用户最大分数
@@ -159,7 +165,7 @@ namespace dt {
             if( gameDt.lvMaxScore[ lv ] != undefined ) {
                 gameDt.lvMaxScore[ lv ] = Math.max( value, gameDt.lvMaxScore[ lv ] );
             }
-            console.log( 'save lvMaxScore', this._curLv, value );
+            // console.log( 'save lvMaxScore', this._curLv, value );
             this._saveLocalDt( GAME_KEY );
         }
         

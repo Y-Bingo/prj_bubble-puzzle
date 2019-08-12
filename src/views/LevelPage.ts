@@ -37,7 +37,7 @@ namespace view {
         
         private _onCreateComplete (): void {
             const lvCount       = dt.dataMrg.getLvCount();
-            const completions   = dt.dataMrg.getLvCompletion();
+            const completions   = dt.dataMrg.getCompletion();
             const data          = [];
             // 构造数据
             let completionCount = 0;
@@ -170,7 +170,7 @@ namespace view {
         onPreShow (): void {
             // 更新数据
             const data        = this.data;
-            const completions = dt.dataMrg.getLvCompletion();
+            const completions = dt.dataMrg.getCompletion();
             if( !data ) return;
             
             let bUpdate = false;

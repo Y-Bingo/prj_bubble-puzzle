@@ -34,6 +34,8 @@ namespace view {
         btn_begin: ui.ImageButton;  // 开始按钮
         btn_change: eui.Rect;       // 切换按钮（无显示效果）
         
+        icon_ready: eui.Image;      // 准备
+        
         time_board: ITimer;         // 计时器面板
         score_board: ScoreBoard;    // 计分板
         
@@ -160,21 +162,24 @@ namespace view {
         //
         // 显示
         onPreShow (): void {
-            this._reset();
-            // 添加灰色遮罩
-            if( !this.gray_mask.parent )
-                this.addChild( this.gray_mask );
-            if( !this.btn_begin.parent )
-                this.addChild( this.btn_begin );
+            const self = this;
+            
+            self._reset();
+            if( self.icon_ready.parent )
+                self.icon_ready.parent.removeChild( self.icon_ready );
+            if( !self.gray_mask.parent )
+                self.addChild( self.gray_mask );
+            if( !self.btn_begin.parent )
+                self.addChild( self.btn_begin );
             
             if( dt.dataMrg.getGameModel() == df.EGameModel.LV ) {
-                this._setLvData( dt.dataMrg.getCurLv() );
+                self._setLvData( dt.dataMrg.getCurLv() );
             }
             
             // 更新金币显示数量
-            this.l_coin.text = `${ dt.dataMrg.getCoin() }`;
+            self.l_coin.text = `${ dt.dataMrg.getCoin() }`;
             // 更新道具显示数量
-            this._initTool();
+            self._initTool();
             
         }
         
@@ -186,14 +191,14 @@ namespace view {
         private _reset (): void {
             const self = this;
             // 清空所有显示泡泡
-            this.g_bubble.removeChildren();
-            this._curBubble && this._curBubble.parent && this._curBubble.parent.removeChild( this._curBubble );
-            this._nextBubble && this._nextBubble.parent && this._nextBubble.parent.removeChild( this._nextBubble );
-            this._curBubble              = null;
-            this._nextBubble             = null;
-            this._bubbleMap.length       = 0;
-            this._droppingBubbles.length = 0;
-            this._lvData                 = null;
+            self.g_bubble.removeChildren();
+            self._curBubble && self._curBubble.parent && self._curBubble.parent.removeChild( self._curBubble );
+            self._nextBubble && self._nextBubble.parent && self._nextBubble.parent.removeChild( self._nextBubble );
+            self._curBubble              = null;
+            self._nextBubble             = null;
+            self._bubbleMap.length       = 0;
+            self._droppingBubbles.length = 0;
+            self._lvData                 = null;
         }
         
         // 更新计分板
@@ -213,14 +218,16 @@ namespace view {
         // 游戏开始
         async gameStart () {
             if( dt.dataMrg.getGameStatus() === df.EGameStatus.PLAYING ) return;
-            // 移除灰色遮罩
-            if( this.gray_mask.parent )
-                this.gray_mask.parent.removeChild( this.gray_mask );
+            
             if( this.btn_begin.parent )
                 this.btn_begin.parent.removeChild( this.btn_begin );
+            await this.amReadyGo();
+            if( this.gray_mask.parent )
+                this.gray_mask.parent.removeChild( this.gray_mask );
             
             // 创建第一个泡泡
             this._createNextBubble();
+            
             // 加载泡泡
             await this.amLoad();
             // 更新游戏状态
@@ -306,6 +313,38 @@ namespace view {
         }
         
         /******************** 动画 ********************/
+        // ready动画
+        amReadyGo () {
+            const self = this;
+            return new Promise( resolve => {
+                
+                if( !self.icon_ready.parent )
+                    self.addChild( self.icon_ready );
+                
+                const tween = egret.Tween.get( self.icon_ready );
+                for( let i = 3; i >= 0; i-- ) {
+                    tween.call( () => {
+                             self.icon_ready.source  = `readygo_${ i }_png`;
+                             self.icon_ready.visible = true;
+                         } )
+                         .set( { scaleX: 2, scaleY: 2 } )
+                         .to( { scaleX: 1, scaleY: 1 }, 500, egret.Ease.quartIn )
+                         .wait( 150 )
+                         .call( () => {
+                             self.icon_ready.visible = false;
+                         } )
+                         .wait( 150 )
+                }
+                tween.call( () => {
+                    egret.Tween.removeTweens( self.icon_ready );
+                    
+                    if( self.icon_ready.parent )
+                        self.icon_ready.parent.removeChild( self.icon_ready );
+                    
+                    resolve();
+                } );
+            } );
+        }
         
         // 动画: 待射区
         amBallRoll ( isNext2Cur: boolean ): Promise<any> {
@@ -315,7 +354,6 @@ namespace view {
             // let zIndex   = isNext2Cur ? 101 : 100;
             
             if( target ) {
-                // self.setChildIndex( target, zIndex );
                 return new Promise( resolve => {
                     egret.Tween
                          .get( target )
@@ -589,8 +627,6 @@ namespace view {
             
             // 开始掉落动画
             this._startDrop( drops );
-            
-            // this._resultCheck();
         }
         
         // 结果检查
@@ -698,24 +734,43 @@ namespace view {
             }
         }
         
-        /******************** 胜负检查  ********************/
-        // 胜利检测
-        protected $checkWin (): boolean {
-            return core.model.isEmpty();
+        // 获得金币奖励动画
+        private _amCoinBonus (): void {
+        
         }
         
-        protected winResult (): void {
+        /******************** 胜负检查  ********************/
+        
+        protected gameEnd ( isFailed: boolean = false ): void {
+            timerHandler.stop();
+            
             const self = this;
             
-            // 更新游戏数据
-            dt.dataMrg.updateLvCompletion( self.score_board.getUserCompletion() );
+            if( !isFailed ) {
+                const deltaCompletion = dt.dataMrg.updateLvCompletion( self.score_board.getUserCompletion() );
+                dt.dataMrg.updateCoin( self.lvModelCoinBonus( deltaCompletion ) );
+            }
+            
             dt.dataMrg.updateLvMaxScore( self.score_board.getUserScore() );
             
             view.viewMrg.showPanel(
                 'ResultPanel',
                 { effectType: ui.BOUNCE_EN.IN },
-                [ self.score_board.getUserScore(), self.score_board.getUserCompletion(), df.EGameModel.LV ]
+                [ self.score_board.getUserScore(), self.score_board.getUserCompletion(), isFailed ]
             );
+            
+        }
+        // 胜利检测
+        protected $checkWin (): boolean {
+            // 满分情况下
+            if( this.score_board.getUserScore() === this._lvData.maxScore ) return true;
+            
+            // 没有泡泡的情况下
+            return core.model.isEmpty();
+        }
+        
+        protected winResult (): void {
+            this.gameEnd();
         }
         
         // 失败检测
@@ -724,33 +779,12 @@ namespace view {
         }
         
         protected loseResult (): void {
-            const self = this;
-            
-            // 更新游戏数据
-            dt.dataMrg.updateLvCompletion( self.score_board.getUserCompletion() );
-            dt.dataMrg.updateLvMaxScore( self.score_board.getUserScore() );
-            
-            view.viewMrg.showPanel(
-                'ResultPanel',
-                { effectType: ui.BOUNCE_EN.IN },
-                [ self.score_board.getUserScore(), self.score_board.getUserCompletion(), df.EGameModel.LV ]
-            );
+            this.gameEnd( true );
         }
         
         // 超时判定
         protected timeOutResult (): void {
-            const self = this;
-            
-            // 更新游戏数据
-            dt.dataMrg.updateLvCompletion( self.score_board.getUserCompletion() );
-            dt.dataMrg.updateLvMaxScore( self.score_board.getUserScore() );
-            
-            view.viewMrg.showPanel(
-                'ResultPanel',
-                { effectType: ui.BOUNCE_EN.IN },
-                [ self.score_board.getUserScore(), self.score_board.getUserCompletion(), df.EGameModel.LV ]
-            );
-            
+            this.gameEnd();
         }
         
         /******************** 算分规则  ********************/
@@ -764,15 +798,13 @@ namespace view {
             return combosCount * baseScore + ( dropsCount - combosCount ) * baseScore / 2;
         }
         
-        // 计算奖励 星星奖励
-        protected countBonus ( scoreLv: number ): void {
-        
+        protected lvModelCoinBonus ( deltaCompletion: number ): number {
+            return deltaCompletion * df.COMPLETION_CHANGE_COIN;
         }
         
         // 计算金币得分
-        protected countCoin ( score: number ): number {
+        protected freeModelCoinBonus ( score: number ): number {
             return Math.floor( score / df.SCORE_CHANGE_COIN );
         }
     }
-    
 }

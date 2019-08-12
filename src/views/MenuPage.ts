@@ -16,25 +16,11 @@ namespace view {
         constructor () {
             super();
             this.once( eui.UIEvent.COMPLETE, this._onComplete, this );
-            this.addEventListener( eui.UIEvent.ADDED_TO_STAGE, this._onAddToStage, this );
-            this.addEventListener( eui.UIEvent.REMOVED_FROM_STAGE, this._onRemoveFromStage, this );
             this.skinName = skins.MenuPage;
         }
         
         private _onComplete (): void {
         
-        }
-        
-        private _onAddToStage (): void {
-            this.btn_start.addEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnStart, this );
-            this.btn_help.addEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnHelp, this );
-            this.btn_shop.addEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnShop, this );
-        }
-        
-        private _onRemoveFromStage (): void {
-            this.btn_start.removeEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnStart, this );
-            this.btn_help.removeEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnHelp, this );
-            this.btn_shop.removeEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnShop, this );
         }
         
         private _onBtnStart (): void {
@@ -57,15 +43,15 @@ namespace view {
         }
         
         onPostShow (): void {
-        
+            this.btn_start.addEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnStart, this );
+            this.btn_help.addEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnHelp, this );
+            this.btn_shop.addEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnShop, this );
         }
         
         onPreClose (): void {
-        
-        }
-        
-        onPostClose (): void {
-        
+            this.btn_start.removeEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnStart, this );
+            this.btn_help.removeEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnHelp, this );
+            this.btn_shop.removeEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnShop, this );
         }
     }
 }

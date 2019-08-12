@@ -1,9 +1,5 @@
 namespace view {
     
-    // export function CountComplection (): void {
-    //
-    // }
-    
     const PROGRESS_SPEED    = 15;       // 进度条速度
     const PROGRESS_MAX_TIME = 600;      // 最大时间
     const PROGRESS_MIN_TIME = 100;      // 最小事件
@@ -80,8 +76,9 @@ namespace view {
             // 更新数据
             self._userScore = Math.min( value + userScore, self._maxScore );
             self._progress  = self._userScore / self._maxScore;
-            if( self._progress * 100 >= self._scoreLv[ self._completion ] ) {
-                self._completion++;
+            for( let i = 0; i < self._scoreLv.length; i++ ) {
+                if( self._progress * 100 < self._scoreLv[ i ] ) break;
+                self._completion = i + 1;
             }
             
             const originX   = self.pg_thumb_mask.x;

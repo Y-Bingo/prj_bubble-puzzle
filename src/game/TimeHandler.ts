@@ -11,8 +11,11 @@ namespace view {
         private _timer: egret.Timer;
         private _res: ITimeApplication;
         
+        private _isTiming: boolean;     // 是否正在计时
+        
         constructor () {
-            this._timer = new egret.Timer( 1000 );
+            this._isTiming = false;
+            this._timer    = new egret.Timer( 1000 );
         }
         
         // 绑定执行者
@@ -30,15 +33,19 @@ namespace view {
         }
         
         reset (): void {
+            this._isTiming = false;
             this._timer.reset();
             this._timer.repeatCount = dt.dataMrg.getLvTime();
         }
         
         star (): void {
+            this._isTiming = true;
             this._timer.start();
         }
         
         stop (): void {
+            if( !this._isTiming ) return;
+            this._isTiming = false;
             this._timer.stop();
         }
     }

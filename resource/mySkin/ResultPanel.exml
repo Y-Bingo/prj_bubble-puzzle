@@ -20,10 +20,10 @@
 	</e:Group>
 	<e:BitmapLabel id="bl_score" x="293.3" y="169.34" font="fnt_nums_fnt" text="232" y.free="196" />
 	<e:BitmapLabel id="bl_maxScore" x="293.8" y="232.84" font="fnt_nums_fnt" text="111" y.free="259.5" />
-	<ui:ImageButton id="btn_back" source="btn_last_png" x.lv="160" y="397" anchorOffsetX="31" anchorOffsetY="32"  x.free="208"/>
+	<ui:ImageButton id="btn_back" source="btn_last_png" x.lv="160" y="400" anchorOffsetX="31" anchorOffsetY="32"  x.free="208" x="162.5"/>
 
-	<ui:ImageButton id="btn_restart" source="btn_restart_png" y="396" anchorOffsetX="34"
-	                anchorOffsetY="33"  x.lv="298" x.free="388"/>
-	<ui:ImageButton id="btn_next" source="btn_next_png" x="430" y="396.44" anchorOffsetX="33" anchorOffsetY="28"
+	<ui:ImageButton id="btn_restart" source="btn_restart_png" y="398" anchorOffsetX="34"
+	                anchorOffsetY="33"  x.lv="298" x.free="388" x="297.5"/>
+	<ui:ImageButton id="btn_next" source="btn_next_png" x="433.5" y="399" anchorOffsetX="33" anchorOffsetY="28"
 	                includeIn="lv" />
 </e:Skin>

@@ -142,24 +142,26 @@ namespace df {
     // 默认玩家ID
     export const ID         = 9527;
     // 默认金币数量
-    export const COIN       = 10;
+    export const COIN       = 180;
     // 默认道具数量
     export const TOOL_COUNT = 1;
     // 默认自由模式最高分数
     export const MAX_SCORE  = 0;
     
     // 默认：连击分数奖励
-    export const COMBO_LV          = [ 8, 16, 24 ];
+    export const COMBO_LV               = [ 8, 16, 24 ];
     // 默认：游戏分数奖励
-    export const COMBOS_BONUS      = [ 8, 16, 24 ];
+    export const COMBOS_BONUS           = [ 8, 16, 24 ];
     // 默认：关卡时间
-    export const GAME_TIME         = 30;
+    export const GAME_TIME              = 30;
     // 默认：游戏通关奖励
-    export const BONUS             = [ 5, 10, 30 ];
+    export const BONUS                  = [ 5, 10, 30 ];
     // 默认：游戏积分转金币
-    export const SCORE_CHANGE_COIN = 10;
+    export const SCORE_CHANGE_COIN      = 10;
+    // 完成度转金币
+    export const COMPLETION_CHANGE_COIN = 10;
     // 默认： 游戏积分进度等级
-    export const SCORE_LV          = [ 30, 60, 100 ];
+    export const SCORE_LV               = [ 30, 60, 100 ];
     
     // 道具价格
     export const TOOL_PRICE = {
