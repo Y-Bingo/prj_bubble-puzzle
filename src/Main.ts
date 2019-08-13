@@ -28,7 +28,6 @@ class Main extends eui.UILayer {
     
     private async runGame () {
         await this.loadResource();
-        console.log( '资源加载完成' );
         this.createGameScene();
     }
     
@@ -41,7 +40,6 @@ class Main extends eui.UILayer {
             this.addChild( this._loadingView );
             await this.loadTheme();
             await RES.loadGroup( 'game', 1, this._loadingView );
-            await RES.loadGroup( 'common', 1, this._loadingView );
             await dt.dataMrg.init();
         } catch( e ) {
             console.error( e );

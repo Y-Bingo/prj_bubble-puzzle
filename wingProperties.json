@@ -1,11 +1,19 @@
 {
-	"resourcePlugin": {
-		"configs": [
-			{
-				"configPath": "resource/default.res.json",
-				"relativePath": "resource/"
-			}
-		]
-	},
-	"theme": "resource/default.thm.json"
+    "resourcePlugin": {
+        "configs": [
+            {
+                "configPath": "resource/default.res.json",
+                "relativePath": "resource/"
+            },
+            {
+                "configPath": "resource/assets/common_res.json",
+                "relativePath": "resource/"
+            },
+            {
+                "configPath": "resource/assets/game_res.json",
+                "relativePath": "resource/"
+            }
+        ]
+    },
+    "theme": "resource/default.thm.json"
 }

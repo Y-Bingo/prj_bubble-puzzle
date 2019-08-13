@@ -29,6 +29,7 @@ namespace view {
                 case self.btn_back:
                     dt.dataMrg.setGameStatus( df.EGameStatus.FREE );
                     view.viewMrg.closePanel();
+                    timerHandler.stop();                    
                     view.viewMrg.showPage( 'LevelPage', { effectType: ui.BOUNCE_EN.DOWN } );
                     break;
                 case self.btn_last:

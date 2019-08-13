@@ -25,12 +25,12 @@ namespace view {
         
         private _onBtnStart (): void {
             viewMrg.showPanel( 'GameModelPanel', { effectType: ui.BOUNCE_EN.IN } );
-            console.log( '开始' );
+            // console.log( '开始' );
         }
         
         private _onBtnHelp (): void {
             viewMrg.showPage( 'HelpPage', { effectType: ui.BOUNCE_EN.RIGHT } );
-            console.log( '帮助' );
+            // console.log( '帮助' );
         }
         
         private _onBtnShop (): void {

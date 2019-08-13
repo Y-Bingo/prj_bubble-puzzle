@@ -1,0 +1,11 @@
+{"file":"fnt_nums.png","frames":{
+"2":{"x":24,"y":35,"w":24,"h":34,"offX":1,"offY":1,"sourceW":26,"sourceH":35},
+"3":{"x":0,"y":69,"w":22,"h":33,"offX":2,"offY":1,"sourceW":26,"sourceH":35},
+"4":{"x":0,"y":34,"w":24,"h":35,"offX":1,"offY":0,"sourceW":26,"sourceH":35},
+"5":{"x":71,"y":0,"w":22,"h":35,"offX":2,"offY":0,"sourceW":26,"sourceH":35},
+"6":{"x":49,"y":0,"w":22,"h":35,"offX":2,"offY":0,"sourceW":26,"sourceH":35},
+"7":{"x":0,"y":0,"w":25,"h":34,"offX":1,"offY":1,"sourceW":26,"sourceH":35},
+"8":{"x":48,"y":35,"w":24,"h":33,"offX":1,"offY":1,"sourceW":26,"sourceH":35},
+"9":{"x":25,"y":0,"w":24,"h":35,"offX":1,"offY":0,"sourceW":26,"sourceH":35},
+"0":{"x":48,"y":68,"w":24,"h":31,"offX":1,"offY":2,"sourceW":26,"sourceH":35},
+"1":{"x":22,"y":69,"w":20,"h":33,"offX":3,"offY":1,"sourceW":26,"sourceH":35}}}
