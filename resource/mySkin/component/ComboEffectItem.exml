@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.ComboEffectItem" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" states="blue,purple" >
+    <e:Image  source="combo_blue_png" source.purple="combo_purple_png"/>
+    <e:BitmapLabel id="bl_combo" font="fnt_combo_blue_fnt" text="122" rotation="0.16" left="81"  font.purple="fnt_combo_pruple_fnt"/>
+</e:Skin>

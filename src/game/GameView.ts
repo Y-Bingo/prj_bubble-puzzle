@@ -21,6 +21,7 @@ namespace view {
         // 组件面板
         g_bubble: eui.Group;        // 泡泡的容器
         g_guidLine: eui.Group;      // 弹道容器
+        g_comboEffect: eui.Group;   // combo特效容器
         g_handle: eui.Group;        // 控制区域
         g_tool: eui.Component;      // 道具容器
         // 道具
@@ -55,11 +56,9 @@ namespace view {
         private _droppingBubbles: ui.Bubble[] = [];     // 正在掉落的泡泡
         
         // 状态属性
-        isShooting: boolean = false;              // 是否正在发射中
+        isShooting: boolean = false;                    // 是否正在发射中
         
         private _timeCount: number = 0;                 //  时间计时
-        
-        private _gameHandler: GameHandler;           // 游戏控制器
         
         constructor () {
             super();
@@ -69,7 +68,7 @@ namespace view {
         protected childrenCreated () {
             super.childrenCreated();
             
-            this._gameHandler = new GameHandler( this );
+            gameHandler.bindRes( this );
             
             this._initMc();
             this.setChildIndex( this.btn_change, 200 );
@@ -589,6 +588,7 @@ namespace view {
                 }
             }
             
+            gameHandler.showCombo( combos.length, new egret.Point( this._curBubble.x, this._curBubble.y ) );
             if( combos.length >= 3 ) {
                 // 满足掉落条件
                 const noConnectNodes = core.model.getNoConnectNode( combos );
@@ -619,6 +619,7 @@ namespace view {
             
             // 连击检测
             const combos = core.model.getCombos( row, col )[ this._curBubble.value ];
+            gameHandler.showCombo( combos.length, new egret.Point( this._curBubble.x, this._curBubble.y ) );
             if( combos.length < 3 ) return;
             
             const noConnectNodes = core.model.getNoConnectNode( combos );
@@ -743,9 +744,9 @@ namespace view {
         }
         
         /******************** 胜负检查  ********************/
-        
         protected gameEnd ( isFailed: boolean = false ): void {
             timerHandler.stop();
+            gameHandler.gameEnd();
             
             const self = this;
             

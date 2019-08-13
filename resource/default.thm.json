@@ -2,6 +2,7 @@
 	"skins": {},
 	"autoGenerateExmlsList": true,
 	"exmls": [
+		"resource/mySkin/component/ComboEffectItem.exml",
 		"resource/mySkin/component/LevelItem.exml",
 		"resource/mySkin/component/ProgressStar.exml",
 		"resource/mySkin/component/ToolItem.exml",

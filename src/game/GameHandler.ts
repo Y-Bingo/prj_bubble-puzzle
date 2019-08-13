@@ -4,27 +4,27 @@ namespace view {
      */
     export class GameHandler {
         private _gameView: GameView;
-        private _angle: number;             // 发射角度
-        
-        private _guidLineHandler: GuidLineHandler;     // 弹道辅助线
-        private _arrow: ui.Arrow;           // 箭头
-        
+        private _angle: number;                     // 发射角度
+        // 控件
+        private _guidLineHandler: GuidLineHandler;  // 弹道辅助线
+        private _comboHandler: ComboEffectHandler;  // 特效控制
+        private _arrow: ui.Arrow;                   // 箭头
         // 状态属性
         private _isUseTool: boolean;        // 是否正在使用道具中
         private _onGuildLine: boolean;      // 是否开启导线
         private _onColor: boolean;          // 是否开启color
         
-        constructor ( res: GameView ) {
-            this._gameView = res;
-            
+        bindRes ( res: GameView ) {
+            this._gameView    = res;
             this._onGuildLine = false;
-            
             this._initHandler();
         }
         
         private _initHandler (): void {
             this._arrow           = this._gameView.icon_arrow;
             this._guidLineHandler = new GuidLineHandler( this._gameView.g_guidLine );
+            this._comboHandler    = new ComboEffectHandler( this._gameView.g_comboEffect );
+            
             timerHandler.bindRes( this._gameView );
             
             this._gameView.btn_begin.addEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnBegin, this );
@@ -38,8 +38,14 @@ namespace view {
             this._gameView.g_handle.addEventListener( egret.TouchEvent.TOUCH_BEGIN, this._onUserTouchBegin, this );
         }
         
+        showCombo ( combo: number, point: egret.Point ): void {
+            this._comboHandler.showCombo( combo, point );
+        }
+        
         // 游戏结束
         gameEnd (): void {
+            this._comboHandler.reset();
+            
             this._gameView.btn_pause.removeEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnPause, this );
             this._gameView.btn_change.removeEventListener( egret.TouchEvent.TOUCH_TAP, this._onBtnSwitch, this );
             this._gameView.g_tool.removeEventListener( egret.TouchEvent.TOUCH_BEGIN, this._onTouchToolBegin, this );
@@ -163,4 +169,6 @@ namespace view {
         
         return Math.atan( a / b ) * 180 / Math.PI;
     }
+    
+    export const gameHandler = new GameHandler();
 }

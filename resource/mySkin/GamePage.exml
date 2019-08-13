@@ -1,30 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin class="skins.GamePage" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:ui="ui.*"
         xmlns:view="view.*" width="640" height="1136">
-	<e:Image id="bg" height="1136" source="bg_png"  locked="true"/>
+	<e:Image id="bg" height="1136" source="bg_png" locked="true" />
 	<e:Group id="g_bubble" y="117" height="735" touchEnabled="false" touchChildren="false" width="618" x="11" locked="true" />
-	<e:Group id="g_guidLine" y="117" height="735" width="618" x="11" locked="true" />
+	<e:Group id="g_guidLine" y="117" height="735" width="618" x="11"  locked="true"/>
+	<e:Group id="g_comboEffect" y="120" anchorOffsetY="0" left="11" right="11" height="730" locked="true"/>
 	<e:Image id="curtain" source="hanging_curtain_png" scale9Grid="32,10,541,5" top="95" horizontalCenter="0" />
 	<e:Image id="border" source="border_png" height="1137" />
 	<e:Image id="dead_line" source="dead_line_png" y="856.08" x="19" />
 	<ui:Arrow id="icon_arrow" source="arrow_blue_png" anchorOffsetY="85" anchorOffsetX="19" y="985" x="320" rotation="0"
 	          visible="false" />
+
+	<view:ScoreBoard id="score_board" skinName="skins.ScoreBoard" x="0" y="0" />
+	<e:Component id="time_board" x="36.11" y="881.08"  scaleX="1.2" scaleY="1.2">
+		<e:skinName>
+			<e:Skin>
+				<e:BitmapLabel font="fnt_daoji_fnt" text="O" y="0" x="0" scaleX="1.1" scaleY="1.1" />
+				<e:BitmapLabel id="bl_time" font="fnt_daoji_fnt" text="50" horizontalCenter="0" verticalCenter="0" />
+			</e:Skin>
+		</e:skinName>
+	</e:Component>
+
+	<e:Group id="g_handle" height="740" width="610" anchorOffsetY="0" x="15" y="110" locked="true"></e:Group>
 	<e:Group id="g_tool" x="230" y="1048" touchChildren="true" touchEnabled="false" touchThrough="true">
-		<e:Component id="tool_hummer" x="0" y="0" skinName="skins.ToolItem" currentState="hummer" name="hummer"
-		             touchEnabled="true" touchChildren="false" />
-		<e:Component id="tool_bomb" x="10" y="10" skinName="skins.ToolItem" currentState="bomb" name="bomb"
-		             touchChildren="false" touchEnabled="true" />
-		<e:Component id="tool_color" x="20" y="20" skinName="skins.ToolItem" currentState="color" name="color"
-		             touchChildren="false" touchEnabled="true" />
-		<e:Component id="tool_guid" x="30" y="30" skinName="skins.ToolItem" currentState="guid" name="guid"
-		             touchChildren="false" touchEnabled="true" />
+		<e:Component id="tool_hummer" x="0" y="0" skinName="skins.ToolItem" currentState="hummer" name="hummer" touchEnabled="true" touchChildren="false"/>
+		<e:Component id="tool_bomb" x="10" y="10" skinName="skins.ToolItem" currentState="bomb" name="bomb" touchChildren="false" touchEnabled="true"/>
+		<e:Component id="tool_color" x="20" y="20" skinName="skins.ToolItem" currentState="color" name="color" touchChildren="false" touchEnabled="true"/>
+		<e:Component id="tool_guid" x="30" y="30" skinName="skins.ToolItem" currentState="guid" name="guid" touchChildren="false" touchEnabled="true"/>
 		<e:layout>
-			<e:HorizontalLayout horizontalAlign="center" gap="15" />
+		<e:HorizontalLayout horizontalAlign="center" gap="15"/>
 		</e:layout>
 	</e:Group>
-	<view:ScoreBoard id="score_board" skinName="skins.ScoreBoard" x="0" y="0" />
-	<e:Component id="time_board" x="44" y="878" skinName="skins.Timer" scaleX="1.2" scaleY="1.2" />
-	<e:Group id="g_handle" height="740" width="610" anchorOffsetY="0" x="15" y="110" locked="true"></e:Group>
 	<e:Rect id="btn_change" width="60" height="60" ellipseWidth="60" ellipseHeight="60" x="177" y="982"
 	        fillColor="0xffffff" fillAlpha="0" strokeAlpha="0" touchEnabled="true" />
 	<ui:ImageButton id="btn_pause" source="btn_pause_png" right="0" top="0" anchorOffsetX="92" />
@@ -33,7 +39,8 @@
 		<e:Image source="icon_coin_png" y="3.04" />
 	</e:Group>
 	<e:Rect id="gray_mask" left="0" right="0" top="0" bottom="0" fillAlpha="0.3" locked="true" />
-	<e:Image id="icon_ready" y="461" source="readygo_0_png" anchorOffsetY="62" horizontalCenter="0"/>
+	<e:Image id="icon_ready" y="461" source="readygo_0_png" anchorOffsetY="62" horizontalCenter="0" />
+	<ui:ImageButton id="btn_begin" source="btn_begin_png" verticalCenter="-100" horizontalCenter="0" />
 
-	<ui:ImageButton id="btn_begin" source="btn_begin_png" verticalCenter="-100"  horizontalCenter="0"/>
+
 </e:Skin>
