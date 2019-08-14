@@ -56,10 +56,11 @@ namespace core {
                 console.warn( '传入了不合法的地图数据！！！' );
                 // return;
             }
-            this._rows   = rows;
-            this._cols   = cols;
-            this._map    = map;
-            this._maxRow = this._countMaxRow();
+            this._rows       = rows;
+            this._cols       = cols;
+            this._map.length = 0;
+            this._map        = map;
+            this._maxRow     = this._countMaxRow();
             this.setTypes( types );
             this.setNext( next );
         }
@@ -93,10 +94,13 @@ namespace core {
                     types.push( map[ row ][ col ] );
                 }
             }
+            
+            
         }
         
         // 设置type
         setTypes ( value: any[] ): void {
+            this._types.length = 0;
             if( !value ) {
                 this._alzTypes();
             } else {
@@ -106,6 +110,7 @@ namespace core {
         
         // 设置next
         setNext ( value: any[] ): void {
+            this._next.length = 0;
             if( !value ) {
                 this._next.length = 0;
             } else {
