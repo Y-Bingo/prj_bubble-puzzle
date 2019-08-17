@@ -1,0 +1,13 @@
+{"file":"fnt_daoji.png","frames":{
+".":{"x":50,"y":26,"w":14,"h":18,"offX":8,"offY":28,"sourceW":30,"sourceH":50},
+"0":{"x":22,"y":102,"w":20,"h":25,"offX":1,"offY":2,"sourceW":22,"sourceH":28},
+"1":{"x":50,"y":0,"w":12,"h":26,"offX":5,"offY":1,"sourceW":22,"sourceH":28},
+"2":{"x":42,"y":50,"w":20,"h":25,"offX":1,"offY":2,"sourceW":22,"sourceH":28},
+"3":{"x":42,"y":101,"w":19,"h":25,"offX":2,"offY":2,"sourceW":22,"sourceH":28},
+"4":{"x":0,"y":50,"w":22,"h":26,"offX":0,"offY":1,"sourceW":22,"sourceH":28},
+"5":{"x":22,"y":76,"w":20,"h":26,"offX":1,"offY":1,"sourceW":22,"sourceH":28},
+"6":{"x":0,"y":76,"w":22,"h":26,"offX":0,"offY":1,"sourceW":22,"sourceH":28},
+"7":{"x":42,"y":75,"w":19,"h":26,"offX":2,"offY":1,"sourceW":22,"sourceH":28},
+"8":{"x":22,"y":50,"w":20,"h":26,"offX":1,"offY":1,"sourceW":22,"sourceH":28},
+"9":{"x":0,"y":102,"w":22,"h":26,"offX":0,"offY":1,"sourceW":22,"sourceH":28},
+"O":{"x":0,"y":0,"w":50,"h":50,"offX":0,"offY":0,"sourceW":50,"sourceH":50}}}

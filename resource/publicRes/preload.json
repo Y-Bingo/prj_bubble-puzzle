@@ -1,0 +1,4 @@
+{"file":"preload.png","frames":{
+"logo_png":{"x":1,"y":1,"w":504,"h":292,"offX":0,"offY":0,"sourceW":504,"sourceH":292},
+"progress_thumb_png":{"x":1,"y":343,"w":329,"h":22,"offX":9,"offY":7,"sourceW":348,"sourceH":42},
+"progress_trace_png":{"x":1,"y":297,"w":348,"h":42,"offX":0,"offY":0,"sourceW":348,"sourceH":42}}}
